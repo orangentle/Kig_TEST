@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>相似图片结果</title>
+    <style>
+        .image-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        .image-pair {
+            display: flex;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #eee;
+            background-color: #f9f9f9;
+        }
+        .image-box {
+            margin: 10px;
+            text-align: center;
+            flex: 1;
+        }
+        img {
+            max-width: 300px;
+            max-height: 300px;
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .similarity-score {
+            color: #2196F3;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 5px 10px;
+            background-color: #E3F2FD;
+            border-radius: 3px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .uploaded-image {
+            border: 2px solid #4CAF50;
+            padding: 5px;
+        }
+        .header {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+        .back-button {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .back-button a {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-button a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>图片相似度结果</h1>
+    </div>
+    
+    {% if results and results.similar_images %}
+        <!-- 添加调试信息 -->
+        <!-- {{ results }} -->
+        {% for similar_image in results.similar_images %}
+        <div class="image-pair">
+            <!-- 上传的图片 -->
+            <div class="image-box">
+                <h3>上传的图片</h3>
+                <img src="{{ results.uploaded_image.path }}" alt="Uploaded image" class="uploaded-image">
+                <p>{{ results.uploaded_image.filename }}</p>
+            </div>
+
+            <!-- 相似的图片 -->
+            <div class="image-box">
+                <h3>相似图片</h3>
+                <img src="{{ url_for('static', filename='database/' + similar_image.filename) }}" alt="Similar image">
+                <p>{{ similar_image.filename }}</p>
+                <p class="similarity-score">
+                    相似度: {{ "%.2f%%"|format(similar_image.similarity * 100) }}
+                    {% if similar_image.similarity > 0.8 %}
+                        (非常相似)
+                    {% elif similar_image.similarity > 0.6 %}
+                        (较为相似)
+                    {% else %}
+                        (略有相似)
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="image-container">
+            <p>没有找到相似的图片 (Debug: {{ results }})</p>
+        </div>
+    {% endif %}
+
+    <div class="back-button">
+        <a href="{{ url_for('index') }}">返回首页</a>
+    </div>
+</body>
+</html>

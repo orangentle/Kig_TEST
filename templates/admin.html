@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Database Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-menu">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('admin') }}" class="active">Database Management</a>
+        </nav>
+
+        <h1>Image Database Management</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="upload-section">
+            <h2>Add New Images to Database</h2>
+            <form action="{{ url_for('add_to_database') }}" method="post" enctype="multipart/form-data">
+                <div class="upload-area">
+                    <input type="file" name="files[]" id="files" accept="image/*" multiple required>
+                    <label for="files">Choose images or drag them here</label>
+                </div>
+                <button type="submit">Add to Database</button>
+            </form>
+        </div>
+
+        <div class="database-images">
+            <h2>Current Database Images</h2>
+            <div class="image-grid">
+                {% for image in images %}
+                <div class="image-card">
+                    <img src="{{ image.path }}" alt="{{ image.filename }}">
+                    <div class="image-info">
+                        <p>{{ image.filename }}</p>
+                        <p>Size: {{ image.file_size | filesizeformat }}</p>
+                        <p>Dimensions: {{ image.width }}x{{ image.height }}</p>
+                        <form action="{{ url_for('delete_from_database', image_id=image.id) }}" method="post">
+                            <button type="submit" class="delete-btn">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
