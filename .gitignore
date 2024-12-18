@@ -194,6 +194,7 @@ logs/
 *.nii.gz
 *.stl
 !requirements.txt
+!logo.png
 # *.pth
 # *.pt
 # *.ts
