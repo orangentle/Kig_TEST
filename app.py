@@ -116,6 +116,15 @@ def delete_from_database(image_id):
         flash('Failed to delete image', 'error')
     return redirect(url_for('admin'))
 
+@app.route('/cleanup-uploads', methods=['POST'])
+def cleanup_uploads():
+    try:
+        shutil.rmtree(app.config['UPLOAD_FOLDER'])
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+        flash('Upload folder cleaned successfully', 'success')
+    except Exception as e:
+        flash(f'Error cleaning upload folder: {str(e)}', 'error')
+    return redirect(url_for('admin'))
 
 if __name__ == '__main__':
     app.run(debug=True)

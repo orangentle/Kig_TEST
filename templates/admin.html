@@ -50,6 +50,9 @@
                 {% endfor %}
             </div>
         </div>
+        <form action="{{ url_for('cleanup_uploads') }}" method="post" style="margin: 10px 0;">
+            <button type="submit" class="btn btn-warning">清理上传文件夹</button>
+        </form>
     </div>
 </body>
 </html>
