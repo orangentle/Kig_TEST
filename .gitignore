@@ -193,6 +193,7 @@ logs/
 *.csv
 *.nii.gz
 *.stl
+!requirements.txt
 # *.pth
 # *.pt
 # *.ts

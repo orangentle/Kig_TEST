@@ -1,12 +1,15 @@
-# Kiger 图片相似度检测 Web 应用 v0.1
+# Kiger 图片相似度检测 Web 应用 v0.2
 
-这是一个为 **Kiger** 开发的小程序，目前只搭建了一个基础框架，并实现了推荐 Kiger 店铺的功能（功能尚不完善）。未来计划集成更多功能以提升用户体验和系统能力。
+这是一个为 **Kiger** 开发的小程序，目前实现了推荐 Kiger 店铺和 BMI 检测功能。未来计划集成更多功能以提升用户体验和系统能力。
 
 ## 功能
 
-### 当前版本 (v0.1)
+### 当前版本 (v0.2)
 
 - **推荐 Kiger 店铺**：用户可以上传图片，系统将分析图片并推荐数据库中相似的 Kiger 店铺图片。
+- **BMI 检测**：
+  - **自动检测**：用户上传全身照，系统自动分析并计算 BMI 指数
+  - **手动输入**：用户手动输入身高体重数据，系统计算 BMI 指数
 
 ### 未来功能
 
@@ -27,11 +30,17 @@
     ├── requirements.txt
     ├── README.md
     ├── static
-    │ ├── uploads # 存储上传的图片
-    │ └── database # 存储数据库中的图片
+    │   ├── uploads # 存储上传的图片
+    │   ├── database
+    │   └── sounds
+    │       └── hover.mp3 # 按钮悬停音效
     ├── templates
-    │ ├── index.html
-    │ ├── admin.html
-    │ └── result.html
-    └── images.db # SQLite 数据库文件
+    │   ├── index.html
+    │   ├── admin.html
+    │   ├── result.html
+    │   ├── bmi.html
+    │   ├── login.html
+    │   └── similarity.html
+    ├── images.db
+    └── yolov8n-pose.pt # YOLO姿态检测模型文件
 ```
