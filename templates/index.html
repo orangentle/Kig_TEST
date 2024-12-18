@@ -1,19 +1,281 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-    <title>Image Matcher</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kigikigi娃娃小站</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff5f7;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+        }
+        .main-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
+        }
+        .logo-container {
+            width: 100%;
+            max-width: 600px;  /* 调整logo最大宽度 */
+            height: auto;
+            margin: 0 auto 30px;
+            text-align: center;
+        }
+        .logo-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.1);
+        }
+        .feature-button {
+            background-color: #fff;
+            border: 2px solid #ffb6c1;
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
+            background-color: #fff0f5;
+        }
+        .feature-button.active {
+            background-color: #ffb6c1;
+            color: white;
+        }
+        .feature-button.disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background-color: #f8f9fa;
+        }
+        .feature-button i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .feature-status {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8em;
+        }
+        .admin-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: 2px solid #ffb6c1;
+            color: #ffb6c1;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .admin-link:hover {
+            background-color: #ffb6c1;
+            color: white;
+        }
+        h1 {
+            color: #ff8da1;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+        .developer-info {
+            text-align: center;
+            color: #ffb6c1;
+            font-size: 0.9rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 182, 193, 0.2);
+        }
+        .developer-links a {
+            color: #ffb6c1;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        .developer-links a:hover {
+            color: #ff8da1;
+            transform: scale(1.1);
+        }
+        .floating-hearts {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ffb6c1;
+            animation: float 2s ease-in-out;
+            opacity: 0;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+        }
+        .logo-container img:hover {
+            transform: scale(1.02);
+            transition: transform 0.3s ease;
+        }
+        .features-container {
+            margin-top: 40px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Image Matcher</h1>
-        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
-            <div class="upload-area">
-                <input type="file" name="file" id="file" accept="image/*" required>
-                <label for="file">Choose an image or drag it here</label>
+    <div class="container main-container">
+        <h1 class="text-center">Kigikigi娃娃小站</h1>
+        
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Kigikigi Logo">
+        </div>
+
+        <div class="row justify-content-center features-container">
+            <div class="col-md-8">
+                <!-- 已实现的功能 -->
+                <a href="{{ url_for('similarity_system') }}" class="text-decoration-none">
+                    <button class="feature-button active">
+                        <i class="bi bi-shop"></i>
+                        推荐Kiger店铺
+                        <span class="feature-status">
+                            <i class="bi bi-check-circle-fill"></i> 已上线
+                        </span>
+                    </button>
+                </a>
+
+                <!-- BMI计算功能 - 已实现 -->
+                <a href="{{ url_for('bmi_calculator') }}" class="text-decoration-none">
+                    <button class="feature-button active">
+                        <i class="bi bi-rulers"></i>
+                        BMI计算与体型检测
+                        <span class="feature-status">
+                            <i class="bi bi-check-circle-fill"></i> 已上线
+                        </span>
+                    </button>
+                </a>
+
+                <!-- 未实现的功能 -->
+                <button class="feature-button disabled">
+                    <i class="bi bi-search"></i>
+                    订单查询
+                    <span class="feature-status">开发中</span>
+                </button>
+
+                <button class="feature-button disabled">
+                    <i class="bi bi-pencil-square"></i>
+                    新订单填写
+                    <span class="feature-status">开发中</span>
+                </button>
+
+                <button class="feature-button disabled">
+                    <i class="bi bi-palette"></i>
+                    AI头壳参考图生成
+                    <span class="feature-status">开发中</span>
+                </button>
+
+                <button class="feature-button disabled">
+                    <i class="bi bi-box"></i>
+                    AI 3D成品预览
+                    <span class="feature-status">开发中</span>
+                </button>
+
+                <button class="feature-button disabled">
+                    <i class="bi bi-image"></i>
+                    AI照片美化工具
+                    <span class="feature-status">开发中</span>
+                </button>
+
+                <button class="feature-button disabled">
+                    <i class="bi bi-mic"></i>
+                    Kiger变声器
+                    <span class="feature-status">开发中</span>
+                </button>
+
+                <button class="feature-button disabled">
+                    <i class="bi bi-music-note"></i>
+                    AI角色翻唱
+                    <span class="feature-status">开发中</span>
+                </button>
+
+                <button class="feature-button disabled">
+                    <i class="bi bi-person-hearts"></i>
+                    Kiger角色推荐
+                    <span class="feature-status">开发中</span>
+                </button>
             </div>
-            <button type="submit">Find Similar Images</button>
-        </form>
+        </div>
+
+        <div class="developer-info">
+            <p>Developed by orange</p>
+            <div class="developer-links">
+                <a href="https://space.bilibili.com/55940293" target="_blank">
+                    <i class="bi bi-play-circle"></i> Bilibili
+                </a>
+                <a href="https://github.com/orangentle/" target="_blank">
+                    <i class="bi bi-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+
+        <div class="floating-hearts"></div>
+
+        <a href="{{ url_for('admin') }}" class="admin-link">
+            <i class="bi bi-gear-fill"></i>
+        </a>
     </div>
+
+    <script>
+        // 添加鼠标点击特效
+        document.addEventListener('click', function(e) {
+            const hearts = document.createElement('div');
+            hearts.className = 'floating-hearts';
+            hearts.style.left = e.clientX + 'px';
+            hearts.style.top = e.clientY + 'px';
+
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤';
+            hearts.appendChild(heart);
+
+            document.body.appendChild(hearts);
+
+            setTimeout(() => {
+                document.body.removeChild(hearts);
+            }, 2000);
+        });
+
+        // 添加按钮悬停音效
+        const buttons = document.querySelectorAll('.feature-button');
+        const hoverSound = new Audio("{{ url_for('static', filename='sounds/hover.mp3') }}");
+        
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                if (!button.classList.contains('disabled')) {
+                    hoverSound.currentTime = 0;
+                    hoverSound.play();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
