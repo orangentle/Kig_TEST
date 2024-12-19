@@ -75,7 +75,7 @@
             <!-- 上传的图片 -->
             <div class="image-box">
                 <h3>上传的图片</h3>
-                <img src="{{ results.uploaded_image.path }}" alt="Uploaded image" class="uploaded-image">
+                <img src="{{ url_for('static', filename='uploads/' + results.uploaded_image.filename) }}" alt="Uploaded image" class="uploaded-image">
                 <p>{{ results.uploaded_image.filename }}</p>
             </div>
 

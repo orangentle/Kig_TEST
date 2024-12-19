@@ -149,6 +149,30 @@
                 reader.readAsDataURL(file);
             }
         }
+
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = "{{ url_for('result') }}";
+                } else {
+                    alert(data.error || '上传失败，请重试');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('上传过程中发生错误，请重试');
+            }
+        });
     </script>
 </body>
 </html>

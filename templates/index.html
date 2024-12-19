@@ -245,7 +245,7 @@
     </div>
 
     <script>
-        // 添加鼠标点击特效
+        // 只保留点击特效相关代码
         document.addEventListener('click', function(e) {
             const hearts = document.createElement('div');
             hearts.className = 'floating-hearts';
@@ -262,19 +262,6 @@
             setTimeout(() => {
                 document.body.removeChild(hearts);
             }, 2000);
-        });
-
-        // 添加按钮悬停音效
-        const buttons = document.querySelectorAll('.feature-button');
-        const hoverSound = new Audio("{{ url_for('static', filename='sounds/hover.mp3') }}");
-        
-        buttons.forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                if (!button.classList.contains('disabled')) {
-                    hoverSound.currentTime = 0;
-                    hoverSound.play();
-                }
-            });
         });
     </script>
 </body>

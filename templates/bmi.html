@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BMI计算与体型检测 - Kigikigi娃娃小站</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* 使用与主页相同的样式主题 */
         body {
@@ -18,23 +19,51 @@
             background-color: white;
             border-radius: 20px;
             box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .main-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,182,193,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
         .form-control:focus {
             border-color: #ffb6c1;
             box-shadow: 0 0 0 0.2rem rgba(255, 182, 193, 0.25);
         }
         .btn-primary {
-            background-color: #ffb6c1;
-            border-color: #ffb6c1;
+            background: linear-gradient(45deg, #ffb6c1, #ff8da1);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+            transition: all 0.3s ease;
         }
         .btn-primary:hover {
-            background-color: #ff8da1;
-            border-color: #ff8da1;
+            background: linear-gradient(45deg, #ff8da1, #ff6b84);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 182, 193, 0.4);
         }
         .result-card {
-            border: 2px solid #ffb6c1;
-            border-radius: 15px;
-            padding: 20px;
+            background: linear-gradient(145deg, #fff, #fff5f7);
+            border: none;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.15);
             margin-top: 20px;
             display: none;
         }
@@ -49,8 +78,10 @@
         }
         .upload-area {
             border: 2px dashed #ffb6c1;
-            border-radius: 15px;
-            padding: 30px;
+            background: linear-gradient(145deg, #fff, #fff5f7);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: inset 0 0 20px rgba(255, 182, 193, 0.1);
             text-align: center;
             margin: 20px 0;
             background-color: #fff;
@@ -58,8 +89,9 @@
             transition: all 0.3s ease;
         }
         .upload-area:hover {
+            background: linear-gradient(145deg, #fff5f7, #fff);
             border-color: #ff8da1;
-            background-color: #fff0f5;
+            transform: translateY(-2px);
         }
         #imagePreview {
             max-width: 300px;
@@ -70,17 +102,25 @@
             box-shadow: 0 3px 10px rgba(255, 182, 193, 0.2);
         }
         .tab-button {
-            background-color: #fff;
+            background: transparent;
             border: 2px solid #ffb6c1;
             color: #ffb6c1;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin: 0 5px;
+            padding: 12px 30px;
+            border-radius: 25px;
+            margin: 0 10px;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
         }
         .tab-button.active {
-            background-color: #ffb6c1;
+            background: linear-gradient(45deg, #ffb6c1, #ff8da1);
             color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
         }
         .tab-content {
             display: none;
@@ -112,16 +152,197 @@
         #annotatedImage {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(255, 182, 193, 0.2);
+            margin: 20px auto;
+            display: block;
         }
         
-        .result-text {
-            background: white;
-            padding: 20px;
+        .alert-info {
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .alert-info ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+        
+        .alert-info li {
+            margin: 5px 0;
+        }
+        
+        .result-header {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .result-divider {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ffb6c1, transparent);
+            margin: 20px 0;
+        }
+        
+        .bmi-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fff5f7, #fff);
+            box-shadow: 0 10px 20px rgba(255, 182, 193, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            position: relative;
+            border: 3px solid rgba(255, 182, 193, 0.3);
+        }
+        
+        .bmi-value {
+            text-align: center;
+        }
+        
+        .bmi-value .display-4 {
+            color: #ff8da1;
+            font-weight: bold;
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+        
+        .bmi-unit {
+            display: block;
+            color: #888;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+        
+        .category-badge {
+            background: linear-gradient(45deg, #ffb6c1, #ff8da1);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+        }
+        
+        .recommendation-box {
+            background: rgba(255, 182, 193, 0.1);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
-            margin-top: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ffb6c1;
+        }
+        
+        .bmi-scale {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .scale-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .scale-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .result-details {
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .bmi-scale {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .scale-item {
+                margin: 5px 0;
+            }
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 250px;
+                margin: 10px auto;
+            }
+        }
+        
+        .cute-girl-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .cute-girl-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .cute-girl-image:hover {
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .cute-girl-container {
+                height: 250px;
+                margin: 10px auto;
+            }
+        }
+        
+        .detection-result-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: rgba(255, 182, 193, 0.1);
+            border-radius: 15px;
+        }
+        
+        .detection-result-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(255, 182, 193, 0.2);
         }
     </style>
 </head>
@@ -174,15 +395,54 @@
 
         <!-- 结果显示区域 -->
         <div class="result-card" id="resultCard">
-            <h4 class="text-center mb-4">检测结果</h4>
+            <div class="result-header">
+                <h4 class="text-center mb-4">检测结果</h4>
+                <div class="result-divider"></div>
+            </div>
+            
             <div class="result-container">
-                <div class="image-container">
-                    <img id="annotatedImage" class="img-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="bmi-circle">
+                            <div class="bmi-value">
+                                <span id="bmiValue" class="display-4"></span>
+                                <span class="bmi-unit">BMI</span>
+                            </div>
+                        </div>
+                        
+                        <div class="result-details">
+                            <div class="category-badge">
+                                <span id="bmiCategory"></span>
+                            </div>
+                            <div class="recommendation-box">
+                                <div id="recommendation"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="cute-girl-container" id="cuteGirlContainer">
+                            <img src="{{ url_for('static', filename='images/cute-girl.png') }}" class="cute-girl-image">
+                        </div>
+                        <div class="detection-result-container" id="detectionContainer" style="display: none;">
+                            <img id="annotatedImage" class="detection-result-image" style="display: none;">
+                        </div>
+                    </div>
                 </div>
-                <div class="result-text">
-                    <p>您的BMI值：<span id="bmiValue" class="fw-bold"></span></p>
-                    <p>体型评估：<span id="bmiCategory" class="fw-bold"></span></p>
-                    <div id="recommendation" class="mt-3"></div>
+                
+                <div class="bmi-scale mt-4">
+                    <div class="scale-item">
+                        <div class="scale-dot" style="background: #92d192;"></div>
+                        <span>竹节虫 (<18.5)</span>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-dot" style="background: #4caf50;"></div>
+                        <span>正常娃 (18.5-22)</span>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-dot" style="background: #ffc107;"></div>
+                        <span>肉感烧娃 (22-24)</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -314,22 +574,65 @@
             return '您就往这一站，我都能感觉到寒气！';
         }
 
+        let bmiChart = null;  // 全局变量存储图表实例
+        
         function displayResults(data) {
             document.getElementById('bmiValue').textContent = data.bmi;
             document.getElementById('bmiCategory').textContent = data.category;
-            document.getElementById('recommendation').innerHTML = `<p class="text-muted">${data.recommendation}</p>`;
+            document.getElementById('recommendation').innerHTML = `
+                <p class="mb-0" style="color: #666;">
+                    <i class="bi bi-info-circle me-2"></i>
+                    ${data.recommendation}
+                </p>
+            `;
             
-            // 显示标注后的图片（如果有）
+            // 更新BMI圆圈的颜色
+            const bmiCircle = document.querySelector('.bmi-circle');
+            const bmi = parseFloat(data.bmi);
+            let gradientColor;
+            
+            if (bmi < 18.5) {
+                gradientColor = '#92d192';
+            } else if (bmi < 22) {
+                gradientColor = '#4caf50';
+            } else {
+                gradientColor = '#ffc107';
+            }
+            
+            bmiCircle.style.borderColor = gradientColor;
+            
+            // 根据是否存在检测结果图片来决定显示哪个容器
+            const cuteGirlContainer = document.getElementById('cuteGirlContainer');
+            const detectionContainer = document.getElementById('detectionContainer');
             const annotatedImage = document.getElementById('annotatedImage');
+            
             if (data.annotated_image) {
+                // 图片检测模式
+                cuteGirlContainer.style.display = 'none';
+                detectionContainer.style.display = 'block';
                 annotatedImage.src = data.annotated_image;
                 annotatedImage.style.display = 'block';
             } else {
+                // 手动输入模式
+                cuteGirlContainer.style.display = 'block';
+                detectionContainer.style.display = 'none';
                 annotatedImage.style.display = 'none';
             }
             
             document.getElementById('resultCard').style.display = 'block';
         }
+
+        // 在页面加载完成后显示提示
+        window.onload = function() {
+            alert('请上传包含完整人体的正面照片，以获得最准确的分析结果！');
+        };
+
+        // 在用户选择文件时也显示提示
+        document.getElementById('imageInput').onchange = function() {
+            if (this.files && this.files[0]) {
+                alert('温馨提示：请确保上传的是全身正面照片，否则可能无法准确分析！');
+            }
+        };
     </script>
 </body>
 </html>
