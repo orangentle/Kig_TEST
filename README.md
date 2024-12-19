@@ -1,46 +1,92 @@
-# Kiger 图片相似度检测 Web 应用 v0.2
+# Kigikigi娃娃小站 v0.2
 
-这是一个为 **Kiger** 开发的小程序，目前实现了推荐 Kiger 店铺和 BMI 检测功能。未来计划集成更多功能以提升用户体验和系统能力。
+一个为 **Kiger** 定制的多功能 Web 应用，集成图片相似度检测的店铺推荐、BMI 计算等功能，致力于提供更好的用户体验。
 
-## 功能
+## 界面展示
 
-### 当前版本 (v0.2)
+### 主页面
+![主页面](./static/screenshots/home.png)
 
-- **推荐 Kiger 店铺**：用户可以上传图片，系统将分析图片并推荐数据库中相似的 Kiger 店铺图片。
-- **BMI 检测**：
-  - **自动检测**：用户上传全身照，系统自动分析并计算 BMI 指数
-  - **手动输入**：用户手动输入身高体重数据，系统计算 BMI 指数
+### 推荐 Kiger 店铺
+![推荐 Kiger 店铺](./static/screenshots/similarity.png)
 
-### 未来功能
+### BMI 计算器
+![BMI计算器](./static/screenshots/bmi.png)
 
-- **订单查询**：用户可以查询已有订单的状态和详情。
-- **新订单填写**：用户可以在线填写并提交新订单。
-- **AI 辅助 Kiger 头壳的参考图生成**：通过输入文字或上传图片，AI 将生成 Kiger 头壳的参考图。
-- **AI 辅助 3D 成品图或视频参考**：生成 3D 成品图或视频的参考资料，帮助用户更好地了解产品。
-- **AI 辅助 Kiger 照片抠图和打光换场景**：自动抠图并调整照片的光照和背景场景。
-- **Kiger 实时变声器**：提供实时变声功能，用户可以在交流中改变声音效果。
-- **Kiger 角色的 AI 翻唱和变声**：为 Kiger 角色提供 AI 翻唱和变声功能，丰富角色表现力。
-- **BMI 推算**：根据用户输入的数据，计算并推算 BMI 指数。
-- **体型检测和相应角色推荐**：分析用户体型并推荐最适合的 Kiger 角色。
+## 核心功能
+
+### 已实现功能 ✅
+
+- 🏪 **推荐 Kiger 店铺**
+  - 上传图片自动匹配相似店铺
+  - 实时预览和结果展示
+    - 注意事项：
+    - 匹配结果仅供参考
+    - 当前数据库收录店铺数量有限
+  
+- 📏 **BMI 检测**
+  - 全身照自动分析
+  - 手动数据输入计算
+    - 注意事项：
+    - Ai检测结果仅供娱乐
+
+### 开发中功能 🚧
+
+- 📦 **订单管理**
+  - 订单状态查询
+  - 在线订单提交
+  
+- 🎨 **AI 创作助手**
+  - Kiger 头壳参考图生成
+  - 3D 成品图/视频生成
+  - 照片抠图与场景优化
+  
+- 🎤 **语音处理**
+  - 实时变声器
+  - AI 翻唱功能
+  
+- 📊 **数据分析**
+  - BMI 智能推算
+  - 个性化角色推荐
 
 ## 项目结构
+
 ```
-    ├── app.py
-    ├── image_processor.py
-    ├── requirements.txt
-    ├── README.md
-    ├── static
-    │   ├── uploads # 存储上传的图片
-    │   ├── database
-    │   └── sounds
-    │       └── hover.mp3 # 按钮悬停音效
-    ├── templates
-    │   ├── index.html
-    │   ├── admin.html
-    │   ├── result.html
-    │   ├── bmi.html
-    │   ├── login.html
-    │   └── similarity.html
-    ├── images.db
-    └── yolov8n-pose.pt # YOLO姿态检测模型文件
+kiger-app/
+├── app.py              # 主应用入口
+├── image_processor.py  # 图像处理模块
+├── requirements.txt    # 依赖项
+├── static/            # 静态资源
+│   ├── uploads/       # 上传文件
+│   ├── database/      # 数据文件
+│   ├── sounds/        # 音效文件
+│   └── screenshots/   # 界面截图
+├── templates/         # 页面模板
+│   ├── index.html
+│   ├── admin.html
+│   ├── result.html
+│   ├── bmi.html
+│   ├── login.html
+│   └── similarity.html
+├── images.db          # 图片数据库
+└── yolov8n-pose.pt   # YOLO模型
 ```
+
+## 使用说明
+
+1. 确保已安装所需依赖：
+```bash
+pip install -r requirements.txt
+```
+
+2. 运行应用：
+```bash
+python app.py
+```
+
+3. 访问 `http://localhost:5000` 开始使用
+
+## 版本历史
+
+- v0.2: 添加 BMI 检测功能
+- v0.1: 首次发布，实现基础图片相似度检测
