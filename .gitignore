@@ -194,7 +194,9 @@ logs/
 *.nii.gz
 *.stl
 !requirements.txt
-!cute-girl.png
-!logo.png
+!static/images/
+!static/images/**/*.png
+!static/screenshots/
+!static/screenshots/**/*.png
 # *.pt
 # *.ts
