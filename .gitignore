@@ -198,5 +198,7 @@ logs/
 !static/images/**/*.png
 !static/screenshots/
 !static/screenshots/**/*.png
+models/*.onnx
+!models/
 # *.pt
 # *.ts

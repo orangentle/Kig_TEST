@@ -6,13 +6,19 @@ from werkzeug.utils import secure_filename
 from config import Config
 from services import AuthService, ImageService
 from image_processor import ImageMatcher
+from routes.remove_bg import bg_bp
+import onnxruntime as ort
+
+# 获取项目根目录
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODELS_DIR = os.path.join(BASE_DIR, 'models')
 
 # 初始化 Flask 应用
 app = Flask(__name__)
 app.config.from_object(Config)
 
 # 初始化 YOLO 和 MediaPipe
-model = YOLO('yolov8n-pose.pt')
+model = YOLO(os.path.join(MODELS_DIR, 'yolov8n-pose.pt'))
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(
     static_image_mode=True,
@@ -26,6 +32,11 @@ auth_service = AuthService(Config)
 
 # 初始化 ImageMatcher
 image_matcher = ImageMatcher()
+
+# 注册蓝图
+app.register_blueprint(bg_bp)
+
+print("可用的执行提供程序:", ort.get_available_providers())
 
 @app.route('/')
 def index():

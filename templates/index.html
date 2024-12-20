@@ -152,7 +152,18 @@
 
         <div class="row justify-content-center features-container">
             <div class="col-md-8">
-                <!-- 已实现的功能 -->
+                <!-- 抠图工具 -->
+                <a href="{{ url_for('bg.remove_bg') }}" class="text-decoration-none">
+                    <button class="feature-button active">
+                        <i class="bi bi-person-bounding-box"></i>
+                        Kiger抠图工具
+                        <span class="feature-status">
+                            <i class="bi bi-check-circle-fill"></i> 已上线
+                        </span>
+                    </button>
+                </a>
+
+                <!-- 推荐Kiger店铺 -->
                 <a href="{{ url_for('similarity_system') }}" class="text-decoration-none">
                     <button class="feature-button active">
                         <i class="bi bi-shop"></i>
@@ -163,7 +174,7 @@
                     </button>
                 </a>
 
-                <!-- BMI计算功能 - 已实现 -->
+                <!-- BMI计算功能 -->
                 <a href="{{ url_for('bmi_calculator') }}" class="text-decoration-none">
                     <button class="feature-button active">
                         <i class="bi bi-rulers"></i>
@@ -214,12 +225,6 @@
                 <button class="feature-button disabled">
                     <i class="bi bi-music-note"></i>
                     AI角色翻唱
-                    <span class="feature-status">开发中</span>
-                </button>
-
-                <button class="feature-button disabled">
-                    <i class="bi bi-person-hearts"></i>
-                    Kiger角色推荐
                     <span class="feature-status">开发中</span>
                 </button>
             </div>
