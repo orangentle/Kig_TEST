@@ -113,6 +113,35 @@ Component({
           console.error('导航失败', err);
         }
       });
+    },
+    
+    // 联系客服
+    contactService() {
+      wx.showModal({
+        title: '联系客服',
+        content: '即将打开淘宝店铺客服页面',
+        success: (res) => {
+          if (res.confirm) {
+            // 使用淘宝短链接
+            const taobaoUrl = 'https://m.tb.cn/h.hf1womHplfjsH5V';
+            wx.setStorageSync('webviewUrl', taobaoUrl);
+            
+            wx.navigateTo({
+              url: '/pages/webview/webview',
+              success: () => {
+                console.log('成功打开淘宝网页');
+              },
+              fail: (err) => {
+                console.error('打开淘宝网页失败', err);
+                wx.showToast({
+                  title: '打开失败，请稍后重试',
+                  icon: 'none'
+                });
+              }
+            });
+          }
+        }
+      });
     }
   }
 }) 

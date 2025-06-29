@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/profile/profile",
     "pages/order-detail/order-detail",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/webview/webview"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -47,5 +48,8 @@
     "t-image": "tdesign-miniprogram/image/image",
     "t-tag": "tdesign-miniprogram/tag/tag"
   },
+  "navigateToMiniProgramAppIdList": [
+    "wx9f4e7b73adbd8f38"
+  ],
   "sitemapLocation": "sitemap.json"
 }

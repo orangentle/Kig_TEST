@@ -42,13 +42,27 @@ miniprogram/
   ├── app.ts            # 应用入口
   ├── app.wxss          # 全局样式
   ├── assets/           # 静态资源
-  │   ├── icons/        # 图标资源
+  │   ├── icons/        # 图标资源（包含导航栏图标）
   │   └── images/       # 图片资源
   ├── pages/            # 页面文件
   │   ├── index/        # 首页（订单查询）
+  │   ├── logs/         # 日志页面
   │   ├── order-detail/ # 订单详情页
-  │   └── profile/      # 个人中心
+  │   ├── profile/      # 个人中心
+  │   └── webview/      # 网页视图（用于打开外部链接）
+  ├── miniprogram_npm/  # 小程序依赖包
   └── utils/            # 工具函数
+```
+
+## 原型设计
+
+```
+prototype/
+  ├── home.html             # 首页原型
+  ├── index.html            # 原型入口
+  ├── order-detail.html     # 订单详情原型
+  ├── profile.html          # 已登录个人中心原型
+  └── profile-unlogin.html  # 未登录个人中心原型
 ```
 
 ## 安装与运行
@@ -67,7 +81,7 @@ git clone https://github.com/your-username/ratstudio-miniprogram.git
 ## 项目截图
 
 <div align="center">
-  <img src="miniprogram/assets/images/鼠鼠工坊小程序原型.png" alt="鼠鼠工坊小程序原型" width="100%"/>
+  <img src="鼠鼠工坊小程序原型.png" alt="鼠鼠工坊小程序原型" width="100%"/>
 </div>
 
 ## 设计原型
@@ -81,6 +95,7 @@ git clone https://github.com/your-username/ratstudio-miniprogram.git
 - [x] 订单详情页开发
 - [x] 个人中心页面开发
 - [x] 原型展示页面
+- [x] WebView页面开发（用于打开淘宝客服）
 - [ ] 后端接口对接
 - [ ] 上线发布
 

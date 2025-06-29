@@ -79,6 +79,19 @@
           </block>
         </t-cell-group>
       </view>
+      
+      <!-- 联系客服按钮 -->
+      <view class="service-container">
+        <t-button 
+          theme="primary" 
+          size="large" 
+          shape="round" 
+          bind:tap="contactService"
+          class="service-button"
+        >
+          联系客服
+        </t-button>
+      </view>
     </view>
   </block>
 </view> 

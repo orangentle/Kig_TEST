@@ -11,7 +11,7 @@ interface IAppOption {
 App<IAppOption>({
   globalData: {
     hasLogin: false,
-    logoUrl: 'https://cdn-icons-png.flaticon.com/512/3069/3069187.png',
+    logoUrl: '/assets/images/icon.jpg',
     emptyImageUrl: 'https://cdn-icons-png.flaticon.com/512/5445/5445197.png'
   },
   onLaunch() {
