@@ -1,7 +1,7 @@
 # 鼠鼠工坊微信小程序
 
 <div align="center">
-  <img src="https://cdn-icons-png.flaticon.com/512/2362/2362765.png" alt="鼠鼠工坊Logo" width="120"/>
+  <img src="icon.png" alt="鼠鼠工坊Logo" width="120"/>
   <h3>专注于Kigurumi头壳制作的工作室小程序</h3>
 </div>
 
