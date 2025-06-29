@@ -52,20 +52,23 @@
               bind:click="onOrderClick"
               data-order-id="{{item.orderId}}"
               title="订单号: {{item.orderId}}"
-              description="角色: {{item.roleName}}\n下单时间: {{item.orderTime}}"
+              description="角色: {{item.roleName}}"
             >
-              <t-tag 
-                wx:if="{{item.status === 'processing'}}" 
-                slot="note" 
-                theme="primary" 
-                variant="light"
-              >制作中</t-tag>
-              <t-tag 
-                wx:else 
-                slot="note" 
-                theme="success" 
-                variant="light"
-              >已完成</t-tag>
+              <view slot="note" class="order-info">
+                <view class="order-time">下单时间: {{item.orderTime}}</view>
+                <t-tag 
+                  wx:if="{{item.status === 'processing'}}" 
+                  theme="primary" 
+                  variant="light"
+                  class="status-tag"
+                >制作中</t-tag>
+                <t-tag 
+                  wx:else 
+                  theme="success" 
+                  variant="light"
+                  class="status-tag"
+                >已完成</t-tag>
+              </view>
             </t-cell>
           </block>
           <block wx:else>

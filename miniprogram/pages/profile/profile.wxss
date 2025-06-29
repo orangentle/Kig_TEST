@@ -77,6 +77,22 @@
   overflow: hidden;
 }
 
+.order-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.order-time {
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
+}
+
+.status-tag {
+  margin-top: 4rpx;
+}
+
 .empty-state {
   display: flex;
   flex-direction: column;

@@ -7,8 +7,32 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
             padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .mascot {
+            width: 80px;
+            height: 80px;
+            margin-right: 15px;
+            vertical-align: middle;
         }
         .phone-container {
             width: 390px;
@@ -16,10 +40,15 @@
             background: white;
             border-radius: 40px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
             position: relative;
             margin: 20px;
             display: inline-block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .phone-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
         .phone-notch {
             position: absolute;
@@ -49,17 +78,61 @@
         .screen-title {
             text-align: center;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .screen-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 8px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .decoration {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        .decoration-1 {
+            top: 10%;
+            left: 5%;
+            transform: rotate(-15deg);
+        }
+        .decoration-2 {
+            bottom: 10%;
+            right: 5%;
+            transform: rotate(15deg);
         }
     </style>
 </head>
 <body>
-    <h1 class="text-3xl font-bold text-center my-6">鼠鼠工坊小程序原型</h1>
+    <div class="header">
+        <img src="https://cdn-icons-png.flaticon.com/512/2362/2362765.png" alt="鼠鼠工坊" class="mascot">
+        <h1 class="header-title">鼠鼠工坊小程序原型</h1>
+        <p class="header-subtitle">专注于Kigurumi头壳制作的工作室</p>
+        
+        <img src="https://cdn-icons-png.flaticon.com/512/5726/5726532.png" alt="装饰" class="decoration decoration-1">
+        <img src="https://cdn-icons-png.flaticon.com/512/6355/6355649.png" alt="装饰" class="decoration decoration-2">
+    </div>
     
     <div class="flex flex-wrap justify-center">
         <!-- 首页 -->
         <div class="flex flex-col items-center">
-            <div class="screen-title">首页</div>
+            <div class="screen-title">
+                <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" alt="首页" class="screen-icon">
+                首页
+            </div>
             <div class="phone-container">
                 <div class="phone-notch"></div>
                 <div class="phone-frame">
@@ -70,7 +143,10 @@
         
         <!-- 订单详情页 -->
         <div class="flex flex-col items-center">
-            <div class="screen-title">订单详情</div>
+            <div class="screen-title">
+                <img src="https://cdn-icons-png.flaticon.com/512/1358/1358023.png" alt="订单详情" class="screen-icon">
+                订单详情
+            </div>
             <div class="phone-container">
                 <div class="phone-notch"></div>
                 <div class="phone-frame">
@@ -81,7 +157,10 @@
         
         <!-- 个人中心（已登录） -->
         <div class="flex flex-col items-center">
-            <div class="screen-title">个人中心（已登录）</div>
+            <div class="screen-title">
+                <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="个人中心" class="screen-icon">
+                个人中心（已登录）
+            </div>
             <div class="phone-container">
                 <div class="phone-notch"></div>
                 <div class="phone-frame">
@@ -92,7 +171,10 @@
         
         <!-- 个人中心（未登录） -->
         <div class="flex flex-col items-center">
-            <div class="screen-title">个人中心（未登录）</div>
+            <div class="screen-title">
+                <img src="https://cdn-icons-png.flaticon.com/512/4202/4202843.png" alt="未登录" class="screen-icon">
+                个人中心（未登录）
+            </div>
             <div class="phone-container">
                 <div class="phone-notch"></div>
                 <div class="phone-frame">
@@ -100,6 +182,10 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="footer">
+        © 2025 鼠鼠工坊 - 原型设计展示
     </div>
 </body>
 </html>
