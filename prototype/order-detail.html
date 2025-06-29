@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鼠鼠工坊 - 订单详情</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f0f0;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .progress-bar {
+            height: 4px;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            position: relative;
+        }
+        .progress-bar-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #0052d9;
+            border-radius: 2px;
+        }
+        .progress-step {
+            position: relative;
+            z-index: 2;
+        }
+        .progress-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 3px solid #0052d9;
+            margin-bottom: 8px;
+        }
+        .progress-dot.inactive {
+            border-color: #e0e0e0;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+        }
+        .nav-item svg {
+            margin-bottom: 4px;
+        }
+        .active {
+            color: #0052d9;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex flex-col h-full">
+        <!-- 顶部导航 -->
+        <div class="bg-white p-4 flex items-center">
+            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <h1 class="text-lg font-medium">订单详情</h1>
+        </div>
+        
+        <!-- 订单信息 -->
+        <div class="bg-white mt-2 p-4">
+            <div class="flex justify-between items-center mb-3">
+                <div class="font-medium">淘宝订单号</div>
+                <div>TB123456789</div>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+                <div class="font-medium">排单号</div>
+                <div>RatStudio-2023-001</div>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+                <div class="font-medium">角色名称</div>
+                <div>狐狸头壳</div>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+                <div class="font-medium">预期完成时间</div>
+                <div>2023-12-30</div>
+            </div>
+        </div>
+        
+        <!-- 制作进度 -->
+        <div class="bg-white mt-2 p-4">
+            <h2 class="text-lg font-medium mb-4">制作进度</h2>
+            
+            <div class="relative mb-8">
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width: 50%;"></div>
+                </div>
+                
+                <div class="flex justify-between mt-2">
+                    <div class="progress-step text-center">
+                        <div class="progress-dot"></div>
+                        <div class="text-xs">订单确认</div>
+                    </div>
+                    <div class="progress-step text-center">
+                        <div class="progress-dot"></div>
+                        <div class="text-xs">设计图确认</div>
+                    </div>
+                    <div class="progress-step text-center">
+                        <div class="progress-dot"></div>
+                        <div class="text-xs">模型制作</div>
+                    </div>
+                    <div class="progress-step text-center">
+                        <div class="progress-dot"></div>
+                        <div class="text-xs">打印</div>
+                    </div>
+                    <div class="progress-step text-center">
+                        <div class="progress-dot inactive"></div>
+                        <div class="text-xs text-gray-400">打磨上色</div>
+                    </div>
+                    <div class="progress-step text-center">
+                        <div class="progress-dot inactive"></div>
+                        <div class="text-xs text-gray-400">组装</div>
+                    </div>
+                    <div class="progress-step text-center">
+                        <div class="progress-dot inactive"></div>
+                        <div class="text-xs text-gray-400">质检</div>
+                    </div>
+                    <div class="progress-step text-center">
+                        <div class="progress-dot inactive"></div>
+                        <div class="text-xs text-gray-400">发货</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center text-blue-600 font-medium">
+                当前进度：打印中
+            </div>
+        </div>
+        
+        <!-- 预期成品图 -->
+        <div class="bg-white mt-2 p-4">
+            <h2 class="text-lg font-medium mb-3">预期成品展示</h2>
+            <div class="rounded-lg overflow-hidden">
+                <img src="https://img.alicdn.com/imgextra/i1/2201504856228/O1CN01KZLNVJ1V6zEiOJJcP_!!2201504856228.jpg" alt="预期成品图" class="w-full">
+            </div>
+        </div>
+        
+        <!-- 联系客服 -->
+        <div class="p-4 mt-auto">
+            <button class="w-full bg-blue-600 text-white py-3 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                联系客服
+            </button>
+        </div>
+        
+        <!-- 底部导航栏 -->
+        <div class="bg-white border-t flex justify-around py-2">
+            <div class="nav-item text-gray-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                </svg>
+                首页
+            </div>
+            <div class="nav-item text-gray-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                </svg>
+                我的
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

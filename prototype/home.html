@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鼠鼠工坊 - 首页</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f0f0;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .search-box {
+            border-radius: 8px;
+            background-color: #f5f5f5;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+        }
+        .nav-item svg {
+            margin-bottom: 4px;
+        }
+        .active {
+            color: #0052d9;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex flex-col h-full">
+        <!-- 顶部区域 -->
+        <div class="p-4 bg-white">
+            <div class="flex items-center justify-center mb-6">
+                <img src="https://cdn-icons-png.flaticon.com/512/3069/3069187.png" alt="Logo" class="rounded-full w-10 h-10 mr-3">
+                <h1 class="text-xl font-bold">鼠鼠工坊</h1>
+            </div>
+            
+            <!-- 搜索框 -->
+            <div class="search-box flex items-center p-3 mb-4">
+                <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input type="text" placeholder="请输入淘宝订单号查询" class="bg-transparent outline-none flex-1">
+            </div>
+        </div>
+        
+        <!-- 最近查询记录 -->
+        <div class="p-4 flex-grow">
+            <h2 class="text-lg font-medium mb-3">最近查询</h2>
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-medium">订单号: TB123456789</p>
+                        <p class="text-sm text-gray-500">角色: 狐狸头壳</p>
+                    </div>
+                    <div class="text-blue-600">查看</div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-medium">订单号: TB987654321</p>
+                        <p class="text-sm text-gray-500">角色: 猫咪头壳</p>
+                    </div>
+                    <div class="text-blue-600">查看</div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-6">
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-full">立即查询</button>
+            </div>
+        </div>
+        
+        <!-- 底部导航栏 -->
+        <div class="bg-white border-t flex justify-around py-2">
+            <div class="nav-item active">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                </svg>
+                首页
+            </div>
+            <div class="nav-item text-gray-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                </svg>
+                我的
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
