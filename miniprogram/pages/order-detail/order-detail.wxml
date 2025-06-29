@@ -1,0 +1,46 @@
+<!--order-detail.wxml-->
+<view class="container">
+  <!-- 订单信息 -->
+  <view class="card order-info">
+    <view class="flex-row flex-between mb-small">
+      <text class="label">淘宝订单号</text>
+      <text class="value">{{order.orderId}}</text>
+    </view>
+    <view class="flex-row flex-between mb-small">
+      <text class="label">排单号</text>
+      <text class="value">{{order.queueId}}</text>
+    </view>
+    <view class="flex-row flex-between mb-small">
+      <text class="label">角色名称</text>
+      <text class="value">{{order.roleName}}</text>
+    </view>
+    <view class="flex-row flex-between">
+      <text class="label">预期完成时间</text>
+      <text class="value">{{order.expectedCompletionDate}}</text>
+    </view>
+  </view>
+  
+  <!-- 制作进度 -->
+  <view class="card">
+    <view class="section-title mb-medium">制作进度</view>
+    
+    <t-steps current="{{currentStep}}" layout="vertical">
+      <t-step-item wx:for="{{steps}}" wx:key="index" title="{{item.title}}" content="{{item.content}}" status="{{index < currentStep ? 'finish' : index === currentStep ? 'process' : 'default'}}" />
+    </t-steps>
+    
+    <view class="current-status mt-medium">
+      <text class="text-primary">当前进度：{{steps[currentStep].title}}</text>
+    </view>
+  </view>
+  
+  <!-- 预期成品图 -->
+  <view class="card">
+    <view class="section-title mb-medium">预期成品展示</view>
+    <t-image src="{{order.previewImage}}" mode="widthFix" width="100%" shape="round" />
+  </view>
+  
+  <!-- 联系客服 -->
+  <view class="contact-button-container">
+    <t-button icon="chat" theme="primary" size="large" block bind:tap="onContactService">联系客服</t-button>
+  </view>
+</view> 

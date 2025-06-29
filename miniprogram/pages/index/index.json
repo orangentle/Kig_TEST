@@ -1,5 +1,9 @@
 {
   "usingComponents": {
-    "t-button": "tdesign-miniprogram/button/button"
-  }
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-search": "tdesign-miniprogram/search/search",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-cell-group": "tdesign-miniprogram/cell-group/cell-group"
+  },
+  "navigationBarTitleText": "鼠鼠工坊"
 }

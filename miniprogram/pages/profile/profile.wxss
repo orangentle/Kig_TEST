@@ -1,0 +1,97 @@
+/* profile.wxss */
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: #ffffff;
+  padding: 32rpx 24rpx;
+  text-align: center;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 500;
+}
+
+.login-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx 24rpx;
+}
+
+.avatar-placeholder {
+  margin-bottom: 32rpx;
+}
+
+.login-tip {
+  color: #999999;
+  font-size: 28rpx;
+  margin-bottom: 48rpx;
+}
+
+.login-button {
+  width: 80%;
+}
+
+.user-info-container {
+  background-color: #ffffff;
+  padding: 48rpx 24rpx;
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  margin-right: 24rpx;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.user-id {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 24rpx;
+}
+
+.order-list {
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.empty-image {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  color: #999999;
+  font-size: 28rpx;
+} 

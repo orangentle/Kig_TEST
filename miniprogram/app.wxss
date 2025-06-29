@@ -1,10 +1,85 @@
 /**app.wxss**/
+page {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
 .container {
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
   box-sizing: border-box;
+}
+
+.page-container {
+  padding: 24rpx;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.text-primary {
+  color: #0052d9;
+}
+
+.text-gray {
+  color: #999999;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-small {
+  margin-top: 16rpx;
+}
+
+.mt-medium {
+  margin-top: 24rpx;
+}
+
+.mt-large {
+  margin-top: 32rpx;
+}
+
+.mb-small {
+  margin-bottom: 16rpx;
+}
+
+.mb-medium {
+  margin-bottom: 24rpx;
+}
+
+.mb-large {
+  margin-bottom: 32rpx;
 } 

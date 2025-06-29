@@ -1,0 +1,81 @@
+<!--profile.wxml-->
+<view class="container">
+  <!-- 未登录状态 -->
+  <block wx:if="{{!hasLogin}}">
+    <view class="header">
+      <text class="header-title">个人中心</text>
+    </view>
+    
+    <view class="login-container">
+      <view class="avatar-placeholder">
+        <t-avatar icon="user" size="large" />
+      </view>
+      <text class="login-tip">登录后查看您的订单信息</text>
+      <t-button 
+        theme="primary" 
+        size="large" 
+        shape="round" 
+        open-type="getUserInfo" 
+        bindgetuserinfo="onGetUserInfo"
+        class="login-button"
+      >
+        微信一键登录
+      </t-button>
+    </view>
+  </block>
+  
+  <!-- 已登录状态 -->
+  <block wx:else>
+    <view class="user-info-container">
+      <t-avatar 
+        image="{{userInfo.avatarUrl}}" 
+        size="large" 
+        class="user-avatar"
+      />
+      <view class="user-info">
+        <text class="user-name">{{userInfo.nickName}}</text>
+        <text class="user-id">ID: {{userId}}</text>
+      </view>
+    </view>
+    
+    <view class="page-container">
+      <view class="section-title">我的订单</view>
+      
+      <view class="order-list">
+        <t-cell-group>
+          <block wx:if="{{orders.length > 0}}">
+            <t-cell
+              wx:for="{{orders}}"
+              wx:key="orderId"
+              hover
+              arrow
+              bind:click="onOrderClick"
+              data-order-id="{{item.orderId}}"
+              title="订单号: {{item.orderId}}"
+              description="角色: {{item.roleName}}\n下单时间: {{item.orderTime}}"
+            >
+              <t-tag 
+                wx:if="{{item.status === 'processing'}}" 
+                slot="note" 
+                theme="primary" 
+                variant="light"
+              >制作中</t-tag>
+              <t-tag 
+                wx:else 
+                slot="note" 
+                theme="success" 
+                variant="light"
+              >已完成</t-tag>
+            </t-cell>
+          </block>
+          <block wx:else>
+            <view class="empty-state">
+              <image class="empty-image" src="{{emptyImageUrl}}" mode="aspectFit"></image>
+              <text class="empty-text">暂无订单信息</text>
+            </view>
+          </block>
+        </t-cell-group>
+      </view>
+    </view>
+  </block>
+</view> 

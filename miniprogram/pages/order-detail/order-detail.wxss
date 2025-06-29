@@ -1,0 +1,34 @@
+/* order-detail.wxss */
+.container {
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.order-info {
+  margin-top: 0;
+}
+
+.label {
+  color: #666;
+  font-size: 28rpx;
+}
+
+.value {
+  font-size: 28rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.current-status {
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.contact-button-container {
+  margin-top: 48rpx;
+  padding-bottom: 48rpx;
+} 

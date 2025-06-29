@@ -1,28 +1,51 @@
 <!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
+<view class="container">
+  <!-- 顶部区域 -->
+  <view class="header">
+    <view class="logo-container">
+      <image class="logo" src="{{logoUrl}}" mode="aspectFit"></image>
+      <text class="title">鼠鼠工坊</text>
     </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
-    </view>
-    <t-button theme="primary">按钮</t-button>
+    
+    <!-- 搜索框 -->
+    <t-search
+      value="{{searchValue}}"
+      placeholder="请输入淘宝订单号查询"
+      bind:change="onSearchChange"
+      bind:submit="onSearch"
+    />
   </view>
-</scroll-view>
+  
+  <!-- 最近查询记录 -->
+  <view class="page-container">
+    <block wx:if="{{recentSearches.length > 0}}">
+      <view class="section-title">最近查询</view>
+      
+      <view class="search-list">
+        <t-cell-group>
+          <t-cell
+            wx:for="{{recentSearches}}"
+            wx:key="orderId"
+            title="订单号: {{item.orderId}}"
+            description="角色: {{item.roleName}}"
+            arrow
+            hover
+            bind:click="onOrderClick"
+            data-order-id="{{item.orderId}}"
+          />
+        </t-cell-group>
+      </view>
+    </block>
+    
+    <block wx:else>
+      <view class="empty-state">
+        <image class="empty-image" src="{{emptyImageUrl}}" mode="aspectFit"></image>
+        <text class="empty-text">暂无查询记录</text>
+      </view>
+    </block>
+    
+    <view class="search-button-container">
+      <t-button theme="primary" size="large" shape="round" bind:tap="onSearchButtonClick">立即查询</t-button>
+    </view>
+  </view>
+</view>

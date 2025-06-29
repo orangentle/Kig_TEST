@@ -1,9 +1,76 @@
 /**index.wxss**/
-page {
+.container {
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
+
+.header {
+  background-color: #ffffff;
+  padding: 32rpx 24rpx;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32rpx;
+}
+
+.logo {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 24rpx;
+}
+
+.search-list {
+  border-radius: 16rpx;
+  overflow: hidden;
+  margin-bottom: 32rpx;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.empty-image {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  color: #999999;
+  font-size: 28rpx;
+}
+
+.search-button-container {
+  margin-top: 48rpx;
+  display: flex;
+  justify-content: center;
+  padding: 0 24rpx;
+}
+
+.search-button-container .t-button {
+  min-width: 240rpx;
+}
+
 .scrollarea {
   flex: 1;
   overflow-y: hidden;
