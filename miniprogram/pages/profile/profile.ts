@@ -7,6 +7,12 @@ interface OrderInfo {
   status: 'processing' | 'completed';
 }
 
+interface OrderStats {
+  processing: number;
+  completed: number;
+  total: number;
+}
+
 Component({
   data: {
     hasLogin: false,
@@ -16,7 +22,14 @@ Component({
     },
     userId: '123456',
     orders: [] as OrderInfo[],
-    emptyImageUrl: ''
+    orderStats: {
+      processing: 0,
+      completed: 0,
+      total: 0
+    } as OrderStats,
+    isAdmin: false,  // 是否为管理员
+    adminClickCount: 0,  // 点击用户ID的次数，用于触发管理员登录
+    adminPassword: '123456'  // 管理员密码，实际应用中应该从服务器获取或更安全的方式存储
   },
 
   lifetimes: {
@@ -27,12 +40,13 @@ Component({
       
       this.setData({
         hasLogin,
-        userInfo: userInfo || this.data.userInfo,
-        emptyImageUrl: app.globalData.emptyImageUrl
+        userInfo: userInfo || this.data.userInfo
       });
       
       if (hasLogin) {
         this.loadOrders();
+        // 检查是否是管理员
+        this.checkAdminStatus();
       }
     }
   },
@@ -94,24 +108,33 @@ Component({
         }
       ];
       
+      // 计算订单统计数据
+      const stats = {
+        processing: mockData.filter(order => order.status === 'processing').length,
+        completed: mockData.filter(order => order.status === 'completed').length,
+        total: mockData.length
+      };
+      
       this.setData({
-        orders: mockData
+        orders: mockData,
+        orderStats: stats
       });
     },
     
     // 点击订单项
     onOrderClick(e: any) {
       const orderId = e.currentTarget.dataset.orderId;
-      console.log('从个人中心点击订单项，订单ID:', orderId);
       
       wx.navigateTo({
-        url: `/pages/order-detail/order-detail?id=${orderId}`,
-        success: (res) => {
-          console.log('导航成功');
-        },
-        fail: (err) => {
-          console.error('导航失败', err);
-        }
+        url: `/pages/order-detail/order-detail?id=${orderId}`
+      });
+    },
+    
+    // 查看全部订单
+    viewAllOrders() {
+      wx.showToast({
+        title: '查看全部订单功能开发中',
+        icon: 'none'
       });
     },
     
@@ -119,28 +142,79 @@ Component({
     contactService() {
       wx.showModal({
         title: '联系客服',
-        content: '即将打开淘宝店铺客服页面',
+        content: '即将打开客服会话',
         success: (res) => {
           if (res.confirm) {
-            // 使用淘宝短链接
-            const taobaoUrl = 'https://m.tb.cn/h.hf1womHplfjsH5V';
-            wx.setStorageSync('webviewUrl', taobaoUrl);
-            
-            wx.navigateTo({
-              url: '/pages/webview/webview',
-              success: () => {
-                console.log('成功打开淘宝网页');
-              },
-              fail: (err) => {
-                console.error('打开淘宝网页失败', err);
-                wx.showToast({
-                  title: '打开失败，请稍后重试',
-                  icon: 'none'
-                });
-              }
+            wx.showToast({
+              title: '客服功能开发中',
+              icon: 'none'
             });
           }
         }
+      });
+    },
+
+    // 检查管理员状态
+    checkAdminStatus() {
+      // 从存储中获取管理员状态
+      const isAdmin = wx.getStorageSync('isAdmin') || false;
+      this.setData({ isAdmin });
+    },
+
+    // 用户ID点击触发器 - 隐藏的管理员入口
+    onAdminLoginTrigger() {
+      let { adminClickCount } = this.data;
+      adminClickCount++;
+      
+      this.setData({ adminClickCount });
+      
+      // 如果点击达到5次，弹出管理员登录对话框
+      if (adminClickCount >= 5) {
+        this.showAdminLoginDialog();
+        // 重置点击计数
+        this.setData({ adminClickCount: 0 });
+      }
+    },
+
+    // 显示管理员登录对话框
+    showAdminLoginDialog() {
+      wx.showModal({
+        title: '管理员登录',
+        content: '请输入管理员密码',
+        editable: true,
+        placeholderText: '请输入密码',
+        success: (res) => {
+          if (res.confirm && res.content) {
+            this.verifyAdminPassword(res.content);
+          }
+        }
+      });
+    },
+
+    // 验证管理员密码
+    verifyAdminPassword(password: string) {
+      // 实际应用中应该使用更安全的验证方式，比如与服务器交互
+      if (password === this.data.adminPassword) {
+        // 设置为管理员
+        this.setData({ isAdmin: true });
+        wx.setStorageSync('isAdmin', true);
+        
+        wx.showToast({
+          title: '管理员登录成功',
+          icon: 'success'
+        });
+      } else {
+        wx.showToast({
+          title: '密码错误',
+          icon: 'error'
+        });
+      }
+    },
+
+    // 进入管理后台
+    enterAdminPanel() {
+      wx.navigateTo({
+        url: '/pages/admin/admin'
       });
     }
   }

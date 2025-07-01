@@ -1,0 +1,131 @@
+<!--admin.wxml-->
+<view class="container">
+  <!-- 顶部导航 -->
+  <view class="header-gradient">
+    <view class="admin-header">
+      <view class="admin-logo">
+        <image class="admin-avatar" src="/assets/images/icon.jpg" mode="aspectFill"></image>
+        <text class="admin-title">鼠鼠工坊管理后台</text>
+      </view>
+      <view class="admin-info">
+        <text class="admin-name">管理员</text>
+        <image class="admin-avatar-small" src="/assets/images/icon.jpg" mode="aspectFill"></image>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 筛选标签 -->
+  <view class="filter-tabs">
+    <scroll-view scroll-x class="tabs-container">
+      <view 
+        class="tab-item {{currentTab === 'all' ? 'tab-active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="all"
+      >全部未完成 ({{orderCounts.all || 0}})</view>
+      <view 
+        class="tab-item {{currentTab === 'design' ? 'tab-active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="design"
+      >设计确认 ({{orderCounts.design || 0}})</view>
+      <view 
+        class="tab-item {{currentTab === 'model' ? 'tab-active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="model"
+      >模型制作 ({{orderCounts.model || 0}})</view>
+      <view 
+        class="tab-item {{currentTab === 'print' ? 'tab-active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="print"
+      >打印中 ({{orderCounts.print || 0}})</view>
+      <view 
+        class="tab-item {{currentTab === 'polish' ? 'tab-active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="polish"
+      >打磨上色 ({{orderCounts.polish || 0}})</view>
+      <view 
+        class="tab-item {{currentTab === 'assembly' ? 'tab-active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="assembly"
+      >组装 ({{orderCounts.assembly || 0}})</view>
+    </scroll-view>
+  </view>
+  
+  <!-- 搜索框 -->
+  <view class="search-container">
+    <t-search
+      value="{{searchValue}}"
+      placeholder="搜索订单号或客户名称"
+      bind:change="onSearchChange"
+      bind:submit="onSearch"
+    />
+  </view>
+  
+  <!-- 订单列表 -->
+  <scroll-view scroll-y class="order-list">
+    <block wx:if="{{filteredOrders.length > 0}}">
+      <!-- 按下单时间排序，最早的在顶部 -->
+      <view 
+        class="order-card {{item.status === 'urgent' ? 'order-card-urgent' : ''}}" 
+        wx:for="{{filteredOrders}}" 
+        wx:key="orderId"
+        bindtap="onOrderClick"
+        data-order-id="{{item.orderId}}"
+      >
+        <view class="order-header">
+          <text class="order-id">订单号: {{item.orderId}}</text>
+          <view class="order-status {{item.status === 'urgent' ? 'status-urgent' : item.status === 'soon' ? 'status-soon' : 'status-normal'}}">
+            {{item.status === 'urgent' ? '加急' : item.status === 'soon' ? '即将完成' : '正常'}}
+          </view>
+        </view>
+        
+        <view class="order-content">
+          <view class="order-info">
+            <view class="order-customer">客户: {{item.customerName}}</view>
+            <view class="order-role">角色: {{item.roleName}}</view>
+            <view class="order-progress">
+              <text class="progress-text">{{item.progressStage}}</text>
+              <view class="progress-bar">
+                <view class="progress-fill" style="width: {{item.progressPercent}}%; background-color: {{item.status === 'urgent' ? '#ff4d4f' : item.status === 'soon' ? '#faad14' : '#ff8800'}}"></view>
+              </view>
+            </view>
+          </view>
+          <view class="order-action">查看详情</view>
+        </view>
+        
+        <view class="order-footer">
+          <text class="order-time">下单时间: {{item.orderTime}}</text>
+          <text class="order-deadline">预期完成: {{item.deadline}}</text>
+        </view>
+      </view>
+    </block>
+    
+    <view class="empty-state" wx:else>
+      <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
+      <text class="empty-text">暂无相关订单</text>
+    </view>
+  </scroll-view>
+  
+  <!-- 底部操作栏 -->
+  <view class="footer-actions">
+    <t-button 
+      icon="add" 
+      variant="outline" 
+      theme="primary" 
+      class="action-button" 
+      bind:tap="onAddOrder"
+    >新增订单</t-button>
+    <t-button 
+      icon="upload" 
+      variant="outline" 
+      theme="primary" 
+      class="action-button" 
+      bind:tap="onExportData"
+    >导出数据</t-button>
+    <t-button 
+      icon="file-copy" 
+      theme="primary" 
+      class="action-button primary-button" 
+      bind:tap="onViewArchive"
+    >查看归档</t-button>
+  </view>
+</view> 

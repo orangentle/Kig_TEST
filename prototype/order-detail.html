@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #f5f7fa;
             height: 100vh;
             margin: 0;
             padding: 0;
@@ -24,7 +24,7 @@
             top: 0;
             left: 0;
             height: 100%;
-            background-color: #0052d9;
+            background-color: #ff8800;
             border-radius: 2px;
         }
         .progress-step {
@@ -36,8 +36,9 @@
             height: 16px;
             border-radius: 50%;
             background-color: #fff;
-            border: 3px solid #0052d9;
+            border: 3px solid #ff8800;
             margin-bottom: 8px;
+            transition: all 0.3s ease;
         }
         .progress-dot.inactive {
             border-color: #e0e0e0;
@@ -52,101 +53,142 @@
             margin-bottom: 4px;
         }
         .active {
-            color: #0052d9;
+            color: #ff8800;
+        }
+        .order-header {
+            background: linear-gradient(135deg, #ff9900, #ffcc00);
+            border-radius: 0 0 25px 25px;
+        }
+        .info-card {
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .product-image {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .contact-btn {
+            background: linear-gradient(90deg, #ff8800, #ffaa00);
+            box-shadow: 0 6px 12px rgba(255,136,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(255,136,0,0.3);
+        }
+        .image-placeholder {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            opacity: 0.2;
         }
     </style>
 </head>
 <body>
     <div class="flex flex-col h-full">
         <!-- 顶部导航 -->
-        <div class="bg-white p-4 flex items-center">
+        <div class="order-header p-4 flex items-center text-white">
             <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
             <h1 class="text-lg font-medium">订单详情</h1>
+            
+            <!-- 装饰图标 -->
+            <img src="../icon.png" alt="鼠鼠" class="image-placeholder">
         </div>
         
         <!-- 订单信息 -->
-        <div class="bg-white mt-2 p-4">
-            <div class="flex justify-between items-center mb-3">
-                <div class="font-medium">淘宝订单号</div>
-                <div>TB123456789</div>
-            </div>
-            <div class="flex justify-between items-center mb-3">
-                <div class="font-medium">排单号</div>
-                <div>RatStudio-2023-001</div>
-            </div>
-            <div class="flex justify-between items-center mb-3">
-                <div class="font-medium">角色名称</div>
-                <div>狐狸头壳</div>
-            </div>
-            <div class="flex justify-between items-center mb-3">
-                <div class="font-medium">预期完成时间</div>
-                <div>2023-12-30</div>
+        <div class="px-4 -mt-5">
+            <div class="bg-white info-card p-5">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-gray-500">淘宝订单号</div>
+                    <div class="font-medium">TB123456789</div>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-gray-500">排单号</div>
+                    <div class="font-medium">RatStudio-2025-001</div>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-gray-500">角色名称</div>
+                    <div class="font-medium">狐狸头壳</div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-gray-500">预期完成时间</div>
+                    <div class="font-medium text-orange-500">2025-12-30</div>
+                </div>
             </div>
         </div>
         
         <!-- 制作进度 -->
-        <div class="bg-white mt-2 p-4">
-            <h2 class="text-lg font-medium mb-4">制作进度</h2>
-            
-            <div class="relative mb-8">
-                <div class="progress-bar">
-                    <div class="progress-bar-fill" style="width: 50%;"></div>
+        <div class="p-4">
+            <div class="bg-white info-card p-5">
+                <h2 class="text-lg font-medium mb-5">制作进度</h2>
+                
+                <div class="relative mb-8">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: 50%;"></div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-4">
+                        <div class="progress-step text-center">
+                            <div class="progress-dot"></div>
+                            <div class="text-xs">订单确认</div>
+                        </div>
+                        <div class="progress-step text-center">
+                            <div class="progress-dot"></div>
+                            <div class="text-xs">设计图确认</div>
+                        </div>
+                        <div class="progress-step text-center">
+                            <div class="progress-dot"></div>
+                            <div class="text-xs">模型制作</div>
+                        </div>
+                        <div class="progress-step text-center">
+                            <div class="progress-dot"></div>
+                            <div class="text-xs">打印</div>
+                        </div>
+                        <div class="progress-step text-center">
+                            <div class="progress-dot inactive"></div>
+                            <div class="text-xs text-gray-400">打磨上色</div>
+                        </div>
+                        <div class="progress-step text-center">
+                            <div class="progress-dot inactive"></div>
+                            <div class="text-xs text-gray-400">组装</div>
+                        </div>
+                        <div class="progress-step text-center">
+                            <div class="progress-dot inactive"></div>
+                            <div class="text-xs text-gray-400">质检</div>
+                        </div>
+                        <div class="progress-step text-center">
+                            <div class="progress-dot inactive"></div>
+                            <div class="text-xs text-gray-400">发货</div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="flex justify-between mt-2">
-                    <div class="progress-step text-center">
-                        <div class="progress-dot"></div>
-                        <div class="text-xs">订单确认</div>
-                    </div>
-                    <div class="progress-step text-center">
-                        <div class="progress-dot"></div>
-                        <div class="text-xs">设计图确认</div>
-                    </div>
-                    <div class="progress-step text-center">
-                        <div class="progress-dot"></div>
-                        <div class="text-xs">模型制作</div>
-                    </div>
-                    <div class="progress-step text-center">
-                        <div class="progress-dot"></div>
-                        <div class="text-xs">打印</div>
-                    </div>
-                    <div class="progress-step text-center">
-                        <div class="progress-dot inactive"></div>
-                        <div class="text-xs text-gray-400">打磨上色</div>
-                    </div>
-                    <div class="progress-step text-center">
-                        <div class="progress-dot inactive"></div>
-                        <div class="text-xs text-gray-400">组装</div>
-                    </div>
-                    <div class="progress-step text-center">
-                        <div class="progress-dot inactive"></div>
-                        <div class="text-xs text-gray-400">质检</div>
-                    </div>
-                    <div class="progress-step text-center">
-                        <div class="progress-dot inactive"></div>
-                        <div class="text-xs text-gray-400">发货</div>
+                <div class="text-center">
+                    <div class="inline-block bg-yellow-50 text-orange-500 px-4 py-2 rounded-full font-medium">
+                        当前进度：打印中
                     </div>
                 </div>
-            </div>
-            
-            <div class="text-center text-blue-600 font-medium">
-                当前进度：打印中
             </div>
         </div>
         
         <!-- 预期成品图 -->
-        <div class="bg-white mt-2 p-4">
-            <h2 class="text-lg font-medium mb-3">预期成品展示</h2>
-            <div class="rounded-lg overflow-hidden">
-                <img src="https://img.alicdn.com/imgextra/i1/2201504856228/O1CN01KZLNVJ1V6zEiOJJcP_!!2201504856228.jpg" alt="预期成品图" class="w-full">
+        <div class="px-4 mb-4">
+            <div class="bg-white info-card p-5">
+                <h2 class="text-lg font-medium mb-4">预期成品展示</h2>
+                <div class="product-image overflow-hidden">
+                    <img src="../icon.png" alt="预期成品图" class="w-full">
+                </div>
             </div>
         </div>
         
         <!-- 联系客服 -->
         <div class="p-4 mt-auto">
-            <button class="w-full bg-blue-600 text-white py-3 rounded-lg flex items-center justify-center">
+            <button class="contact-btn w-full text-white py-3 rounded-full flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                 </svg>
@@ -155,12 +197,18 @@
         </div>
         
         <!-- 底部导航栏 -->
-        <div class="bg-white border-t flex justify-around py-2">
+        <div class="bg-white border-t flex justify-around py-3 shadow-md">
             <div class="nav-item text-gray-500">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                 </svg>
                 首页
+            </div>
+            <div class="nav-item text-gray-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                </svg>
+                作品
             </div>
             <div class="nav-item text-gray-500">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

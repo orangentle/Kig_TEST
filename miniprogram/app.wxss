@@ -2,7 +2,7 @@
 page {
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #f5f7fa;
 }
 
 .container {
@@ -48,8 +48,9 @@ page {
   flex-grow: 1;
 }
 
+/* 主题色定义 */
 .text-primary {
-  color: #0052d9;
+  color: #ff8800;
 }
 
 .text-gray {
@@ -82,4 +83,90 @@ page {
 
 .mb-large {
   margin-bottom: 32rpx;
+}
+
+/* 渐变背景 */
+.gradient-bg {
+  background: linear-gradient(135deg, #ff9900, #ffcc00);
+}
+
+/* 圆角设计 */
+.rounded-full {
+  border-radius: 999rpx;
+}
+
+.rounded-lg {
+  border-radius: 16rpx;
+}
+
+/* 头部样式 */
+.header {
+  padding: 32rpx 24rpx;
+  background: #fff;
+  border-radius: 0 0 30rpx 30rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.header-gradient {
+  padding: 32rpx 24rpx;
+  background: linear-gradient(135deg, #ff9900, #ffcc00);
+  border-radius: 0 0 30rpx 30rpx;
+  margin-bottom: 24rpx;
+  color: #fff;
+}
+
+/* 按钮样式覆盖 */
+.primary-button {
+  background: linear-gradient(90deg, #ff8800, #ffaa00) !important;
+  color: #000 !important;
+  font-weight: 500 !important;
+}
+
+/* 状态标签 */
+.status-tag {
+  padding: 4rpx 16rpx;
+  border-radius: 10rpx;
+  font-size: 24rpx;
+}
+
+.status-urgent {
+  background-color: #fff1f0;
+  color: #ff4d4f;
+}
+
+.status-normal {
+  background-color: #fff0e0;
+  color: #ff8800;
+}
+
+.status-soon {
+  background-color: #fcf4db;
+  color: #faad14;
+}
+
+.status-completed {
+  background-color: #f6ffed;
+  color: #52c41a;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.empty-image {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  color: #999;
+  font-size: 28rpx;
 } 

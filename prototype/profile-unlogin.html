@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #f5f7fa;
             height: 100vh;
             margin: 0;
             padding: 0;
@@ -23,40 +23,102 @@
             margin-bottom: 4px;
         }
         .active {
-            color: #0052d9;
+            color: #ff8800;
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #ff9900, #ffcc00);
+            border-radius: 0 0 30px 30px;
+        }
+        .login-btn {
+            background: linear-gradient(90deg, #ff8800, #ffaa00);
+            box-shadow: 0 6px 12px rgba(255, 136, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(255, 136, 0, 0.3);
+        }
+        .avatar-placeholder {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
         }
     </style>
 </head>
 <body>
     <div class="flex flex-col h-full">
         <!-- 顶部标题 -->
-        <div class="bg-white p-4">
-            <h1 class="text-lg font-medium text-center">个人中心</h1>
+        <div class="profile-header p-6 text-white">
+            <h1 class="text-lg font-medium text-center mb-4">个人中心</h1>
+            
+            <!-- 插画预留位置 -->
+            <div class="flex justify-center mb-4">
+                <img src="../icon.png" alt="鼠鼠工坊" class="w-24 h-24 opacity-20">
+            </div>
         </div>
         
         <!-- 未登录提示 -->
-        <div class="flex-grow flex flex-col items-center justify-center p-6">
-            <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center mb-4">
-                <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                </svg>
+        <div class="flex-grow flex flex-col items-center justify-center p-6 -mt-10">
+            <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm text-center">
+                <div class="w-24 h-24 rounded-full avatar-placeholder flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold mb-2">欢迎来到鼠鼠工坊</h2>
+                <p class="text-gray-500 mb-6">登录后可查看您的订单信息和更多功能</p>
+                <button class="login-btn text-white px-8 py-3 rounded-full flex items-center justify-center w-full">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
+                    </svg>
+                    微信一键登录
+                </button>
             </div>
-            <p class="text-gray-500 mb-6">登录后查看您的订单信息</p>
-            <button class="bg-green-500 text-white px-8 py-3 rounded-full flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
-                </svg>
-                微信一键登录
-            </button>
+            
+            <!-- 功能提示 -->
+            <div class="mt-6 w-full max-w-sm">
+                <div class="bg-white p-4 rounded-lg shadow-sm mb-3">
+                    <div class="flex items-center">
+                        <div class="bg-yellow-100 p-2 rounded-lg mr-3">
+                            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">订单查询</h3>
+                            <p class="text-sm text-gray-500">无需登录即可查询订单进度</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <div class="flex items-center">
+                        <div class="bg-orange-100 p-2 rounded-lg mr-3">
+                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">作品展示</h3>
+                            <p class="text-sm text-gray-500">浏览我们的精美头壳作品</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- 底部导航栏 -->
-        <div class="bg-white border-t flex justify-around py-2">
+        <div class="bg-white border-t flex justify-around py-3 shadow-md">
             <div class="nav-item text-gray-500">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                 </svg>
                 首页
+            </div>
+            <div class="nav-item text-gray-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                </svg>
+                作品
             </div>
             <div class="nav-item active">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

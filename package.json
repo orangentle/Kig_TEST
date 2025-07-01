@@ -2,7 +2,10 @@
   "name": "miniprogram-ts-quickstart",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "compile": "tsc",
+    "build": "tsc"
+  },
   "keywords": [],
   "author": "",
   "license": "",
@@ -10,7 +13,7 @@
     "tdesign-miniprogram": "^1.9.6"
   },
   "devDependencies": {
-    "miniprogram-api-typings": "^2.8.3-1",
+    "miniprogram-api-typings": "^4.0.7",
     "uglify-js": "^3.19.3"
   }
 }

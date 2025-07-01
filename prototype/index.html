@@ -19,7 +19,9 @@
         .header-title {
             font-size: 2.5rem;
             font-weight: bold;
-            color: #333;
+            background: linear-gradient(135deg, #ff9900, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
             display: inline-block;
         }
@@ -114,23 +116,40 @@
             right: 5%;
             transform: rotate(15deg);
         }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 40px 0 20px;
+            text-align: center;
+            color: #444;
+        }
+        .section-description {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <img src="https://cdn-icons-png.flaticon.com/512/2362/2362765.png" alt="鼠鼠工坊" class="mascot">
+        <img src="../icon.png" alt="鼠鼠工坊" class="mascot">
         <h1 class="header-title">鼠鼠工坊小程序原型</h1>
         <p class="header-subtitle">专注于Kigurumi头壳制作的工作室</p>
         
-        <img src="https://cdn-icons-png.flaticon.com/512/5726/5726532.png" alt="装饰" class="decoration decoration-1">
-        <img src="https://cdn-icons-png.flaticon.com/512/6355/6355649.png" alt="装饰" class="decoration decoration-2">
+        <img src="../icon.png" alt="装饰" class="decoration decoration-1">
+        <img src="../icon.png" alt="装饰" class="decoration decoration-2">
     </div>
+    
+    <!-- 用户端页面 -->
+    <div class="section-title">用户端页面</div>
+    <p class="section-description">用户可以查询订单进度、浏览作品展示和管理个人订单</p>
     
     <div class="flex flex-wrap justify-center">
         <!-- 首页 -->
         <div class="flex flex-col items-center">
             <div class="screen-title">
-                <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" alt="首页" class="screen-icon">
+                <img src="../icon.png" alt="首页" class="screen-icon">
                 首页
             </div>
             <div class="phone-container">
@@ -141,10 +160,24 @@
             </div>
         </div>
         
+        <!-- 作品展示页 -->
+        <div class="flex flex-col items-center">
+            <div class="screen-title">
+                <img src="../icon.png" alt="作品展示" class="screen-icon">
+                作品展示
+            </div>
+            <div class="phone-container">
+                <div class="phone-notch"></div>
+                <div class="phone-frame">
+                    <iframe src="works.html"></iframe>
+                </div>
+            </div>
+        </div>
+        
         <!-- 订单详情页 -->
         <div class="flex flex-col items-center">
             <div class="screen-title">
-                <img src="https://cdn-icons-png.flaticon.com/512/1358/1358023.png" alt="订单详情" class="screen-icon">
+                <img src="../icon.png" alt="订单详情" class="screen-icon">
                 订单详情
             </div>
             <div class="phone-container">
@@ -158,7 +191,7 @@
         <!-- 个人中心（已登录） -->
         <div class="flex flex-col items-center">
             <div class="screen-title">
-                <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="个人中心" class="screen-icon">
+                <img src="../icon.png" alt="个人中心" class="screen-icon">
                 个人中心（已登录）
             </div>
             <div class="phone-container">
@@ -172,13 +205,33 @@
         <!-- 个人中心（未登录） -->
         <div class="flex flex-col items-center">
             <div class="screen-title">
-                <img src="https://cdn-icons-png.flaticon.com/512/4202/4202843.png" alt="未登录" class="screen-icon">
+                <img src="../icon.png" alt="未登录" class="screen-icon">
                 个人中心（未登录）
             </div>
             <div class="phone-container">
                 <div class="phone-notch"></div>
                 <div class="phone-frame">
                     <iframe src="profile-unlogin.html"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 管理员端页面 -->
+    <div class="section-title">管理员端页面</div>
+    <p class="section-description">管理员可以查看和管理所有未完成订单，更新订单状态</p>
+    
+    <div class="flex flex-wrap justify-center">
+        <!-- 管理员后台 -->
+        <div class="flex flex-col items-center">
+            <div class="screen-title">
+                <img src="../icon.png" alt="管理员后台" class="screen-icon">
+                管理员后台
+            </div>
+            <div class="phone-container">
+                <div class="phone-notch"></div>
+                <div class="phone-frame">
+                    <iframe src="admin.html"></iframe>
                 </div>
             </div>
         </div>

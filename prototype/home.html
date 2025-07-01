@@ -8,14 +8,15 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #f5f7fa;
             height: 100vh;
             margin: 0;
             padding: 0;
         }
         .search-box {
-            border-radius: 8px;
-            background-color: #f5f5f5;
+            border-radius: 12px;
+            background-color: #f0f2f5;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
         .nav-item {
             display: flex;
@@ -27,17 +28,39 @@
             margin-bottom: 4px;
         }
         .active {
-            color: #0052d9;
+            color: #ff8800;
+        }
+        .banner-area {
+            height: 150px;
+            background: linear-gradient(135deg, #ff9900, #ffcc00);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+        .banner-placeholder {
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            width: 180px;
+            height: 180px;
+            opacity: 0.2;
+        }
+        .recent-card {
+            border-radius: 12px;
+            transition: transform 0.2s ease;
+        }
+        .recent-card:hover {
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
     <div class="flex flex-col h-full">
         <!-- 顶部区域 -->
-        <div class="p-4 bg-white">
-            <div class="flex items-center justify-center mb-6">
-                <img src="https://cdn-icons-png.flaticon.com/512/3069/3069187.png" alt="Logo" class="rounded-full w-10 h-10 mr-3">
-                <h1 class="text-xl font-bold">鼠鼠工坊</h1>
+        <div class="p-4 bg-white rounded-b-3xl shadow-sm">
+            <div class="flex items-center justify-center mb-4">
+                <img src="../icon.png" alt="Logo" class="rounded-full w-10 h-10 mr-3">
+                <h1 class="text-xl font-bold bg-gradient-to-r from-yellow-500 to-orange-500 text-transparent bg-clip-text">鼠鼠工坊</h1>
             </div>
             
             <!-- 搜索框 -->
@@ -47,43 +70,64 @@
                 </svg>
                 <input type="text" placeholder="请输入淘宝订单号查询" class="bg-transparent outline-none flex-1">
             </div>
+            
+            <!-- Banner区域 - 预留插画位置 -->
+            <div class="banner-area flex items-center p-4 mb-4">
+                <div class="z-10">
+                    <h2 class="text-white text-lg font-bold mb-2">专业Kigurumi头壳定制</h2>
+                    <p class="text-white text-opacity-80 text-sm mb-3">精心打造，为您的角色赋予生命</p>
+                    <button class="bg-white text-orange-500 px-4 py-1 rounded-full text-sm font-medium">了解更多</button>
+                </div>
+                <!-- 插画占位符 -->
+                <img src="../icon.png" alt="插画占位" class="banner-placeholder">
+            </div>
         </div>
         
         <!-- 最近查询记录 -->
         <div class="p-4 flex-grow">
-            <h2 class="text-lg font-medium mb-3">最近查询</h2>
-            <div class="bg-white rounded-lg shadow-sm p-4 mb-3">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-medium">最近查询</h2>
+                <span class="text-sm text-orange-500">查看全部</span>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3 recent-card">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="font-medium">订单号: TB123456789</p>
                         <p class="text-sm text-gray-500">角色: 狐狸头壳</p>
                     </div>
-                    <div class="text-blue-600">查看</div>
+                    <div class="bg-yellow-50 text-orange-500 px-3 py-1 rounded-full text-sm">查看</div>
                 </div>
             </div>
             
-            <div class="bg-white rounded-lg shadow-sm p-4 mb-3">
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3 recent-card">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="font-medium">订单号: TB987654321</p>
                         <p class="text-sm text-gray-500">角色: 猫咪头壳</p>
                     </div>
-                    <div class="text-blue-600">查看</div>
+                    <div class="bg-yellow-50 text-orange-500 px-3 py-1 rounded-full text-sm">查看</div>
                 </div>
             </div>
             
             <div class="text-center mt-6">
-                <button class="bg-blue-600 text-white px-6 py-2 rounded-full">立即查询</button>
+                <button class="bg-gradient-to-r from-orange-500 to-yellow-500 text-black font-medium px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-shadow">立即查询</button>
             </div>
         </div>
         
         <!-- 底部导航栏 -->
-        <div class="bg-white border-t flex justify-around py-2">
+        <div class="bg-white border-t flex justify-around py-3 shadow-md">
             <div class="nav-item active">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                 </svg>
                 首页
+            </div>
+            <div class="nav-item text-gray-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                </svg>
+                作品
             </div>
             <div class="nav-item text-gray-500">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

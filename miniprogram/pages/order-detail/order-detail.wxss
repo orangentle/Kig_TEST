@@ -1,34 +1,213 @@
 /* order-detail.wxss */
 .container {
-  padding: 24rpx;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
   box-sizing: border-box;
 }
 
-.order-info {
-  margin-top: 0;
+.header-gradient {
+  background: linear-gradient(135deg, #ff9900, #ffcc00);
+  border-radius: 0 0 25rpx 25rpx;
+  padding: 24rpx;
+  color: white;
+  position: relative;
 }
 
-.label {
-  color: #666;
-  font-size: 28rpx;
+.nav-header {
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
-.value {
-  font-size: 28rpx;
+.back-button {
+  padding: 8rpx;
 }
 
-.section-title {
+.page-title {
+  flex: 1;
+  text-align: center;
   font-size: 32rpx;
+  font-weight: 500;
+}
+
+.decoration-image {
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+  width: 100rpx;
+  height: 100rpx;
+  opacity: 0.2;
+}
+
+.order-info-card {
+  margin: -20rpx 24rpx 24rpx;
+  padding: 32rpx;
+  background-color: white;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  color: #999;
+  font-size: 28rpx;
+}
+
+.info-value {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.progress-card, .preview-card {
+  margin: 0 24rpx 24rpx;
+  padding: 32rpx;
+  background-color: white;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 32rpx;
+}
+
+.progress-container {
+  margin-bottom: 32rpx;
+  position: relative;
+}
+
+.progress-bar {
+  height: 8rpx;
+  background-color: #e0e0e0;
+  border-radius: 4rpx;
+  margin-bottom: 32rpx;
+  position: relative;
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #ff8800;
+  border-radius: 4rpx;
+}
+
+/* 原横向步骤样式 */
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 12.5%;
+  position: relative;
+}
+
+/* 新增纵向步骤样式 */
+.progress-steps-vertical {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20rpx;
+}
+
+.progress-step-vertical {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30rpx;
+  position: relative;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.step-content {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 46rpx;
+  margin-bottom: 10rpx;
+}
+
+.step-content.active {
+  color: #666;
+}
+
+.step-line {
+  position: absolute;
+  left: 16rpx;
+  top: 32rpx;
+  width: 2rpx;
+  height: calc(100% - 10rpx);
+  background-color: #e0e0e0;
+  z-index: 0;
+}
+
+.progress-dot {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  background-color: white;
+  border: 6rpx solid #e0e0e0;
+  margin-right: 14rpx;
+  z-index: 1;
+}
+
+.progress-dot.active {
+  border-color: #ff8800;
+}
+
+.progress-label {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.progress-label.active {
+  color: #333;
   font-weight: 500;
 }
 
 .current-status {
   text-align: center;
+  margin-top: 20rpx;
+}
+
+.status-badge {
+  display: inline-block;
+  background-color: #fff0e0;
+  color: #ff8800;
+  padding: 8rpx 24rpx;
+  border-radius: 999rpx;
   font-size: 28rpx;
   font-weight: 500;
 }
 
+.preview-image {
+  width: 100%;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
 .contact-button-container {
-  margin-top: 48rpx;
+  margin: 24rpx;
+  margin-top: auto;
   padding-bottom: 48rpx;
 } 

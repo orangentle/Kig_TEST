@@ -162,5 +162,12 @@ Component({
         }
       })
     },
+    // 查看全部搜索记录
+    viewAllSearches() {
+      wx.showToast({
+        title: '查看全部记录功能开发中',
+        icon: 'none'
+      });
+    }
   },
 })

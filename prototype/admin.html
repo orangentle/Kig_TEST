@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鼠鼠工坊 - 管理员后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f7fa;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .order-status {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .status-urgent {
+            background-color: #fff1f0;
+            color: #ff4d4f;
+        }
+        .status-normal {
+            background-color: #fff0e0;
+            color: #ff8800;
+        }
+        .status-soon {
+            background-color: #fcf4db;
+            color: #faad14;
+        }
+        .tab-active {
+            color: #ff8800;
+            border-bottom: 2px solid #ff8800;
+        }
+        .progress-indicator {
+            width: 60px;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex flex-col h-full">
+        <!-- 顶部导航 -->
+        <div class="bg-gradient-to-r from-yellow-500 to-orange-500 p-4 flex items-center justify-between shadow-sm text-white">
+            <div class="flex items-center">
+                <img src="../icon.png" alt="Logo" class="rounded-full w-8 h-8 mr-3">
+                <h1 class="text-lg font-medium">鼠鼠工坊管理后台</h1>
+            </div>
+            <div class="flex items-center">
+                <span class="mr-2 text-sm">管理员</span>
+                <img src="../icon.png" alt="管理员头像" class="w-8 h-8 rounded-full">
+            </div>
+        </div>
+        
+        <!-- 筛选标签 -->
+        <div class="bg-white p-4 flex space-x-6 overflow-x-auto">
+            <div class="tab-active pb-2 px-1 font-medium">全部未完成 (12)</div>
+            <div class="text-gray-500 pb-2 px-1">设计确认 (3)</div>
+            <div class="text-gray-500 pb-2 px-1">模型制作 (2)</div>
+            <div class="text-gray-500 pb-2 px-1">打印中 (4)</div>
+            <div class="text-gray-500 pb-2 px-1">打磨上色 (2)</div>
+            <div class="text-gray-500 pb-2 px-1">组装 (1)</div>
+        </div>
+        
+        <!-- 搜索框 -->
+        <div class="p-4 bg-white border-t border-b border-gray-100">
+            <div class="flex items-center bg-gray-100 rounded-lg px-3 py-2">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input type="text" placeholder="搜索订单号或客户名称" class="bg-transparent outline-none ml-2 flex-1">
+            </div>
+        </div>
+        
+        <!-- 订单列表 -->
+        <div class="p-4 flex-grow overflow-auto">
+            <!-- 即将完成订单 - 最早下单 -->
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="font-medium">订单号: TB456789123</div>
+                    <div class="order-status status-soon">即将完成</div>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <p class="text-sm">客户: 张小华</p>
+                        <p class="text-sm text-gray-500">角色: 兔子头壳</p>
+                        <div class="flex items-center mt-1">
+                            <span class="text-xs text-gray-500 mr-2">质检</span>
+                            <div class="progress-indicator">
+                                <div class="progress-fill bg-yellow-500" style="width: 90%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-orange-500">查看详情</div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500">
+                    <div>下单时间: 2025-09-20</div>
+                    <div>预期完成: 2025-12-10</div>
+                </div>
+            </div>
+            
+            <!-- 紧急订单 - 第二早 -->
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3 border-l-4 border-red-500">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="font-medium">订单号: TB123456789</div>
+                    <div class="order-status status-urgent">加急</div>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <p class="text-sm">客户: 王小明</p>
+                        <p class="text-sm text-gray-500">角色: 狐狸头壳</p>
+                        <div class="flex items-center mt-1">
+                            <span class="text-xs text-gray-500 mr-2">打印中</span>
+                            <div class="progress-indicator">
+                                <div class="progress-fill bg-red-500" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-orange-500">查看详情</div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500">
+                    <div>下单时间: 2025-10-15</div>
+                    <div>预期完成: 2025-12-30</div>
+                </div>
+            </div>
+            
+            <!-- 普通订单 - 第三早 -->
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="font-medium">订单号: TB987654321</div>
+                    <div class="order-status status-normal">正常</div>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <p class="text-sm">客户: 李小红</p>
+                        <p class="text-sm text-gray-500">角色: 猫咪头壳</p>
+                        <div class="flex items-center mt-1">
+                            <span class="text-xs text-gray-500 mr-2">模型制作</span>
+                            <div class="progress-indicator">
+                                <div class="progress-fill bg-orange-500" style="width: 30%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-orange-500">查看详情</div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500">
+                    <div>下单时间: 2025-11-05</div>
+                    <div>预期完成: 2025-01-15</div>
+                </div>
+            </div>
+            
+            <!-- 更多订单... - 最新下单 -->
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="font-medium">订单号: TB789123456</div>
+                    <div class="order-status status-normal">正常</div>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <p class="text-sm">客户: 赵小刚</p>
+                        <p class="text-sm text-gray-500">角色: 熊猫头壳</p>
+                        <div class="flex items-center mt-1">
+                            <span class="text-xs text-gray-500 mr-2">设计图确认</span>
+                            <div class="progress-indicator">
+                                <div class="progress-fill bg-orange-500" style="width: 20%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-orange-500">查看详情</div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500">
+                    <div>下单时间: 2025-11-20</div>
+                    <div>预期完成: 2025-02-10</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部操作栏 -->
+        <div class="bg-white border-t p-4 flex justify-between">
+            <button class="px-4 py-2 border border-orange-500 bg-white text-orange-500 rounded-lg flex items-center hover:bg-orange-50">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                新增订单
+            </button>
+            <button class="px-4 py-2 border border-orange-500 bg-white text-orange-500 rounded-lg flex items-center hover:bg-orange-50">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                导出数据
+            </button>
+            <button class="px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-500 text-black font-medium rounded-lg flex items-center hover:shadow-md">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                查看归档
+            </button>
+        </div>
+    </div>
+</body>
+</html> 

@@ -3,49 +3,65 @@
   <!-- 顶部区域 -->
   <view class="header">
     <view class="logo-container">
-      <image class="logo" src="{{logoUrl}}" mode="aspectFit"></image>
+      <image class="logo" src="/assets/images/icon.jpg" mode="aspectFit"></image>
       <text class="title">鼠鼠工坊</text>
     </view>
     
     <!-- 搜索框 -->
+    <view class="search-box">
     <t-search
       value="{{searchValue}}"
       placeholder="请输入淘宝订单号查询"
       bind:change="onSearchChange"
       bind:submit="onSearch"
     />
+    </view>
+    
+    <!-- Banner区域 -->
+    <view class="banner-area">
+      <view class="banner-content">
+        <text class="banner-title">专业Kigurumi头壳定制</text>
+        <text class="banner-subtitle">精心打造，为您的角色赋予生命</text>
+        <t-button size="small" variant="outline" class="banner-button">了解更多</t-button>
+      </view>
+      <image class="banner-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
+    </view>
   </view>
   
   <!-- 最近查询记录 -->
   <view class="page-container">
+    <view class="section-header">
+      <text class="section-title">最近查询</text>
+      <text class="section-more" bindtap="viewAllSearches">查看全部</text>
+    </view>
+    
     <block wx:if="{{recentSearches.length > 0}}">
-      <view class="section-title">最近查询</view>
-      
       <view class="search-list">
-        <t-cell-group>
-          <t-cell
+        <view 
+          class="search-item" 
             wx:for="{{recentSearches}}"
             wx:key="orderId"
-            title="订单号: {{item.orderId}}"
-            description="角色: {{item.roleName}}"
-            arrow
-            hover
-            bind:click="onOrderClick"
+          bindtap="onOrderClick"
             data-order-id="{{item.orderId}}"
-          />
-        </t-cell-group>
+        >
+          <view class="search-item-info">
+            <view class="search-item-title">订单号: {{item.orderId}}</view>
+            <view class="search-item-desc">角色: {{item.roleName}}</view>
+          </view>
+          <view class="search-item-action">查看</view>
+        </view>
       </view>
     </block>
     
     <block wx:else>
       <view class="empty-state">
-        <image class="empty-image" src="{{emptyImageUrl}}" mode="aspectFit"></image>
+        <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
         <text class="empty-text">暂无查询记录</text>
       </view>
     </block>
     
     <view class="search-button-container">
-      <t-button theme="primary" size="large" shape="round" bind:tap="onSearchButtonClick">立即查询</t-button>
+      <t-button theme="primary" size="large" shape="round" bind:tap="onSearchButtonClick" class="primary-button">立即查询</t-button>
     </view>
   </view>
 </view>

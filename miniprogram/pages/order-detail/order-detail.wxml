@@ -1,46 +1,89 @@
 <!--order-detail.wxml-->
 <view class="container">
+  <!-- 顶部导航 -->
+  <view class="header-gradient">
+    <view class="nav-header">
+      <view class="back-button" bindtap="onBack">
+        <t-icon name="chevron-left" size="48rpx" color="#fff" />
+      </view>
+      <text class="page-title">订单详情</text>
+      <image class="decoration-image" src="/assets/images/icon.jpg" mode="aspectFill"></image>
+    </view>
+  </view>
+  
   <!-- 订单信息 -->
-  <view class="card order-info">
-    <view class="flex-row flex-between mb-small">
-      <text class="label">淘宝订单号</text>
-      <text class="value">{{order.orderId}}</text>
+  <view class="order-info-card">
+    <view class="info-item">
+      <text class="info-label">淘宝订单号</text>
+      <text class="info-value">{{order.orderId}}</text>
     </view>
-    <view class="flex-row flex-between mb-small">
-      <text class="label">排单号</text>
-      <text class="value">{{order.queueId}}</text>
+    <view class="info-item">
+      <text class="info-label">排单号</text>
+      <text class="info-value">{{order.queueId}}</text>
     </view>
-    <view class="flex-row flex-between mb-small">
-      <text class="label">角色名称</text>
-      <text class="value">{{order.roleName}}</text>
+    <view class="info-item">
+      <text class="info-label">角色名称</text>
+      <text class="info-value">{{order.roleName}}</text>
     </view>
-    <view class="flex-row flex-between">
-      <text class="label">预期完成时间</text>
-      <text class="value">{{order.expectedCompletionDate}}</text>
+    <view class="info-item">
+      <text class="info-label">预期完成时间</text>
+      <text class="info-value text-primary">{{order.expectedCompletionDate}}</text>
     </view>
   </view>
   
   <!-- 制作进度 -->
-  <view class="card">
-    <view class="section-title mb-medium">制作进度</view>
+  <view class="progress-card">
+    <view class="card-title">制作进度</view>
     
-    <t-steps current="{{currentStep}}" layout="vertical">
-      <t-step-item wx:for="{{steps}}" wx:key="index" title="{{item.title}}" content="{{item.content}}" status="{{index < currentStep ? 'finish' : index === currentStep ? 'process' : 'default'}}" />
-    </t-steps>
+    <view class="progress-container">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+      </view>
+      
+      <view class="progress-steps-vertical">
+        <view 
+          class="progress-step-vertical {{index <= currentStepIndex ? 'active' : 'inactive'}}" 
+          wx:for="{{steps}}" 
+          wx:key="index"
+        >
+          <view class="step-header">
+            <view class="progress-dot {{index <= currentStepIndex ? 'active' : 'inactive'}}"></view>
+            <text class="progress-label {{index <= currentStepIndex ? 'active' : 'inactive'}}">{{item.title}}</text>
+          </view>
+          <view class="step-content {{index <= currentStepIndex ? 'active' : 'inactive'}}">
+            {{item.content}}
+          </view>
+          <view class="step-line" wx:if="{{index < steps.length - 1}}"></view>
+        </view>
+      </view>
+    </view>
     
-    <view class="current-status mt-medium">
-      <text class="text-primary">当前进度：{{steps[currentStep].title}}</text>
+    <view class="current-status">
+      <view class="status-badge">
+        当前进度：{{steps[currentStepIndex].title}}
+      </view>
     </view>
   </view>
   
   <!-- 预期成品图 -->
-  <view class="card">
-    <view class="section-title mb-medium">预期成品展示</view>
-    <t-image src="{{order.previewImage}}" mode="widthFix" width="100%" shape="round" />
+  <view class="preview-card">
+    <view class="card-title">预期成品展示</view>
+    <image 
+      class="preview-image" 
+      src="{{order.previewImage || '/assets/images/icon.jpg'}}" 
+      mode="widthFix"
+    ></image>
   </view>
   
   <!-- 联系客服 -->
   <view class="contact-button-container">
-    <t-button icon="chat" theme="primary" size="large" block bind:tap="onContactService">联系客服</t-button>
+    <t-button 
+      icon="chat" 
+      theme="primary" 
+      size="large" 
+      block 
+      bind:tap="onContactService"
+      class="primary-button"
+    >联系客服</t-button>
   </view>
 </view> 

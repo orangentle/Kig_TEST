@@ -1,8 +1,10 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/works/works",
     "pages/profile/profile",
     "pages/order-detail/order-detail",
+    "pages/admin/admin",
     "pages/logs/logs",
     "pages/webview/webview"
   ],
@@ -10,11 +12,11 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "鼠鼠工坊",
     "navigationBarBackgroundColor": "#ffffff",
-    "backgroundColor": "#f0f0f0"
+    "backgroundColor": "#f5f7fa"
   },
   "tabBar": {
     "color": "#999999",
-    "selectedColor": "#0052d9",
+    "selectedColor": "#ff8800",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [
@@ -23,6 +25,12 @@
         "text": "首页",
         "iconPath": "assets/icons/home.png",
         "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/works/works",
+        "text": "作品",
+        "iconPath": "assets/icons/works.png",
+        "selectedIconPath": "assets/icons/works-active.png"
       },
       {
         "pagePath": "pages/profile/profile",
@@ -46,10 +54,18 @@
     "t-steps": "tdesign-miniprogram/steps/steps",
     "t-step-item": "tdesign-miniprogram/step-item/step-item",
     "t-image": "tdesign-miniprogram/image/image",
-    "t-tag": "tdesign-miniprogram/tag/tag"
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-tabs": "tdesign-miniprogram/tabs/tabs",
+    "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel"
   },
   "navigateToMiniProgramAppIdList": [
     "wx9f4e7b73adbd8f38"
   ],
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "networkTimeout": {
+    "request": 30000,
+    "downloadFile": 30000,
+    "connectSocket": 30000,
+    "uploadFile": 30000
+  }
 }

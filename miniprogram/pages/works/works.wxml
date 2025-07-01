@@ -1,0 +1,90 @@
+<!--works.wxml-->
+<view class="container">
+  <!-- 顶部搜索和筛选 -->
+  <view class="header">
+    <view class="header-title">作品展示</view>
+    
+    <!-- 搜索框 -->
+    <view class="search-box">
+      <t-search
+        value="{{searchValue}}"
+        placeholder="搜索角色名称或来源作品"
+        bind:change="onSearchChange"
+        bind:submit="onSearch"
+      />
+    </view>
+    
+    <!-- 排序选项 -->
+    <scroll-view scroll-x class="sort-options">
+      <view 
+        class="sort-item {{currentSort === 'latest' ? 'sort-active' : ''}}" 
+        bindtap="onSortChange" 
+        data-sort="latest"
+      >最新完成</view>
+      <view 
+        class="sort-item {{currentSort === 'name' ? 'sort-active' : ''}}" 
+        bindtap="onSortChange" 
+        data-sort="name"
+      >名称排序</view>
+      <view 
+        class="sort-item {{currentSort === 'original' ? 'sort-active' : ''}}" 
+        bindtap="onSortChange" 
+        data-sort="original"
+      >自设角色</view>
+      <view 
+        class="sort-item {{currentSort === 'game' ? 'sort-active' : ''}}" 
+        bindtap="onSortChange" 
+        data-sort="game"
+      >游戏角色</view>
+      <view 
+        class="sort-item {{currentSort === 'anime' ? 'sort-active' : ''}}" 
+        bindtap="onSortChange" 
+        data-sort="anime"
+      >动漫角色</view>
+    </scroll-view>
+  </view>
+  
+  <!-- 作品展示区 -->
+  <view class="works-container">
+    <view class="works-grid">
+      <view 
+        class="work-card" 
+        wx:for="{{works}}" 
+        wx:key="id"
+        bindtap="onWorkClick"
+        data-work-id="{{item.id}}"
+      >
+        <view class="work-image-container">
+          <image 
+            class="work-image" 
+            src="{{item.imageUrl || '/assets/images/icon.jpg'}}" 
+            mode="aspectFill"
+          ></image>
+          <view class="work-title-overlay">
+            <text class="work-title">{{item.title}}</text>
+          </view>
+        </view>
+        <view class="work-info">
+          <text class="work-source">来源: {{item.source}}</text>
+          <text class="work-date">{{item.date}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 加载更多按钮 -->
+    <view class="load-more" wx:if="{{hasMore}}">
+      <t-button 
+        variant="outline" 
+        theme="primary" 
+        size="medium" 
+        bind:tap="loadMore"
+      >加载更多</t-button>
+    </view>
+    
+    <!-- 无数据状态 -->
+    <view class="empty-state" wx:if="{{works.length === 0}}">
+      <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
+      <text class="empty-text">暂无相关作品</text>
+    </view>
+  </view>
+</view> 
