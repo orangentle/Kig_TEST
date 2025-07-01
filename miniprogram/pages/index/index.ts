@@ -26,6 +26,13 @@ Component({
 
   lifetimes: {
     attached() {
+      // 确保云环境已初始化
+      if (wx.cloud) {
+        console.log('云环境已初始化');
+      } else {
+        console.error('云环境未初始化，请检查app.ts中的初始化代码');
+      }
+      
       // 获取最近查询记录
       this.loadRecentSearches();
       
@@ -40,14 +47,41 @@ Component({
   methods: {
     // 加载最近查询记录
     loadRecentSearches() {
-      // 模拟数据，实际应从本地存储或服务器获取
-      const mockData: OrderInfo[] = [
-        { orderId: 'TB123456789', roleName: '狐狸头壳' },
-        { orderId: 'TB987654321', roleName: '猫咪头壳' }
-      ];
+      // 从本地存储获取最近查询记录
+      const recentSearches = wx.getStorageSync('recentSearches') || [];
       
       this.setData({
-        recentSearches: mockData
+        recentSearches
+      });
+    },
+
+    // 保存最近查询记录
+    saveRecentSearch(orderInfo: OrderInfo) {
+      // 获取现有记录
+      let recentSearches = wx.getStorageSync('recentSearches') || [];
+      
+      // 检查是否已存在相同订单号
+      const existingIndex = recentSearches.findIndex((item: OrderInfo) => item.orderId === orderInfo.orderId);
+      
+      if (existingIndex !== -1) {
+        // 如果存在，删除旧记录
+        recentSearches.splice(existingIndex, 1);
+      }
+      
+      // 添加到记录开头
+      recentSearches.unshift(orderInfo);
+      
+      // 限制记录数量为5条
+      if (recentSearches.length > 5) {
+        recentSearches = recentSearches.slice(0, 5);
+      }
+      
+      // 保存到本地存储
+      wx.setStorageSync('recentSearches', recentSearches);
+      
+      // 更新数据
+      this.setData({
+        recentSearches
       });
     },
 
@@ -69,7 +103,7 @@ Component({
         return;
       }
 
-      this.searchOrder(searchValue);
+      this.searchOrder(searchValue.trim());
     },
 
     // 点击搜索按钮
@@ -83,32 +117,75 @@ Component({
         return;
       }
 
-      this.searchOrder(searchValue);
+      this.searchOrder(searchValue.trim());
     },
 
     // 搜索订单
-    searchOrder(orderId: string) {
+    async searchOrder(orderId: string) {
       wx.showLoading({
         title: '查询中...'
       });
 
-      // 模拟API请求
-      setTimeout(() => {
+      try {
+        // 使用云数据库查询订单
+        const db = wx.cloud.database();
+        const orderResult = await db.collection('orders').where({
+          orderId: orderId
+        }).get();
+        
+        // 隐藏加载提示
         wx.hideLoading();
         
-        console.log('跳转到订单详情页，订单ID:', orderId);
+        if (orderResult.data && orderResult.data.length > 0) {
+          // 订单存在，保存到最近查询记录
+          const orderInfo = {
+            orderId: orderId,
+            roleName: orderResult.data[0].roleName || '未知角色'
+          };
+          
+          this.saveRecentSearch(orderInfo);
+          
+          // 导航到订单详情页
+          wx.navigateTo({
+            url: `/pages/order-detail/order-detail?id=${orderId}`,
+            success: (res) => {
+              console.log('导航成功');
+            },
+            fail: (err) => {
+              console.error('导航失败', err);
+              // 导航失败时显示提示
+              wx.showToast({
+                title: '页面跳转失败',
+                icon: 'none'
+              });
+            }
+          });
+        } else {
+          // 订单不存在，显示提示窗口
+          wx.showModal({
+            title: '未找到订单',
+            content: `没有找到订单号为 ${orderId} 的订单信息，请确认订单号是否正确。`,
+            showCancel: false,
+            confirmText: '确定'
+          });
+          
+          // 清空搜索框
+          this.setData({
+            searchValue: ''
+          });
+        }
+      } catch (error) {
+        console.error('查询订单失败', error);
+        wx.hideLoading();
         
-        // 导航到订单详情页
-        wx.navigateTo({
-          url: `/pages/order-detail/order-detail?id=${orderId}`,
-          success: (res) => {
-            console.log('导航成功');
-          },
-          fail: (err) => {
-            console.error('导航失败', err);
-          }
+        // 查询失败，显示错误提示
+        wx.showModal({
+          title: '查询失败',
+          content: '订单查询失败，请稍后重试。',
+          showCancel: false,
+          confirmText: '确定'
         });
-      }, 1000);
+      }
     },
 
     // 点击订单项
@@ -116,15 +193,13 @@ Component({
       const orderId = e.currentTarget.dataset.orderId;
       console.log('点击订单项，订单ID:', orderId);
       
-      wx.navigateTo({
-        url: `/pages/order-detail/order-detail?id=${orderId}`,
-        success: (res) => {
-          console.log('导航成功');
-        },
-        fail: (err) => {
-          console.error('导航失败', err);
-        }
+      // 设置搜索框内容
+      this.setData({
+        searchValue: orderId
       });
+      
+      // 搜索订单
+      this.searchOrder(orderId);
     },
 
     // 事件处理函数

@@ -146,7 +146,7 @@ Component({
         try {
           this.setData({ isLoading: true });
           
-          const userInfo = e.detail.userInfo;
+        const userInfo = e.detail.userInfo;
           
           // 调用云函数登录
           const { result } = await wx.cloud.callFunction({
@@ -189,27 +189,27 @@ Component({
                 }
               });
             }
-            
-            // 更新全局数据
+        
+        // 更新全局数据
             globalApp.globalData.userInfo = userInfo;
             globalApp.globalData.hasLogin = true;
-            
-            // 存储用户信息
-            wx.setStorageSync('userInfo', userInfo);
-            
-            this.setData({
-              hasLogin: true,
+        
+        // 存储用户信息
+        wx.setStorageSync('userInfo', userInfo);
+        
+        this.setData({
+          hasLogin: true,
               userInfo,
               userId
-            });
-            
-            // 加载订单数据
-            this.loadOrders();
-            
-            wx.showToast({
-              title: '登录成功',
-              icon: 'success'
-            });
+        });
+        
+        // 加载订单数据
+        this.loadOrders();
+        
+        wx.showToast({
+          title: '登录成功',
+          icon: 'success'
+        });
           }
         } catch (error) {
           console.error('登录失败', error);
@@ -351,10 +351,10 @@ Component({
         content: '即将打开客服会话',
         success: (res) => {
           if (res.confirm) {
-            wx.showToast({
+                wx.showToast({
               title: '客服功能开发中',
-              icon: 'none'
-            });
+                  icon: 'none'
+                });
           }
         }
       });

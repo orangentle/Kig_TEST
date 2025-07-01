@@ -128,4 +128,140 @@
       bind:tap="onViewArchive"
     >查看归档</t-button>
   </view>
+  
+  <!-- 新增订单表单弹窗 -->
+  <view class="order-form-modal {{showOrderForm ? 'show' : ''}}" wx:if="{{showOrderForm}}">
+    <view class="order-form-content">
+      <view class="form-header">
+        <text class="form-title">新增订单</text>
+        <view class="form-close" bindtap="onCloseOrderForm">×</view>
+      </view>
+      
+      <scroll-view scroll-y class="form-body">
+        <view class="form-item">
+          <text class="form-label">淘宝订单号 <text class="required">*</text></text>
+          <input 
+            class="form-input" 
+            placeholder="请输入淘宝订单号" 
+            value="{{orderForm.tbOrderId}}" 
+            bindinput="onFormInputChange" 
+            data-field="tbOrderId"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">排单号</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入排单号" 
+            value="{{orderForm.queueNumber}}" 
+            bindinput="onFormInputChange" 
+            data-field="queueNumber"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">客户名称 <text class="required">*</text></text>
+          <input 
+            class="form-input" 
+            placeholder="请输入客户名称" 
+            value="{{orderForm.customerName}}" 
+            bindinput="onFormInputChange" 
+            data-field="customerName"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">角色名称 <text class="required">*</text></text>
+          <input 
+            class="form-input" 
+            placeholder="请输入角色名称" 
+            value="{{orderForm.roleName}}" 
+            bindinput="onFormInputChange" 
+            data-field="roleName"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">下单时间 <text class="required">*</text></text>
+          <picker 
+            mode="date" 
+            value="{{orderForm.orderTime}}" 
+            bindchange="onDateChange" 
+            data-field="orderTime"
+          >
+            <view class="form-picker">
+              {{orderForm.orderTime || '请选择下单时间'}}
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">预期完成时间 <text class="required">*</text></text>
+          <picker 
+            mode="date" 
+            value="{{orderForm.deadline}}" 
+            bindchange="onDateChange" 
+            data-field="deadline"
+          >
+            <view class="form-picker">
+              {{orderForm.deadline || '请选择预期完成时间'}}
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">制作进度</text>
+          <slider 
+            value="{{orderForm.progressPercent}}" 
+            min="0" 
+            max="100" 
+            show-value 
+            activeColor="#ff8800"
+            bindchange="onFormInputChange" 
+            data-field="progressPercent"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">是否加急</text>
+          <switch 
+            checked="{{orderForm.isUrgent}}" 
+            color="#ff4d4f" 
+            bindchange="onToggleUrgent"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">预期成品展示图</text>
+          <view class="image-uploader" bindtap="onChooseImage">
+            <block wx:if="{{tempImagePath}}">
+              <image class="preview-image" src="{{tempImagePath}}" mode="aspectFit"></image>
+              <view class="upload-progress" wx:if="{{uploadProgress > 0 && uploadProgress < 100}}">
+                {{uploadProgress}}%
+              </view>
+            </block>
+            <view class="upload-placeholder" wx:else>
+              <text class="upload-icon">+</text>
+              <text class="upload-text">选择图片</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+      
+      <view class="form-footer">
+        <t-button 
+          variant="outline" 
+          class="form-button cancel-button" 
+          bindtap="onCloseOrderForm"
+        >取消</t-button>
+        <t-button 
+          theme="primary" 
+          class="form-button submit-button" 
+          bindtap="onSubmitOrderForm"
+          loading="{{isSubmitting}}"
+        >提交</t-button>
+      </view>
+    </view>
+  </view>
 </view> 
