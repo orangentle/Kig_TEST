@@ -4,7 +4,8 @@ interface IAppOption {
     userInfo?: WechatMiniprogram.UserInfo,
     hasLogin: boolean,
     logoUrl: string,
-    emptyImageUrl: string
+    emptyImageUrl: string,
+    cloudEnv: string
   }
 }
 
@@ -12,13 +13,26 @@ App<IAppOption>({
   globalData: {
     hasLogin: false,
     logoUrl: '/assets/images/icon.jpg',
-    emptyImageUrl: 'https://cdn-icons-png.flaticon.com/512/5445/5445197.png'
+    emptyImageUrl: 'https://cdn-icons-png.flaticon.com/512/5445/5445197.png',
+    cloudEnv: 'cloud1-9ga5mdp1028f94eb'
   },
   onLaunch() {
     // 展示本地存储能力
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+
+    // 初始化云开发
+    if (!wx.cloud) {
+      console.error('请使用 2.2.3 或以上的基础库以使用云能力')
+    } else {
+      wx.cloud.init({
+        env: this.globalData.cloudEnv,
+        traceUser: true
+      })
+      
+      console.log('云环境初始化成功：', this.globalData.cloudEnv)
+    }
 
     // 检查用户登录状态
     const userInfo = wx.getStorageSync('userInfo')

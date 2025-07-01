@@ -28,14 +28,22 @@
   <block wx:else>
     <view class="header-gradient">
       <view class="user-info-container">
-        <image 
-          class="user-avatar" 
-          src="{{userInfo.avatarUrl || '/assets/images/icon.jpg'}}" 
-          mode="aspectFill"
-        ></image>
+        <view class="avatar-container" bindtap="chooseAvatar">
+          <image 
+            class="user-avatar" 
+            src="{{userInfo.avatarUrl || '/assets/images/icon.jpg'}}" 
+            mode="aspectFill"
+          ></image>
+          <view class="avatar-edit-icon">
+            <t-icon name="edit" size="24rpx" color="#fff"></t-icon>
+          </view>
+        </view>
         <view class="user-info">
           <text class="user-name">{{userInfo.nickName || '鼠鼠用户'}}</text>
           <text class="user-id" bindtap="onAdminLoginTrigger">ID: {{userId || '12345678'}}</text>
+        </view>
+        <view class="edit-profile-btn">
+          <t-button icon="edit" size="small" shape="round" variant="outline" theme="primary" bind:tap="showEditProfileModal">编辑资料</t-button>
         </view>
       </view>
     </view>
@@ -129,4 +137,29 @@
       </view>
     </view>
   </block>
+
+  <!-- 编辑个人资料弹窗 -->
+  <t-popup visible="{{showEditPopup}}" bind:visible-change="onCloseEditPopup" placement="bottom">
+    <view class="edit-profile-popup">
+      <view class="edit-profile-header">
+        <text class="edit-profile-title">编辑个人资料</text>
+        <t-icon name="close" size="48rpx" color="#999" bind:tap="onCloseEditPopup" />
+      </view>
+      
+      <view class="edit-profile-content">
+        <view class="edit-avatar-section" bindtap="chooseAvatar">
+          <image class="edit-avatar" src="{{tempUserInfo.avatarUrl || '/assets/images/icon.jpg'}}" mode="aspectFill"></image>
+          <text class="edit-avatar-hint">点击修改头像</text>
+        </view>
+        
+        <view class="edit-input-section">
+          <t-input label="昵称" value="{{tempUserInfo.nickName}}" placeholder="请输入昵称" bind:change="onNicknameChange" />
+        </view>
+      </view>
+      
+      <view class="edit-profile-footer">
+        <t-button theme="primary" size="large" block bind:tap="saveUserProfile">保存</t-button>
+      </view>
+    </view>
+  </t-popup>
 </view> 

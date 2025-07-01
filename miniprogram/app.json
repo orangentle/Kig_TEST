@@ -56,7 +56,9 @@
     "t-image": "tdesign-miniprogram/image/image",
     "t-tag": "tdesign-miniprogram/tag/tag",
     "t-tabs": "tdesign-miniprogram/tabs/tabs",
-    "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel"
+    "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-icon": "tdesign-miniprogram/icon/icon"
   },
   "navigateToMiniProgramAppIdList": [
     "wx9f4e7b73adbd8f38"
@@ -67,5 +69,6 @@
     "downloadFile": 30000,
     "connectSocket": 30000,
     "uploadFile": 30000
-  }
+  },
+  "cloud": true
 }
