@@ -49,6 +49,15 @@
             height: 100%;
             border-radius: 4px;
         }
+        .cloud-function-card {
+            border-left: 3px solid #ff8800;
+        }
+        .system-info {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -65,8 +74,17 @@
             </div>
         </div>
         
-        <!-- 筛选标签 -->
+        <!-- 管理功能标签 -->
         <div class="bg-white p-4 flex space-x-6 overflow-x-auto">
+            <div class="tab-active pb-2 px-1 font-medium">订单管理</div>
+            <div class="text-gray-500 pb-2 px-1">云函数</div>
+            <div class="text-gray-500 pb-2 px-1">数据统计</div>
+            <div class="text-gray-500 pb-2 px-1">用户管理</div>
+            <div class="text-gray-500 pb-2 px-1">系统设置</div>
+        </div>
+        
+        <!-- 订单筛选标签 -->
+        <div class="bg-white p-4 flex space-x-6 overflow-x-auto border-t border-gray-100">
             <div class="tab-active pb-2 px-1 font-medium">全部未完成 (12)</div>
             <div class="text-gray-500 pb-2 px-1">设计确认 (3)</div>
             <div class="text-gray-500 pb-2 px-1">模型制作 (2)</div>
@@ -85,8 +103,19 @@
             </div>
         </div>
         
+        <!-- 云函数状态信息 -->
+        <div class="px-4 pt-4">
+            <div class="bg-white rounded-lg shadow-sm p-3 mb-3 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                    <span class="text-sm">云函数服务正常</span>
+                </div>
+                <div class="system-info">上次同步: 10分钟前</div>
+            </div>
+        </div>
+        
         <!-- 订单列表 -->
-        <div class="p-4 flex-grow overflow-auto">
+        <div class="px-4 flex-grow overflow-auto">
             <!-- 即将完成订单 - 最早下单 -->
             <div class="bg-white rounded-lg shadow-sm p-4 mb-3">
                 <div class="flex justify-between items-center mb-2">
@@ -184,6 +213,32 @@
                 <div class="flex justify-between text-xs text-gray-500">
                     <div>下单时间: 2025-11-20</div>
                     <div>预期完成: 2025-02-10</div>
+                </div>
+            </div>
+            
+            <!-- 云函数状态卡片 -->
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3 cloud-function-card">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="font-medium">云函数状态</div>
+                    <div class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">全部正常</div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="flex items-center">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                        <span>getOrders</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                        <span>createOrder</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                        <span>updateAvatar</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                        <span>adminAuth</span>
+                    </div>
                 </div>
             </div>
         </div>
