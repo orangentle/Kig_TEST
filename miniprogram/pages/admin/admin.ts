@@ -1,6 +1,7 @@
 // admin.ts
 interface OrderItem {
   orderId: string;
+  tbOrderId: string;  // 添加淘宝订单号字段
   customerName: string;
   roleName: string;
   status: 'urgent' | 'normal' | 'soon';
@@ -20,6 +21,8 @@ interface OrderForm {
   orderTime: string; // 下单时间
   deadline: string; // 预期完成时间
   progressPercent: number; // 制作进度
+  progressStage: string; // 进度阶段描述
+  stage: string; // 制作阶段
   isUrgent: boolean; // 是否加急
   previewImage: string; // 预期成品展示图
 }
@@ -48,9 +51,23 @@ Component({
       orderTime: '',
       deadline: '',
       progressPercent: 0,
+      progressStage: '订单确认',
+      stage: 'confirm',
       isUrgent: false,
       previewImage: ''
     } as OrderForm,
+    // 制作阶段选项
+    stageOptions: [
+      { label: '订单确认', value: 'confirm', percent: 10 },
+      { label: '设计图确认', value: 'design', percent: 20 },
+      { label: '模型制作', value: 'model', percent: 30 },
+      { label: '打印中', value: 'print', percent: 50 },
+      { label: '打磨上色', value: 'polish', percent: 70 },
+      { label: '组装', value: 'assembly', percent: 80 },
+      { label: '质检', value: 'quality', percent: 90 },
+      { label: '发货', value: 'shipping', percent: 100 }
+    ],
+    stageIndex: 0, // 当前选中的制作阶段索引
     todayDate: '',
     tempImagePath: '',
     uploadProgress: 0,
@@ -69,6 +86,9 @@ Component({
         todayDate: `${year}-${month}-${day}`,
         'orderForm.orderTime': `${year}-${month}-${day}`
       });
+      
+      // 设置初始阶段索引
+      this.updateStageIndex();
     }
   },
 
@@ -111,7 +131,8 @@ Component({
       // 模拟数据，实际应从服务器获取
       const mockData: OrderItem[] = [
         {
-          orderId: 'TB456789123',
+          orderId: 'order-001',
+          tbOrderId: 'TB456789123',
           customerName: '张小华',
           roleName: '兔子头壳',
           status: 'soon',
@@ -122,7 +143,8 @@ Component({
           stage: 'quality'
         },
         {
-          orderId: 'TB123456789',
+          orderId: 'order-002',
+          tbOrderId: 'TB123456789',
           customerName: '王小明',
           roleName: '狐狸头壳',
           status: 'urgent',
@@ -133,7 +155,8 @@ Component({
           stage: 'print'
         },
         {
-          orderId: 'TB987654321',
+          orderId: 'order-003',
+          tbOrderId: 'TB987654321',
           customerName: '李小红',
           roleName: '猫咪头壳',
           status: 'normal',
@@ -144,7 +167,8 @@ Component({
           stage: 'model'
         },
         {
-          orderId: 'TB789123456',
+          orderId: 'order-004',
+          tbOrderId: 'TB789123456',
           customerName: '赵小刚',
           roleName: '熊猫头壳',
           status: 'normal',
@@ -223,7 +247,7 @@ Component({
       if (searchValue) {
         const keyword = searchValue.toLowerCase();
         filtered = filtered.filter(order => 
-          order.orderId.toLowerCase().includes(keyword) || 
+          order.tbOrderId.toLowerCase().includes(keyword) || 
           order.customerName.toLowerCase().includes(keyword) ||
           order.roleName.toLowerCase().includes(keyword)
         );
@@ -243,6 +267,24 @@ Component({
       });
     },
 
+    // 更新阶段索引
+    updateStageIndex() {
+      const { stageOptions } = this.data;
+      const stageValue = this.data.orderForm.stage;
+      let index = 0;
+      
+      for (let i = 0; i < stageOptions.length; i++) {
+        if (stageOptions[i].value === stageValue) {
+          index = i;
+          break;
+        }
+      }
+      
+      this.setData({
+        stageIndex: index
+      });
+    },
+    
     // 新增订单
     onAddOrder() {
       this.setData({
@@ -254,10 +296,18 @@ Component({
           roleName: '',
           orderTime: this.data.todayDate,
           deadline: '',
-          progressPercent: 0,
+          progressPercent: 10,
+          progressStage: '订单确认',
+          stage: 'confirm',
           isUrgent: false,
           previewImage: ''
-        },
+        }
+      }, () => {
+        // 更新阶段索引
+        this.updateStageIndex();
+      });
+      
+      this.setData({
         tempImagePath: '',
         uploadProgress: 0
       });
@@ -309,6 +359,22 @@ Component({
           });
         }
       });
+    },
+    
+    // 选择制作阶段
+    onStageChange(e: any) {
+      const { value } = e.detail;
+      const index = parseInt(value);
+      const stageOption = this.data.stageOptions[index];
+      
+      if (stageOption) {
+        this.setData({
+          'orderForm.stage': stageOption.value,
+          'orderForm.progressStage': stageOption.label,
+          'orderForm.progressPercent': stageOption.percent,
+          stageIndex: index
+        });
+      }
     },
     
     // 提交表单
@@ -374,8 +440,6 @@ Component({
           ...orderForm,
           previewImage: previewImageUrl,
           status: orderForm.isUrgent ? 'urgent' : 'normal',
-          progressStage: '设计图确认',
-          stage: 'design',
           createTime: new Date()
         };
         
@@ -440,11 +504,10 @@ Component({
       });
     },
 
-    // 查看归档
-    onViewArchive() {
-      wx.showToast({
-        title: '查看归档功能开发中',
-        icon: 'none'
+    // 作品管理
+    onManageWorks() {
+      wx.navigateTo({
+        url: '/pages/admin/works-manage/works-manage'
       });
     }
   }

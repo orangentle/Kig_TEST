@@ -25,40 +25,28 @@ exports.main = async (event, context) => {
     // 准备测试订单数据
     const testOrders = [
       {
-        orderId: 'TB123456789',
-        roleName: '狐狸头壳',
-        orderTime: new Date('2025-10-15').getTime(),
+        orderId: 'TB100000001',
+        roleName: '雷电将军头壳',
+        orderTime: new Date('2026-02-20').getTime(),
         status: 'processing',
         createTime: Date.now(),
-        details: {
-          color: '橙色',
-          size: '标准',
-          notes: '需要特殊定制耳朵'
-        }
+        details: { color: '紫黑', size: '标准', notes: '需做雷光发饰效果' }
       },
       {
-        orderId: 'TB987654321',
-        roleName: '猫咪头壳',
-        orderTime: new Date('2025-09-01').getTime(),
+        orderId: 'TB100000002',
+        roleName: '甘雨头壳',
+        orderTime: new Date('2026-02-05').getTime(),
         status: 'completed',
         createTime: Date.now(),
-        details: {
-          color: '黑色',
-          size: '标准',
-          notes: '需要可拆卸的眼睛'
-        }
+        details: { color: '冰蓝', size: '标准', notes: '冰弓蝴蝶结与发角细节' }
       },
       {
-        orderId: 'TB456789123',
-        roleName: '兔子头壳',
-        orderTime: new Date('2025-08-15').getTime(),
+        orderId: 'TB100000003',
+        roleName: '胡桃头壳',
+        orderTime: new Date('2026-01-28').getTime(),
         status: 'completed',
         createTime: Date.now(),
-        details: {
-          color: '白色',
-          size: '大号',
-          notes: '长耳朵设计'
-        }
+        details: { color: '深棕', size: '小号', notes: '蝶引来生纹路与帽饰' }
       }
     ]
     
@@ -84,4 +72,4 @@ exports.main = async (event, context) => {
       message: '初始化订单数据失败'
     }
   }
-} 
+}

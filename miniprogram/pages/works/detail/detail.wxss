@@ -1,0 +1,34 @@
+.container {
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+.hero {
+  width: 100%;
+  background: #000;
+}
+
+.cover {
+  width: 100%;
+}
+
+.card {
+  margin: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.title {
+  font-size: 32rpx;
+  font-weight: 700;
+  margin-bottom: 12rpx;
+  color: #333;
+}
+
+.meta {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}

@@ -15,11 +15,11 @@
   <view class="order-info-card">
     <view class="info-item">
       <text class="info-label">淘宝订单号</text>
-      <text class="info-value">{{order.orderId}}</text>
+      <text class="info-value">{{order.tbOrderId}}</text>
     </view>
     <view class="info-item">
       <text class="info-label">排单号</text>
-      <text class="info-value">{{order.queueId}}</text>
+      <text class="info-value">{{order.queueNumber}}</text>
     </view>
     <view class="info-item">
       <text class="info-label">角色名称</text>
@@ -27,7 +27,7 @@
     </view>
     <view class="info-item">
       <text class="info-label">预期完成时间</text>
-      <text class="info-value text-primary">{{order.expectedCompletionDate}}</text>
+      <text class="info-value text-primary">{{order.deadline}}</text>
     </view>
   </view>
   

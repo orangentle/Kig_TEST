@@ -60,50 +60,63 @@
     />
   </view>
   
-  <!-- 订单列表 -->
-  <scroll-view scroll-y class="order-list">
-    <block wx:if="{{filteredOrders.length > 0}}">
-      <!-- 按下单时间排序，最早的在顶部 -->
-      <view 
-        class="order-card {{item.status === 'urgent' ? 'order-card-urgent' : ''}}" 
-        wx:for="{{filteredOrders}}" 
-        wx:key="orderId"
-        bindtap="onOrderClick"
-        data-order-id="{{item.orderId}}"
-      >
-        <view class="order-header">
-          <text class="order-id">订单号: {{item.orderId}}</text>
-          <view class="order-status {{item.status === 'urgent' ? 'status-urgent' : item.status === 'soon' ? 'status-soon' : 'status-normal'}}">
-            {{item.status === 'urgent' ? '加急' : item.status === 'soon' ? '即将完成' : '正常'}}
-          </view>
-        </view>
-        
-        <view class="order-content">
-          <view class="order-info">
-            <view class="order-customer">客户: {{item.customerName}}</view>
-            <view class="order-role">角色: {{item.roleName}}</view>
-            <view class="order-progress">
-              <text class="progress-text">{{item.progressStage}}</text>
-              <view class="progress-bar">
-                <view class="progress-fill" style="width: {{item.progressPercent}}%; background-color: {{item.status === 'urgent' ? '#ff4d4f' : item.status === 'soon' ? '#faad14' : '#ff8800'}}"></view>
-              </view>
-            </view>
-          </view>
-          <view class="order-action">查看详情</view>
-        </view>
-        
-        <view class="order-footer">
-          <text class="order-time">下单时间: {{item.orderTime}}</text>
-          <text class="order-deadline">预期完成: {{item.deadline}}</text>
+  <!-- 订单表格 -->
+  <view class="table-container">
+    <!-- 表格头部 -->
+    <scroll-view scroll-x enable-flex class="table-scroll">
+      <view class="table-header">
+        <view class="table-row">
+          <view class="table-cell cell-status">状态</view>
+          <view class="table-cell cell-id">淘宝订单号</view>
+          <view class="table-cell cell-customer">客户</view>
+          <view class="table-cell cell-role">角色</view>
+          <view class="table-cell cell-progress">进度</view>
+          <view class="table-cell cell-time">下单时间</view>
+          <view class="table-cell cell-deadline">预期完成</view>
+          <view class="table-cell cell-action">操作</view>
         </view>
       </view>
-    </block>
-    
-    <view class="empty-state" wx:else>
-      <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
-      <text class="empty-text">暂无相关订单</text>
-    </view>
-  </scroll-view>
+      
+      <!-- 表格内容 -->
+      <view class="table-body">
+        <block wx:if="{{filteredOrders.length > 0}}">
+          <view 
+            class="table-row {{item.status === 'urgent' ? 'row-urgent' : ''}}" 
+            wx:for="{{filteredOrders}}" 
+            wx:key="orderId"
+            bindtap="onOrderClick"
+            data-order-id="{{item.tbOrderId}}"
+          >
+            <view class="table-cell cell-status">
+              <view class="status-dot {{item.status === 'urgent' ? 'dot-urgent' : item.status === 'soon' ? 'dot-soon' : 'dot-normal'}}"></view>
+            </view>
+            <view class="table-cell cell-id">{{item.tbOrderId}}</view>
+            <view class="table-cell cell-customer">{{item.customerName}}</view>
+            <view class="table-cell cell-role">{{item.roleName}}</view>
+            <view class="table-cell cell-progress">
+              <view class="table-progress">
+                <text class="progress-text">{{item.progressStage}}</text>
+                <view class="progress-bar">
+                  <view class="progress-fill" style="width: {{item.progressPercent}}%; background-color: {{item.status === 'urgent' ? '#ff4d4f' : item.status === 'soon' ? '#faad14' : '#ff8800'}}"></view>
+                </view>
+                <text class="progress-percent">{{item.progressPercent}}%</text>
+              </view>
+            </view>
+            <view class="table-cell cell-time">{{item.orderTime}}</view>
+            <view class="table-cell cell-deadline">{{item.deadline}}</view>
+            <view class="table-cell cell-action">
+              <view class="cell-action-btn">查看</view>
+            </view>
+          </view>
+        </block>
+        
+        <view class="empty-state" wx:if="{{filteredOrders.length === 0}}">
+          <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
+          <text class="empty-text">暂无相关订单</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
   
   <!-- 底部操作栏 -->
   <view class="footer-actions">
@@ -125,8 +138,8 @@
       icon="file-copy" 
       theme="primary" 
       class="action-button primary-button" 
-      bind:tap="onViewArchive"
-    >查看归档</t-button>
+      bind:tap="onManageWorks"
+    >作品管理</t-button>
   </view>
   
   <!-- 新增订单表单弹窗 -->
@@ -212,15 +225,20 @@
         
         <view class="form-item">
           <text class="form-label">制作进度</text>
-          <slider 
-            value="{{orderForm.progressPercent}}" 
-            min="0" 
-            max="100" 
-            show-value 
-            activeColor="#ff8800"
-            bindchange="onFormInputChange" 
-            data-field="progressPercent"
-          />
+          <picker 
+            mode="selector" 
+            range="{{stageOptions}}" 
+            range-key="label" 
+            value="{{stageIndex}}"
+            bindchange="onStageChange"
+          >
+            <view class="form-picker">
+              {{orderForm.progressStage || '请选择制作阶段'}}
+              <view class="progress-info">
+                <text class="progress-percent">{{orderForm.progressPercent}}%</text>
+              </view>
+            </view>
+          </picker>
         </view>
         
         <view class="form-item">

@@ -30,11 +30,11 @@ exports.main = async (event, context) => {
       
       // 进度信息
       progressPercent: event.progressPercent || 0, // 制作进度
-      progressStage: event.progressStage || '设计图确认', // 进度阶段
-      stage: event.stage || 'design', // 制作阶段
+      progressStage: event.progressStage || '订单确认', // 进度阶段
+      stage: event.stage || 'confirm', // 制作阶段
       
       // 状态信息
-      status: event.isUrgent ? 'urgent' : 'normal', // 订单状态
+      status: event.status || (event.isUrgent ? 'urgent' : 'normal'), // 订单状态
       isArchived: false, // 是否归档
       
       // 图片信息

@@ -49,7 +49,7 @@
     <view class="works-grid">
       <view 
         class="work-card" 
-        wx:for="{{works}}" 
+        wx:for="{{displayedWorks}}" 
         wx:key="id"
         bindtap="onWorkClick"
         data-work-id="{{item.id}}"
@@ -61,7 +61,7 @@
             mode="aspectFill"
           ></image>
           <view class="work-title-overlay">
-            <text class="work-title">{{item.title}}</text>
+            <text class="work-title">{{item.roleName}}</text>
           </view>
         </view>
         <view class="work-info">
@@ -82,7 +82,7 @@
     </view>
     
     <!-- 无数据状态 -->
-    <view class="empty-state" wx:if="{{works.length === 0}}">
+    <view class="empty-state" wx:if="{{displayedWorks.length === 0}}">
       <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
       <text class="empty-text">暂无相关作品</text>
     </view>

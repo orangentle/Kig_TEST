@@ -1,0 +1,61 @@
+<view class="container">
+  <view class="section-card">
+    <view class="section-title">新增作品</view>
+    <view class="form-item">
+      <view class="label">角色名称</view>
+      <input class="input" placeholder="请输入角色名称" value="{{form.roleName}}" bindinput="onInputChange" data-field="roleName" />
+    </view>
+    <view class="form-item">
+      <view class="label">来源</view>
+      <input class="input" placeholder="填写作品来源/系列" value="{{form.source}}" bindinput="onInputChange" data-field="source" />
+    </view>
+    <view class="form-item">
+      <view class="label">参考价格</view>
+      <input class="input" type="number" placeholder="示例：999 或 999.00" value="{{form.price}}" bindinput="onInputChange" data-field="price" />
+    </view>
+    <view class="form-item">
+      <view class="label">分类</view>
+      <picker mode="selector" range="{{categories}}" range-key="label" value="{{form.categoryIndex}}" bindchange="onCategoryChange">
+        <view class="picker">{{categories[form.categoryIndex].label}}</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <view class="label">是否上架</view>
+      <switch checked="{{form.isPublished}}" bindchange="onPublishSwitch" color="#ff8800" />
+    </view>
+    <view class="form-item">
+      <view class="label">封面图</view>
+      <view class="uploader" bindtap="onChooseImage">
+        <image wx:if="{{form.coverPreview || form.coverFileId}}" class="preview" src="{{form.coverPreview || form.coverFileId}}" mode="aspectFill" />
+        <view class="upload-placeholder" wx:else>点击上传</view>
+      </view>
+    </view>
+    <t-button theme="primary" block loading="{{isSubmitting}}" bindtap="onSubmit">保存作品</t-button>
+  </view>
+
+  <view class="section-card">
+    <view class="section-title">作品列表</view>
+    <view wx:if="{{works.length === 0}}" class="empty">暂无作品</view>
+    <block wx:for="{{works}}" wx:key="_id">
+      <view class="work-item">
+        <image class="work-cover" src="{{item.coverFileId || '/assets/images/icon.jpg'}}" mode="aspectFill" />
+        <view class="work-meta">
+          <view class="title-row">
+            <text class="title">{{item.roleName}}</text>
+            <text class="status {{item.isPublished ? 'on' : 'off'}}">{{item.isPublished ? '已上架' : '未上架'}}</text>
+          </view>
+          <text class="desc">来源：{{item.source || '未填写'}}</text>
+          <text class="meta">参考价格：{{item.price !== undefined && item.price !== null ? item.price : '未填写'}}</text>
+          <text class="meta">分类：{{item.category}} ｜ 时间：{{item.displayDate}}</text>
+          <view class="actions">
+            <view class="switch-wrap">
+              <text class="switch-label">上架</text>
+              <switch checked="{{item.isPublished}}" data-id="{{item._id}}" bindchange="onTogglePublish" color="#ff8800" />
+            </view>
+            <t-button size="small" variant="outline" theme="danger" data-id="{{item._id}}" bindtap="onDelete">删除</t-button>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

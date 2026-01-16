@@ -1,0 +1,11 @@
+<view class="container">
+  <view class="hero">
+    <image class="cover" src="{{work.coverFileId || '/assets/images/icon.jpg'}}" mode="widthFix" />
+  </view>
+  <view class="card">
+    <view class="title">{{work.roleName}}</view>
+    <view class="meta">来源：{{work.source}}</view>
+    <view class="meta">参考价格：{{work.price !== undefined && work.price !== null ? work.price : '未填写'}}</view>
+    <view class="meta">分类：{{work.category}} ｜ 时间：{{work.date}}</view>
+  </view>
+</view>
