@@ -1,0 +1,221 @@
+<!--order-review.wxml-->
+<view class="container">
+  <t-tabs defaultValue="{{0}}" bind:change="onTabChange">
+    <t-tab-panel label="待审核" value="0" />
+    <t-tab-panel label="已通过" value="1" />
+    <t-tab-panel label="已拒绝" value="2" />
+    <t-tab-panel label="全部" value="3" />
+  </t-tabs>
+  
+  <scroll-view scroll-y class="order-list" bindscrolltolower="loadMore" refresher-enabled bindrefresherrefresh="onRefresh" refresher-triggered="{{isRefreshing}}">
+    <block wx:if="{{orders.length > 0}}">
+      <view class="order-card" wx:for="{{orders}}" wx:key="_id" bindtap="viewOrderDetail" data-order="{{item}}">
+        <view class="order-header">
+          <view class="order-id-wrap">
+            <text class="order-id">{{item.orderId}}</text>
+            <t-tag wx:if="{{item.isUrgent || item.options.isUrgent}}" size="small" theme="danger">加急</t-tag>
+          </view>
+          <t-tag 
+            variant="light" 
+            theme="{{item.status === 'pending' ? 'warning' : item.status === 'approved' ? 'success' : item.status === 'rejected' ? 'danger' : 'primary'}}"
+          >
+            {{item.status === 'pending' ? '待审核' : item.status === 'approved' ? '已通过' : item.status === 'rejected' ? '已拒绝' : item.status === 'processing' ? '制作中' : '已完成'}}
+          </t-tag>
+        </view>
+        
+        <view class="order-info">
+          <view class="info-row">
+            <text class="label">角色名称:</text>
+            <text class="value">{{item.roleName}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">来源作品:</text>
+            <text class="value">{{item.sourceWork}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">用户昵称:</text>
+            <text class="value">{{item.userInfo.nickName || '未知用户'}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">淘宝名称:</text>
+            <text class="value">{{item.userInfo.taobaoName || '未填写'}}</text>
+          </view>
+          <view class="info-row" wx:if="{{item.taobaoOrderId}}">
+            <text class="label">淘宝订单号:</text>
+            <text class="value highlight">{{item.taobaoOrderId}}</text>
+          </view>
+        </view>
+        
+        <view class="order-options">
+          <t-tag size="small" variant="outline" wx:if="{{item.options.needReplaceFace}}">替换脸</t-tag>
+          <t-tag size="small" variant="outline" wx:if="{{item.options.needHeadwear}}">头饰</t-tag>
+          <t-tag size="small" variant="outline" wx:if="{{item.options.needAntiGravity}}">反重力</t-tag>
+          <t-tag size="small" variant="outline" wx:if="{{item.options.needCornsilkPerm}}">玉米须烫发</t-tag>
+          <t-tag size="small" theme="danger" wx:if="{{item.isUrgent || item.options.isUrgent}}">加急+1000</t-tag>
+        </view>
+        
+        <view class="order-time">
+          <text>提交时间: {{item.createTimeStr}}</text>
+        </view>
+        
+        <view class="order-actions" wx:if="{{item.status === 'pending'}}" catchtap="stopPropagation">
+          <t-button size="small" theme="primary" variant="outline" catchtap="approveOrder" data-order="{{item}}">通过</t-button>
+          <t-button size="small" theme="danger" variant="outline" catchtap="rejectOrder" data-order="{{item}}">拒绝</t-button>
+        </view>
+      </view>
+    </block>
+    
+    <t-empty wx:else icon="folder-open" description="暂无订单" />
+    
+    <view class="load-more" wx:if="{{orders.length > 0}}">
+      <text wx:if="{{hasMore}}">加载更多...</text>
+      <text wx:else>没有更多了</text>
+    </view>
+  </scroll-view>
+  
+  <!-- 订单详情弹窗 -->
+  <t-popup visible="{{showDetailPopup}}" bind:visible-change="onCloseDetailPopup" placement="bottom">
+    <view class="detail-popup" wx:if="{{currentOrder}}">
+      <view class="detail-header">
+        <text class="detail-title">订单详情</text>
+        <t-icon name="close" size="48rpx" color="#999" bind:tap="onCloseDetailPopup" />
+      </view>
+      
+      <scroll-view scroll-y class="detail-content">
+        <view class="detail-section">
+          <view class="section-title">基本信息</view>
+          <view class="detail-row">
+            <text class="label">订单号:</text>
+            <text class="value">{{currentOrder.orderId}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="label">角色名称:</text>
+            <text class="value">{{currentOrder.roleName}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="label">来源作品:</text>
+            <text class="value">{{currentOrder.sourceWork}}</text>
+          </view>
+        </view>
+        
+        <view class="detail-section">
+          <view class="section-title">用户信息</view>
+          <view class="detail-row">
+            <text class="label">昵称:</text>
+            <text class="value">{{currentOrder.userInfo.nickName || '未知'}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="label">淘宝名称:</text>
+            <text class="value">{{currentOrder.userInfo.taobaoName || '未填写'}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="label">QQ:</text>
+            <text class="value">{{currentOrder.userInfo.qq || '未填写'}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="label">手机号:</text>
+            <text class="value">{{currentOrder.userInfo.phone || '未填写'}}</text>
+          </view>
+        </view>
+        
+        <view class="detail-section">
+          <view class="section-title">身材数据</view>
+          <view class="body-data-grid">
+            <view class="body-item">
+              <text class="body-label">身高</text>
+              <text class="body-value">{{currentOrder.bodyMeasurements.height || '-'}} cm</text>
+            </view>
+            <view class="body-item">
+              <text class="body-label">体重</text>
+              <text class="body-value">{{currentOrder.bodyMeasurements.weight || '-'}} kg</text>
+            </view>
+            <view class="body-item">
+              <text class="body-label">头围</text>
+              <text class="body-value">{{currentOrder.bodyMeasurements.headCircumference || '-'}} cm</text>
+            </view>
+            <view class="body-item">
+              <text class="body-label">颈围</text>
+              <text class="body-value">{{currentOrder.bodyMeasurements.neckCircumference || '-'}} cm</text>
+            </view>
+            <view class="body-item">
+              <text class="body-label">肩宽</text>
+              <text class="body-value">{{currentOrder.bodyMeasurements.shoulderWidth || '-'}} cm</text>
+            </view>
+          </view>
+        </view>
+        
+        <view class="detail-section">
+          <view class="section-title">定制选项</view>
+          <view class="options-grid">
+            <view class="option-item {{currentOrder.options.needReplaceFace ? 'active' : ''}}">
+              <t-icon name="{{currentOrder.options.needReplaceFace ? 'check' : 'close'}}" size="32rpx" />
+              <text>替换脸</text>
+            </view>
+            <view class="option-item {{currentOrder.options.needHeadwear ? 'active' : ''}}">
+              <t-icon name="{{currentOrder.options.needHeadwear ? 'check' : 'close'}}" size="32rpx" />
+              <text>头饰</text>
+            </view>
+            <view class="option-item {{currentOrder.options.needAntiGravity ? 'active' : ''}}">
+              <t-icon name="{{currentOrder.options.needAntiGravity ? 'check' : 'close'}}" size="32rpx" />
+              <text>反重力</text>
+            </view>
+            <view class="option-item {{currentOrder.options.needCornsilkPerm ? 'active' : ''}}">
+              <t-icon name="{{currentOrder.options.needCornsilkPerm ? 'check' : 'close'}}" size="32rpx" />
+              <text>玉米须烫发</text>
+            </view>
+          </view>
+        </view>
+        
+        <view class="detail-section">
+          <view class="section-title">参考图片</view>
+          <view class="image-grid">
+            <t-image 
+              wx:for="{{currentOrder.referenceImages}}" 
+              wx:key="index"
+              src="{{item}}" 
+              mode="aspectFill" 
+              width="200rpx" 
+              height="200rpx"
+              bind:tap="previewImage"
+              data-url="{{item}}"
+              data-urls="{{currentOrder.referenceImages}}"
+            />
+          </view>
+        </view>
+        
+        <view class="detail-section" wx:if="{{currentOrder.remark}}">
+          <view class="section-title">备注</view>
+          <text class="remark-text">{{currentOrder.remark}}</text>
+        </view>
+        
+        <!-- 淘宝订单号输入（已通过状态显示） -->
+        <view class="detail-section" wx:if="{{currentOrder.status === 'approved' || currentOrder.taobaoOrderId}}">
+          <view class="section-title">淘宝订单号</view>
+          <view class="taobao-input">
+            <t-input 
+              value="{{currentOrder.taobaoOrderId}}" 
+              placeholder="请输入淘宝订单号" 
+              bind:change="onTaobaoOrderIdChange"
+              disabled="{{currentOrder.status !== 'approved'}}"
+            />
+            <t-button 
+              wx:if="{{currentOrder.status === 'approved'}}"
+              size="small" 
+              theme="primary" 
+              bind:tap="saveTaobaoOrderId"
+            >
+              保存
+            </t-button>
+          </view>
+        </view>
+      </scroll-view>
+      
+      <view class="detail-footer" wx:if="{{currentOrder.status === 'pending'}}">
+        <t-button theme="danger" variant="outline" bind:tap="rejectCurrentOrder">拒绝</t-button>
+        <t-button theme="primary" bind:tap="approveCurrentOrder">通过审核</t-button>
+      </view>
+    </view>
+  </t-popup>
+  
+  <t-message id="t-message" />
+</view>

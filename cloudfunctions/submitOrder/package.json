@@ -1,0 +1,11 @@
+{
+  "name": "submitOrder",
+  "version": "1.0.0",
+  "description": "提交头壳定制订单",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

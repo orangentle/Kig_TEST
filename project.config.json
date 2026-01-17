@@ -53,5 +53,6 @@
     "include": []
   },
   "appid": "wx85216a49304a8344",
-  "projectname": "RatStudio"
+  "projectname": "RatStudio",
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
 }

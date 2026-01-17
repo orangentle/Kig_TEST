@@ -8,7 +8,7 @@ cloud.init({
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  const { avatarUrl, nickName } = event
+  const { avatarUrl, nickName, taobaoName, qq, phone, bodyMeasurements } = event
   
   try {
     // 获取用户信息
@@ -23,12 +23,22 @@ exports.main = async (event, context) => {
     if (userResult.data && userResult.data.length > 0) {
       // 用户存在，更新用户信息
       const userId = userResult.data[0]._id
+      
+      // 准备更新数据
+      const updateData = {
+        updateTime: Date.now()
+      }
+      
+      // 只更新提供的字段
+      if (avatarUrl !== undefined) updateData.avatarUrl = avatarUrl
+      if (nickName !== undefined) updateData.nickName = nickName
+      if (taobaoName !== undefined) updateData.taobaoName = taobaoName
+      if (qq !== undefined) updateData.qq = qq
+      if (phone !== undefined) updateData.phone = phone
+      if (bodyMeasurements !== undefined) updateData.bodyMeasurements = bodyMeasurements
+      
       const result = await userCollection.doc(userId).update({
-        data: {
-          avatarUrl,
-          nickName,
-          updateTime: Date.now()
-        }
+        data: updateData
       })
       
       return {
@@ -45,7 +55,7 @@ exports.main = async (event, context) => {
       }
     }
   } catch (error) {
-    console.error('更新用户头像失败', error)
+    console.error('更新用户信息失败', error)
     return {
       success: false,
       error: error.message,

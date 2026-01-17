@@ -4,9 +4,11 @@
     "pages/works/works",
     "pages/works/detail/detail",
     "pages/profile/profile",
+    "pages/order/order",
     "pages/order-detail/order-detail",
     "pages/admin/works-manage/works-manage",
     "pages/admin/admin",
+    "pages/admin/order-review/order-review",
     "pages/logs/logs",
     "pages/webview/webview"
   ],

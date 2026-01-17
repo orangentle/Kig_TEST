@@ -52,6 +52,10 @@
       <!-- 订单统计 -->
       <view class="stats-container">
         <view class="stat-item">
+          <text class="stat-number">{{orderStats.pending || 0}}</text>
+          <text class="stat-label">待审核</text>
+        </view>
+        <view class="stat-item">
           <text class="stat-number">{{orderStats.processing || 0}}</text>
           <text class="stat-label">制作中</text>
         </view>
@@ -61,7 +65,7 @@
         </view>
         <view class="stat-item">
           <text class="stat-number">{{orderStats.total || 0}}</text>
-          <text class="stat-label">全部订单</text>
+          <text class="stat-label">全部</text>
         </view>
       </view>
       
@@ -82,8 +86,8 @@
           >
             <view class="order-item-header">
               <text class="order-id">订单号: {{item.orderId}}</text>
-              <view class="order-status {{item.status === 'processing' ? 'status-normal' : 'status-completed'}}">
-                {{item.status === 'processing' ? '制作中' : '已完成'}}
+              <view class="order-status {{item.status === 'pending' ? 'status-pending' : item.status === 'approved' ? 'status-approved' : item.status === 'processing' ? 'status-normal' : item.status === 'rejected' ? 'status-rejected' : 'status-completed'}}">
+                {{item.status === 'pending' ? '待审核' : item.status === 'approved' ? '已通过' : item.status === 'processing' ? '制作中' : item.status === 'rejected' ? '已拒绝' : '已完成'}}
               </view>
             </view>
             
@@ -146,16 +150,51 @@
         <t-icon name="close" size="48rpx" color="#999" bind:tap="onCloseEditPopup" />
       </view>
       
-      <view class="edit-profile-content">
-        <view class="edit-avatar-section" bindtap="chooseAvatar">
-          <image class="edit-avatar" src="{{tempUserInfo.avatarUrl || '/assets/images/icon.jpg'}}" mode="aspectFill"></image>
-          <text class="edit-avatar-hint">点击修改头像</text>
+      <scroll-view scroll-y class="edit-profile-content" enhanced show-scrollbar="{{false}}">
+        <view class="edit-profile-scroll-inner">
+          <view class="edit-avatar-section" bindtap="chooseAvatar">
+            <image class="edit-avatar" src="{{tempUserInfo.avatarUrl || '/assets/images/icon.jpg'}}" mode="aspectFill"></image>
+            <text class="edit-avatar-hint">点击修改头像</text>
+          </view>
+        
+        <!-- 用户信息 -->
+        <view class="info-section">
+          <view class="section-title-small">用户信息</view>
+          <view class="edit-input-section">
+            <t-input label="昵称" value="{{tempUserInfo.nickName}}" placeholder="请输入昵称" bind:change="onNicknameChange" />
+          </view>
+          <view class="edit-input-section">
+            <t-input label="淘宝名称" value="{{tempUserInfo.taobaoName}}" placeholder="请输入淘宝名称" bind:change="onTaobaoNameChange" />
+          </view>
+          <view class="edit-input-section">
+            <t-input label="QQ账号" value="{{tempUserInfo.qq}}" placeholder="请输入QQ账号" bind:change="onQQChange" />
+          </view>
+          <view class="edit-input-section">
+            <t-input label="手机号" value="{{tempUserInfo.phone}}" placeholder="请输入手机号" type="number" bind:change="onPhoneChange" />
+          </view>
         </view>
         
-        <view class="edit-input-section">
-          <t-input label="昵称" value="{{tempUserInfo.nickName}}" placeholder="请输入昵称" bind:change="onNicknameChange" />
+        <!-- 身材数据 -->
+        <view class="info-section">
+          <view class="section-title-small">身材数据</view>
+          <view class="edit-input-section">
+            <t-input label="身高(cm)" value="{{tempBodyMeasurements.height || ''}}" placeholder="请输入身高" type="digit" bind:change="onHeightChange" />
+          </view>
+          <view class="edit-input-section">
+            <t-input label="体重(kg)" value="{{tempBodyMeasurements.weight || ''}}" placeholder="请输入体重" type="digit" bind:change="onWeightChange" />
+          </view>
+          <view class="edit-input-section">
+            <t-input label="头围(cm)" value="{{tempBodyMeasurements.headCircumference || ''}}" placeholder="请输入头围" type="digit" bind:change="onHeadCircumferenceChange" />
+          </view>
+          <view class="edit-input-section">
+            <t-input label="颈围(cm)" value="{{tempBodyMeasurements.neckCircumference || ''}}" placeholder="请输入颈围" type="digit" bind:change="onNeckCircumferenceChange" />
+          </view>
+          <view class="edit-input-section">
+            <t-input label="肩宽(cm)" value="{{tempBodyMeasurements.shoulderWidth || ''}}" placeholder="请输入肩宽" type="digit" bind:change="onShoulderWidthChange" />
+          </view>
         </view>
-      </view>
+        </view>
+      </scroll-view>
       
       <view class="edit-profile-footer">
         <t-button theme="primary" size="large" block bind:tap="saveUserProfile">保存</t-button>

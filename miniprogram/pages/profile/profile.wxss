@@ -197,6 +197,16 @@
   border-radius: 999rpx;
 }
 
+.status-pending {
+  background-color: #fffbe6;
+  color: #faad14;
+}
+
+.status-approved {
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
 .status-normal {
   background-color: #fff0e0;
   color: #ff8800;
@@ -205,6 +215,11 @@
 .status-completed {
   background-color: #f6ffed;
   color: #52c41a;
+}
+
+.status-rejected {
+  background-color: #fff1f0;
+  color: #ff4d4f;
 }
 
 .order-item-content {
@@ -283,16 +298,18 @@
 .edit-profile-popup {
   background-color: #fff;
   border-radius: 24rpx 24rpx 0 0;
-  padding: 32rpx;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .edit-profile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32rpx;
+  padding: 32rpx 32rpx 20rpx;
 }
 
 .edit-profile-title {
@@ -301,33 +318,55 @@
 }
 
 .edit-profile-content {
+  height: 1000rpx;
+  padding: 0 32rpx;
+  box-sizing: border-box;
+}
+
+.edit-profile-scroll-inner {
+  padding-bottom: 40rpx;
+}
+
+/* 信息分组 */
+.info-section {
   margin-bottom: 32rpx;
+}
+
+.section-title-small {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid #ff8800;
 }
 
 .edit-avatar-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 36rpx;
+  margin-bottom: 32rpx;
 }
 
 .edit-avatar {
-  width: 160rpx;
-  height: 160rpx;
+  width: 140rpx;
+  height: 140rpx;
   border-radius: 50%;
-  margin-bottom: 16rpx;
+  margin-bottom: 12rpx;
   border: 2rpx solid #f0f0f0;
 }
 
 .edit-avatar-hint {
-  font-size: 28rpx;
+  font-size: 26rpx;
   color: #ff8800;
 }
 
 .edit-input-section {
-  margin-bottom: 24rpx;
+  margin-bottom: 20rpx;
 }
 
 .edit-profile-footer {
-  padding-top: 24rpx;
+  padding: 20rpx 32rpx 32rpx;
+  background-color: #fff;
+  border-top: 1rpx solid #f0f0f0;
 } 

@@ -16,13 +16,23 @@ interface OrderInfo {
   orderId: string;
   roleName: string;
   orderTime: string;
-  status: 'processing' | 'completed';
+  status: 'pending' | 'approved' | 'rejected' | 'processing' | 'completed';
 }
 
 interface OrderStats {
+  pending: number;
   processing: number;
   completed: number;
   total: number;
+}
+
+// 身材数据接口
+interface BodyMeasurements {
+  height?: number;    // 身高(cm)
+  weight?: number;    // 体重(kg)
+  headCircumference?: number;  // 头围(cm)
+  neckCircumference?: number;  // 颈围(cm)
+  shoulderWidth?: number;      // 肩宽(cm)
 }
 
 // 用户资料接口
@@ -32,8 +42,13 @@ interface UserProfile {
   avatarUrl: string;
   nickName: string;
   userId: string;
-  phone?: string;
+  // 用户信息
+  taobaoName?: string;    // 淘宝名称
+  qq?: string;            // QQ账号
+  phone?: string;         // 手机号
   email?: string;
+  // 身材数据
+  bodyMeasurements?: BodyMeasurements;
   isAdmin?: boolean;
   createTime?: number;
 }
@@ -59,8 +74,18 @@ Component({
     showEditPopup: false, // 是否显示编辑个人资料弹窗
     tempUserInfo: {
       avatarUrl: '',
-      nickName: ''
+      nickName: '',
+      taobaoName: '',
+      qq: '',
+      phone: ''
     }, // 临时存储编辑中的用户信息
+    tempBodyMeasurements: {
+      height: 0,
+      weight: 0,
+      headCircumference: 0,
+      neckCircumference: 0,
+      shoulderWidth: 0
+    }, // 临时存储编辑中的身材数据
     tempAvatarPath: '' // 临时存储选择的头像路径
   },
 
@@ -173,6 +198,8 @@ Component({
               _openid: result.openid
             }).get();
             
+            let isAdmin = false;
+            
             if (userCheck.data.length === 0) {
               // 新用户，添加到数据库
               await db.collection('users').add({
@@ -181,6 +208,11 @@ Component({
             } else {
               // 更新用户信息
               const docId = userCheck.data[0]._id as string;
+              const existingUser = userCheck.data[0] as UserProfile;
+              
+              // 保留原有的isAdmin状态
+              isAdmin = existingUser.isAdmin || false;
+              
               await db.collection('users').doc(docId).update({
                 data: {
                   avatarUrl: userInfo.avatarUrl,
@@ -200,7 +232,8 @@ Component({
         this.setData({
           hasLogin: true,
               userInfo,
-              userId
+              userId,
+              isAdmin
         });
         
         // 加载订单数据
@@ -262,6 +295,7 @@ Component({
           
           // 计算订单统计数据
           const stats = {
+            pending: orders.filter(order => order.status === 'pending' || order.status === 'approved').length,
             processing: orders.filter(order => order.status === 'processing').length,
             completed: orders.filter(order => order.status === 'completed').length,
             total: orders.length
@@ -272,53 +306,22 @@ Component({
             orderStats: stats
           });
         } else {
-          // 如果没有订单数据，使用模拟数据（实际应用中可以显示空状态）
-          this.loadMockOrders();
+          // 如果没有订单数据，显示空状态
+          this.setData({
+            orders: [],
+            orderStats: { pending: 0, processing: 0, completed: 0, total: 0 }
+          });
         }
       } catch (error) {
         console.error('加载订单失败', error);
-        // 加载失败时使用模拟数据
-        this.loadMockOrders();
+        // 加载失败时显示空状态
+        this.setData({
+          orders: [],
+          orderStats: { pending: 0, processing: 0, completed: 0, total: 0 }
+        });
       } finally {
         this.setData({ isLoading: false });
       }
-    },
-    
-    // 加载模拟订单数据（用于开发测试）
-    loadMockOrders() {
-      // 模拟数据，实际应从服务器获取
-      const mockData: OrderInfo[] = [
-        { 
-          orderId: 'TB123456789', 
-          roleName: '狐狸头壳', 
-          orderTime: '2025-10-15', 
-          status: 'processing' 
-        },
-        { 
-          orderId: 'TB987654321', 
-          roleName: '猫咪头壳', 
-          orderTime: '2025-09-01', 
-          status: 'completed' 
-        },
-        { 
-          orderId: 'TB456789123', 
-          roleName: '兔子头壳', 
-          orderTime: '2025-08-15', 
-          status: 'completed' 
-        }
-      ];
-      
-      // 计算订单统计数据
-      const stats = {
-        processing: mockData.filter(order => order.status === 'processing').length,
-        completed: mockData.filter(order => order.status === 'completed').length,
-        total: mockData.length
-      };
-      
-      this.setData({
-        orders: mockData,
-        orderStats: stats
-      });
     },
     
     // 格式化日期
@@ -501,24 +504,84 @@ Component({
 
     // 进入管理后台
     enterAdminPanel() {
+      // 检查是否为管理员
+      if (!this.data.isAdmin) {
+        wx.showModal({
+          title: '权限不足',
+          content: '只有管理员才能进入管理后台',
+          showCancel: false,
+          confirmText: '我知道了'
+        });
+        return;
+      }
+      
       wx.navigateTo({
         url: '/pages/admin/admin'
       });
     },
 
     // 显示编辑资料弹窗
-    showEditProfileModal() {
+    async showEditProfileModal() {
       console.log('编辑资料按钮被点击');
-      // 设置临时用户信息
-      this.setData({
-        showEditPopup: true,
-        tempUserInfo: { 
-          avatarUrl: this.data.userInfo.avatarUrl,
-          nickName: this.data.userInfo.nickName
-        },
-        tempAvatarPath: ''
-      });
-      console.log('弹窗状态设置完成', this.data.showEditPopup, this.data.tempUserInfo);
+      
+      try {
+        // 从数据库获取完整的用户信息
+        const { result } = await wx.cloud.callFunction({
+          name: 'getOpenId'
+        }) as any;
+        
+        const db = wx.cloud.database();
+        const userResult = await db.collection('users').where({
+          _openid: result.openid
+        }).get();
+        
+        let userProfile: UserProfile | null = null;
+        if (userResult.data && userResult.data.length > 0) {
+          userProfile = userResult.data[0] as UserProfile;
+        }
+        
+        // 设置临时用户信息
+        this.setData({
+          showEditPopup: true,
+          tempUserInfo: { 
+            avatarUrl: this.data.userInfo.avatarUrl,
+            nickName: this.data.userInfo.nickName,
+            taobaoName: userProfile?.taobaoName || '',
+            qq: userProfile?.qq || '',
+            phone: userProfile?.phone || ''
+          },
+          tempBodyMeasurements: {
+            height: userProfile?.bodyMeasurements?.height || 0,
+            weight: userProfile?.bodyMeasurements?.weight || 0,
+            headCircumference: userProfile?.bodyMeasurements?.headCircumference || 0,
+            neckCircumference: userProfile?.bodyMeasurements?.neckCircumference || 0,
+            shoulderWidth: userProfile?.bodyMeasurements?.shoulderWidth || 0
+          },
+          tempAvatarPath: ''
+        });
+        console.log('弹窗状态设置完成', this.data.showEditPopup, this.data.tempUserInfo);
+      } catch (error) {
+        console.error('加载用户信息失败', error);
+        // 如果加载失败，使用默认值
+        this.setData({
+          showEditPopup: true,
+          tempUserInfo: { 
+            avatarUrl: this.data.userInfo.avatarUrl,
+            nickName: this.data.userInfo.nickName,
+            taobaoName: '',
+            qq: '',
+            phone: ''
+          },
+          tempBodyMeasurements: {
+            height: 0,
+            weight: 0,
+            headCircumference: 0,
+            neckCircumference: 0,
+            shoulderWidth: 0
+          },
+          tempAvatarPath: ''
+        });
+      }
     },
 
     // 关闭编辑资料弹窗
@@ -557,6 +620,62 @@ Component({
       });
     },
 
+    // 淘宝名称输入变更
+    onTaobaoNameChange(e: any) {
+      this.setData({
+        'tempUserInfo.taobaoName': e.detail.value
+      });
+    },
+
+    // QQ账号输入变更
+    onQQChange(e: any) {
+      this.setData({
+        'tempUserInfo.qq': e.detail.value
+      });
+    },
+
+    // 手机号输入变更
+    onPhoneChange(e: any) {
+      this.setData({
+        'tempUserInfo.phone': e.detail.value
+      });
+    },
+
+    // 身高输入变更
+    onHeightChange(e: any) {
+      this.setData({
+        'tempBodyMeasurements.height': parseFloat(e.detail.value) || 0
+      });
+    },
+
+    // 体重输入变更
+    onWeightChange(e: any) {
+      this.setData({
+        'tempBodyMeasurements.weight': parseFloat(e.detail.value) || 0
+      });
+    },
+
+    // 头围输入变更
+    onHeadCircumferenceChange(e: any) {
+      this.setData({
+        'tempBodyMeasurements.headCircumference': parseFloat(e.detail.value) || 0
+      });
+    },
+
+    // 颈围输入变更
+    onNeckCircumferenceChange(e: any) {
+      this.setData({
+        'tempBodyMeasurements.neckCircumference': parseFloat(e.detail.value) || 0
+      });
+    },
+
+    // 肩宽输入变更
+    onShoulderWidthChange(e: any) {
+      this.setData({
+        'tempBodyMeasurements.shoulderWidth': parseFloat(e.detail.value) || 0
+      });
+    },
+
     // 保存用户资料
     async saveUserProfile() {
       try {
@@ -569,7 +688,10 @@ Component({
           // 直接保存资料
           await this.updateUserProfile({
             nickName: this.data.tempUserInfo.nickName,
-            avatarUrl: this.data.userInfo.avatarUrl
+            avatarUrl: this.data.userInfo.avatarUrl,
+            taobaoName: this.data.tempUserInfo.taobaoName,
+            qq: this.data.tempUserInfo.qq,
+            phone: this.data.tempUserInfo.phone
           });
         }
         
@@ -616,7 +738,10 @@ Component({
           // 更新用户资料
           await this.updateUserProfile({
             nickName: this.data.tempUserInfo?.nickName || this.data.userInfo.nickName,
-            avatarUrl: uploadResult.fileID
+            avatarUrl: uploadResult.fileID,
+            taobaoName: this.data.tempUserInfo?.taobaoName,
+            qq: this.data.tempUserInfo?.qq,
+            phone: this.data.tempUserInfo?.phone
           });
         } else {
           throw new Error('头像上传失败');
@@ -634,7 +759,7 @@ Component({
     },
 
     // 更新用户资料到数据库
-    async updateUserProfile(userInfo: { nickName: string, avatarUrl: string }) {
+    async updateUserProfile(userInfo: { nickName: string, avatarUrl: string, taobaoName?: string, qq?: string, phone?: string }) {
       try {
         // 获取用户openid
         const wxContext = await wx.cloud.callFunction({
@@ -652,12 +777,19 @@ Component({
         if (userResult.data && userResult.data.length > 0) {
           const docId = userResult.data[0]._id as string;
           
+          // 准备更新数据
+          const updateData: any = {
+            avatarUrl: userInfo.avatarUrl,
+            nickName: userInfo.nickName,
+            taobaoName: userInfo.taobaoName || '',
+            qq: userInfo.qq || '',
+            phone: userInfo.phone || '',
+            bodyMeasurements: this.data.tempBodyMeasurements,
+            updateTime: Date.now()
+          };
+          
           await db.collection('users').doc(docId).update({
-            data: {
-              avatarUrl: userInfo.avatarUrl,
-              nickName: userInfo.nickName,
-              updateTime: Date.now()
-            }
+            data: updateData
           });
           
           // 更新本地和全局数据

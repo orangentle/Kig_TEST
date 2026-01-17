@@ -1,0 +1,218 @@
+<!--order.wxml-->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">头壳定制下单</text>
+    <text class="page-subtitle">请填写以下信息，我们将为您打造专属头壳</text>
+  </view>
+  
+  <scroll-view scroll-y class="form-scroll">
+    <view class="form-content">
+      <!-- 基本信息 -->
+      <view class="section">
+        <view class="section-title">
+          <t-icon name="user" size="36rpx" color="#ff8800" />
+          <text>基本信息</text>
+        </view>
+        
+        <view class="form-item">
+          <t-input 
+            label="角色名称" 
+            placeholder="请输入角色名称" 
+            value="{{formData.roleName}}" 
+            bind:change="onRoleNameChange"
+            required
+          />
+        </view>
+        
+        <view class="form-item">
+          <t-input 
+            label="来源作品" 
+            placeholder="请输入角色所属作品" 
+            value="{{formData.sourceWork}}" 
+            bind:change="onSourceWorkChange"
+            required
+          />
+        </view>
+      </view>
+      
+      <!-- 身材数据 -->
+      <view class="section">
+        <view class="section-title">
+          <t-icon name="measurement" size="36rpx" color="#ff8800" />
+          <text>身材数据</text>
+        </view>
+        
+        <t-cell 
+          title="使用个人资料身材数据" 
+          description="{{useProfileBodyData ? '已开启：将使用您个人资料中的身材数据' : '已关闭：请在下方填写身材数据'}}"
+          hover
+        >
+          <t-switch 
+            slot="note" 
+            value="{{useProfileBodyData}}" 
+            bind:change="onUseProfileBodyDataChange"
+          />
+        </t-cell>
+        
+        <block wx:if="{{!useProfileBodyData}}">
+          <view class="form-item">
+            <t-input label="身高(cm)" placeholder="请输入身高" type="digit" value="{{formData.height}}" bind:change="onHeightChange" />
+          </view>
+          <view class="form-item">
+            <t-input label="体重(kg)" placeholder="请输入体重" type="digit" value="{{formData.weight}}" bind:change="onWeightChange" />
+          </view>
+          <view class="form-item">
+            <t-input label="头围(cm)" placeholder="请输入头围" type="digit" value="{{formData.headCircumference}}" bind:change="onHeadCircumferenceChange" />
+          </view>
+          <view class="form-item">
+            <t-input label="颈围(cm)" placeholder="请输入颈围" type="digit" value="{{formData.neckCircumference}}" bind:change="onNeckCircumferenceChange" />
+          </view>
+          <view class="form-item">
+            <t-input label="肩宽(cm)" placeholder="请输入肩宽" type="digit" value="{{formData.shoulderWidth}}" bind:change="onShoulderWidthChange" />
+          </view>
+        </block>
+        
+        <block wx:else>
+          <view class="body-data-preview" wx:if="{{profileBodyData}}">
+            <view class="body-data-item">
+              <text class="label">身高:</text>
+              <text class="value">{{profileBodyData.height || '未填写'}} cm</text>
+            </view>
+            <view class="body-data-item">
+              <text class="label">体重:</text>
+              <text class="value">{{profileBodyData.weight || '未填写'}} kg</text>
+            </view>
+            <view class="body-data-item">
+              <text class="label">头围:</text>
+              <text class="value">{{profileBodyData.headCircumference || '未填写'}} cm</text>
+            </view>
+            <view class="body-data-item">
+              <text class="label">颈围:</text>
+              <text class="value">{{profileBodyData.neckCircumference || '未填写'}} cm</text>
+            </view>
+            <view class="body-data-item">
+              <text class="label">肩宽:</text>
+              <text class="value">{{profileBodyData.shoulderWidth || '未填写'}} cm</text>
+            </view>
+          </view>
+          <view class="body-data-tip" wx:else>
+            <text>您尚未在个人资料中填写身材数据，请先去完善。</text>
+            <t-button size="small" variant="text" theme="primary" bind:tap="goToProfile">去完善</t-button>
+          </view>
+        </block>
+      </view>
+      
+      <!-- 表情参考图 -->
+      <view class="section">
+        <view class="section-title">
+          <t-icon name="image" size="36rpx" color="#ff8800" />
+          <text>表情参考图</text>
+        </view>
+        
+        <view class="upload-area">
+          <t-upload
+            media-type="{{['image']}}"
+            max="9"
+            files="{{referenceImages}}"
+            bind:add="onUploadAdd"
+            bind:remove="onUploadRemove"
+          />
+          <text class="upload-tip">请上传角色表情参考图，最多9张</text>
+        </view>
+      </view>
+      
+      <!-- 定制选项 -->
+      <view class="section">
+        <view class="section-title">
+          <t-icon name="setting" size="36rpx" color="#ff8800" />
+          <text>定制选项</text>
+        </view>
+        
+        <t-cell 
+          title="添加替换脸" 
+          description="可更换不同表情的面部"
+          hover
+        >
+          <t-switch slot="note" value="{{formData.needReplaceFace}}" bind:change="onReplaceFaceChange" />
+        </t-cell>
+        
+        <t-cell 
+          title="需要头饰" 
+          description="角色专属头饰配件"
+          hover
+        >
+          <t-switch slot="note" value="{{formData.needHeadwear}}" bind:change="onHeadwearChange" />
+        </t-cell>
+        
+        <t-cell 
+          title="需要反重力" 
+          description="特殊造型支撑结构"
+          hover
+        >
+          <t-switch slot="note" value="{{formData.needAntiGravity}}" bind:change="onAntiGravityChange" />
+        </t-cell>
+        
+        <t-cell 
+          title="需要玉米须烫发" 
+          description="特殊发型处理工艺"
+          hover
+        >
+          <t-switch slot="note" value="{{formData.needCornsilkPerm}}" bind:change="onCornsilkPermChange" />
+        </t-cell>
+        
+        <t-cell 
+          title="加急处理" 
+          description="U类加急费用+1000元，优先制作"
+          hover
+        >
+          <t-switch slot="note" value="{{formData.isUrgent}}" bind:change="onUrgentChange" />
+        </t-cell>
+        
+        <view class="urgent-notice" wx:if="{{formData.isUrgent}}">
+          <t-icon name="error-circle-filled" size="32rpx" color="#ff8800" />
+          <text class="urgent-text">您已选择加急服务，将额外收取1000元加急费用</text>
+        </view>
+      </view>
+      
+      <!-- 备注 -->
+      <view class="section">
+        <view class="section-title">
+          <t-icon name="edit" size="36rpx" color="#ff8800" />
+          <text>备注说明</text>
+        </view>
+        
+        <view class="form-item">
+          <t-textarea
+            placeholder="请输入其他特殊要求或备注信息"
+            value="{{formData.remark}}"
+            bind:change="onRemarkChange"
+            maxlength="500"
+            indicator
+          />
+        </view>
+      </view>
+      
+      <!-- 底部占位 -->
+      <view class="bottom-placeholder"></view>
+    </view>
+  </scroll-view>
+  
+  <!-- 底部提交按钮 -->
+  <view class="submit-bar">
+    <view class="submit-tip">
+      <t-icon name="info-circle" size="32rpx" color="#ff8800" />
+      <text>提交后请等待管理员审核</text>
+    </view>
+    <t-button 
+      theme="primary" 
+      size="large" 
+      block 
+      loading="{{isSubmitting}}"
+      bind:tap="onSubmit"
+    >
+      提交订单
+    </t-button>
+  </view>
+  
+  <t-message id="t-message" />
+</view>

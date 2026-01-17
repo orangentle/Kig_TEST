@@ -121,19 +121,19 @@
   <!-- 底部操作栏 -->
   <view class="footer-actions">
     <t-button 
+      icon="check-circle" 
+      variant="outline" 
+      theme="primary" 
+      class="action-button" 
+      bind:tap="onOrderReview"
+    >订单审核</t-button>
+    <t-button 
       icon="add" 
       variant="outline" 
       theme="primary" 
       class="action-button" 
       bind:tap="onAddOrder"
     >新增订单</t-button>
-    <t-button 
-      icon="upload" 
-      variant="outline" 
-      theme="primary" 
-      class="action-button" 
-      bind:tap="onExportData"
-    >导出数据</t-button>
     <t-button 
       icon="file-copy" 
       theme="primary" 

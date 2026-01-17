@@ -1,67 +1,117 @@
 <!--index.wxml-->
 <view class="container">
-  <!-- 顶部区域 -->
-  <view class="header">
-    <view class="logo-container">
-      <image class="logo" src="/assets/images/icon.jpg" mode="aspectFit"></image>
-      <text class="title">鼠鼠工坊</text>
-    </view>
-    
-    <!-- 搜索框 -->
-    <view class="search-box">
-    <t-search
-      value="{{searchValue}}"
-      placeholder="请输入淘宝订单号查询"
-      bind:change="onSearchChange"
-      bind:submit="onSearch"
-    />
-    </view>
-    
-    <!-- Banner区域 -->
-    <view class="banner-area">
-      <view class="banner-content">
-        <text class="banner-title">专业Kigurumi头壳定制</text>
-        <text class="banner-subtitle">精心打造，为您的角色赋予生命</text>
-        <t-button size="small" variant="outline" class="banner-button">了解更多</t-button>
+  <!-- 顶部Banner区域 -->
+  <view class="header-banner">
+    <view class="banner-bg"></view>
+    <view class="banner-content">
+      <view class="logo-section">
+        <image class="logo" src="/assets/images/icon.jpg" mode="aspectFill"></image>
+        <view class="logo-text">
+          <text class="title">鼠鼠工坊</text>
+          <text class="subtitle">专业Kigurumi头壳定制</text>
+        </view>
       </view>
-      <image class="banner-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
+      <view class="banner-slogan">
+        <text class="slogan-main">精心打造，为您的角色赋予生命</text>
+      </view>
+      <t-button 
+        theme="primary" 
+        size="large" 
+        shape="round" 
+        icon="edit"
+        class="order-button"
+        bind:tap="goToOrder"
+      >
+        立即定制
+      </t-button>
     </view>
   </view>
   
-  <!-- 最近查询记录 -->
-  <view class="page-container">
-    <view class="section-header">
-      <text class="section-title">最近查询</text>
-      <text class="section-more" bindtap="viewAllSearches">查看全部</text>
+  <!-- 服务入口 -->
+  <view class="services-section">
+    <view class="section-title-bar">
+      <view class="title-line"></view>
+      <text class="title-text">我们的服务</text>
+      <view class="title-line"></view>
     </view>
     
-    <block wx:if="{{recentSearches.length > 0}}">
-      <view class="search-list">
-        <view 
-          class="search-item" 
-            wx:for="{{recentSearches}}"
-            wx:key="orderId"
-          bindtap="onOrderClick"
-            data-order-id="{{item.orderId}}"
-        >
-          <view class="search-item-info">
-            <view class="search-item-title">订单号: {{item.orderId}}</view>
-            <view class="search-item-desc">角色: {{item.roleName}}</view>
-          </view>
-          <view class="search-item-action">查看</view>
+    <view class="service-grid">
+      <!-- 头壳下单 -->
+      <view class="service-card" bindtap="goToOrder">
+        <view class="service-icon-wrap gradient-orange">
+          <t-icon name="edit" size="56rpx" color="#fff" />
         </view>
+        <view class="service-info">
+          <text class="service-name">头壳下单</text>
+          <text class="service-desc">定制专属Kig头壳</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#ccc" />
       </view>
-    </block>
-    
-    <block wx:else>
-      <view class="empty-state">
-        <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
-        <text class="empty-text">暂无查询记录</text>
+      
+      <!-- 偶壳娃聚 -->
+      <view class="service-card" bindtap="showDeveloping">
+        <view class="service-icon-wrap gradient-pink">
+          <t-icon name="heart" size="56rpx" color="#fff" />
+        </view>
+        <view class="service-info">
+          <text class="service-name">偶壳娃聚</text>
+          <text class="service-desc">社区活动聚会</text>
+        </view>
+        <view class="dev-tag">开发中</view>
       </view>
-    </block>
-    
-    <view class="search-button-container">
-      <t-button theme="primary" size="large" shape="round" bind:tap="onSearchButtonClick" class="primary-button">立即查询</t-button>
+      
+      <!-- 作品展示 -->
+      <view class="service-card" bindtap="goToWorks">
+        <view class="service-icon-wrap gradient-green">
+          <t-icon name="image" size="56rpx" color="#fff" />
+        </view>
+        <view class="service-info">
+          <text class="service-name">作品展示</text>
+          <text class="service-desc">浏览精选作品集</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#ccc" />
+      </view>
+      
+      <!-- 我的订单 -->
+      <view class="service-card" bindtap="goToProfile">
+        <view class="service-icon-wrap gradient-purple">
+          <t-icon name="user" size="56rpx" color="#fff" />
+        </view>
+        <view class="service-info">
+          <text class="service-name">我的订单</text>
+          <text class="service-desc">查看订单进度</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#ccc" />
+      </view>
+      
+      <!-- 常见问题 -->
+      <view class="service-card" bindtap="showDeveloping">
+        <view class="service-icon-wrap gradient-blue">
+          <t-icon name="help-circle" size="56rpx" color="#fff" />
+        </view>
+        <view class="service-info">
+          <text class="service-name">常见问题</text>
+          <text class="service-desc">FAQ帮助中心</text>
+        </view>
+        <view class="dev-tag">开发中</view>
+      </view>
+      
+      <!-- 价格估算 -->
+      <view class="service-card" bindtap="showDeveloping">
+        <view class="service-icon-wrap gradient-yellow">
+          <t-icon name="calculation" size="56rpx" color="#fff" />
+        </view>
+        <view class="service-info">
+          <text class="service-name">价格估算</text>
+          <text class="service-desc">在线估算费用</text>
+        </view>
+        <view class="dev-tag">开发中</view>
+      </view>
     </view>
+  </view>
+  
+  <!-- 底部信息 -->
+  <view class="footer-info">
+    <text class="footer-text">© 2025 鼠鼠工坊 · 用心定制每一个头壳</text>
   </view>
 </view>

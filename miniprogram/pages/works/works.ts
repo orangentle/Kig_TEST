@@ -36,16 +36,39 @@ Page({
         .get();
 
       if (res.data && res.data.length > 0) {
-        const works: WorkItem[] = res.data.map((item: any) => ({
-          id: item._id,
-          roleName: item.roleName || item.title || '未命名角色',
-          source: item.source || item.description || '作品',
-          date: this.formatDate(item.createTime || Date.now()),
-          imageUrl: item.coverFileId || item.imageFileId || '',
-          coverFileId: item.coverFileId || item.imageFileId || '',
-          category: item.category || 'original',
-          createTime: item.createTime || Date.now()
-        }));
+        // 收集所有fileID
+        const fileIDs = res.data
+          .map((item: any) => item.coverFileId || item.imageFileId)
+          .filter(Boolean);
+        
+        // 批量获取临时链接
+        let fileURLMap: Record<string, string> = {};
+        if (fileIDs.length > 0) {
+          try {
+            const urlRes = await wx.cloud.getTempFileURL({ fileList: fileIDs });
+            urlRes.fileList.forEach((file: any) => {
+              if (file.tempFileURL) {
+                fileURLMap[file.fileID] = file.tempFileURL;
+              }
+            });
+          } catch (error) {
+            console.error('获取临时URL失败', error);
+          }
+        }
+
+        const works: WorkItem[] = res.data.map((item: any) => {
+          const fileId = item.coverFileId || item.imageFileId || '';
+          return {
+            id: item._id,
+            roleName: item.roleName || item.title || '未命名角色',
+            source: item.source || item.description || '作品',
+            date: this.formatDate(item.createTime || Date.now()),
+            imageUrl: fileURLMap[fileId] || '',
+            coverFileId: fileId,
+            category: item.category || 'original',
+            createTime: item.createTime || Date.now()
+          };
+        });
         this.setData({ works });
         this.applyFilters(true);
         return;

@@ -85,7 +85,7 @@ Page({
           fail: reject
         });
       });
-      const cloudPath = `works/${Date.now()}-${Math.floor(Math.random() * 1000)}.jpg`;
+      const cloudPath = `images/works/${Date.now()}-${Math.floor(Math.random() * 1000)}.jpg`;
       wx.showLoading({ title: '上传中...' });
       const uploadRes = await wx.cloud.uploadFile({ cloudPath, filePath });
       wx.hideLoading();

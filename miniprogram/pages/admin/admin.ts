@@ -504,6 +504,13 @@ Component({
       });
     },
 
+    // 订单审核
+    onOrderReview() {
+      wx.navigateTo({
+        url: '/pages/admin/order-review/order-review'
+      });
+    },
+
     // 作品管理
     onManageWorks() {
       wx.navigateTo({
