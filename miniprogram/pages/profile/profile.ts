@@ -106,6 +106,15 @@ Component({
     }
   },
 
+  pageLifetimes: {
+    // 页面显示时重新加载订单数据
+    show() {
+      if (this.data.hasLogin) {
+        this.loadOrders();
+      }
+    }
+  },
+
   methods: {
     // 检查登录状态
     async checkLoginStatus() {

@@ -272,6 +272,11 @@ Page({
 
   // 提交订单
   async onSubmit() {
+    // 防止重复提交
+    if (this.data.isSubmitting) {
+      return;
+    }
+    
     if (!this.data.hasLogin) {
       wx.showModal({
         title: '请先登录',

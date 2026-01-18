@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鼠鼠工坊 - 设计稿 v2.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff8800;
+            --primary-light: #ffaa00;
+            --primary-gradient: linear-gradient(135deg, #ff9900, #ffcc00);
+            --success: #52c41a;
+            --warning: #faad14;
+            --danger: #ff4d4f;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border: #e0e0e0;
+            --bg-page: #f5f7fa;
+            --bg-card: #ffffff;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #1a1a2e;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        
+        .design-header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+        
+        .design-header h1 {
+            font-size: 48px;
+            font-weight: bold;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+        
+        .design-header p {
+            color: #888;
+            font-size: 18px;
+        }
+        
+        .color-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 2px;
+            margin-right: 12px;
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        
+        .color-item {
+            text-align: center;
+        }
+        
+        .color-swatch {
+            width: 100%;
+            height: 80px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .color-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .color-value {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+        
+        .gradient-swatch {
+            background: var(--primary-gradient);
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        
+        .component-card {
+            background: var(--bg-page);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .component-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        /* 按钮组件 */
+        .btn-primary-demo {
+            background: linear-gradient(90deg, #ff8800, #ffaa00);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 24px;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 6px 12px rgba(255,136,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary-demo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255,136,0,0.3);
+        }
+        
+        .btn-secondary-demo {
+            background: white;
+            color: #ff8800;
+            padding: 12px 32px;
+            border-radius: 24px;
+            border: 2px solid #ff8800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-danger-demo {
+            background: white;
+            color: #ff4d4f;
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: 1px solid #ff4d4f;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        /* 标签组件 */
+        .tag-demo {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .tag-warning { background: #fff7e6; color: #fa8c16; }
+        .tag-success { background: #f6ffed; color: #52c41a; }
+        .tag-danger { background: #fff1f0; color: #ff4d4f; }
+        .tag-outline { background: white; color: #666; border: 1px solid #d9d9d9; }
+        
+        /* 输入框 */
+        .input-demo {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+        
+        .input-demo:focus {
+            outline: none;
+            border-color: #ff8800;
+        }
+        
+        .search-demo {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+        }
+        
+        /* 开关 */
+        .switch-demo {
+            width: 44px;
+            height: 22px;
+            background: #ccc;
+            border-radius: 11px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .switch-demo.active {
+            background: #ff8800;
+        }
+        
+        .switch-demo::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        
+        .switch-demo.active::after {
+            transform: translateX(22px);
+        }
+        
+        /* 进度条 */
+        .progress-demo {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill-demo {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        /* 卡片 */
+        .card-demo {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        /* 页面预览 */
+        .page-preview-section {
+            margin-top: 60px;
+        }
+        
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+        }
+        
+        .page-item {
+            text-align: center;
+        }
+        
+        .page-name {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+        
+        .phone-frame {
+            width: 320px;
+            height: 640px;
+            background: black;
+            border-radius: 40px;
+            padding: 12px;
+            margin: 0 auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            overflow: hidden;
+            background: var(--bg-page);
+        }
+        
+        .phone-screen iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* 字体规范 */
+        .typography-item {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .typography-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .typo-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .typo-h1 { font-size: 36px; font-weight: 600; color: var(--text-primary); }
+        .typo-h2 { font-size: 32px; font-weight: 500; color: var(--text-primary); }
+        .typo-h3 { font-size: 30px; font-weight: 500; color: var(--text-primary); }
+        .typo-body { font-size: 28px; color: var(--text-primary); }
+        .typo-small { font-size: 26px; color: var(--text-secondary); }
+        .typo-tiny { font-size: 24px; color: var(--text-muted); }
+        
+        /* 间距展示 */
+        .spacing-demo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .spacing-box {
+            background: linear-gradient(135deg, #ff9900, #ffcc00);
+            opacity: 0.8;
+        }
+        
+        .spacing-label {
+            margin-left: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .spacing-value {
+            font-family: monospace;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <div class="design-header">
+        <h1>🐭 鼠鼠工坊设计系统</h1>
+        <p>Design System v2.0 | 2026年1月18日更新</p>
+    </div>
+    
+    <!-- 色彩系统 -->
+    <div class="color-section">
+        <h2 class="section-title">色彩系统</h2>
+        
+        <h3 style="font-size: 18px; color: #666; margin-bottom: 16px;">品牌色</h3>
+        <div class="color-grid" style="margin-bottom: 32px;">
+            <div class="color-item">
+                <div class="color-swatch" style="background: #ff8800;"></div>
+                <div class="color-name">品牌橙</div>
+                <div class="color-value">#ff8800</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #ffaa00;"></div>
+                <div class="color-name">品牌黄</div>
+                <div class="color-value">#ffaa00</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #ffcc00;"></div>
+                <div class="color-name">金黄色</div>
+                <div class="color-value">#ffcc00</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch gradient-swatch"></div>
+                <div class="color-name">主渐变</div>
+                <div class="color-value">#ff9900 → #ffcc00</div>
+            </div>
+        </div>
+        
+        <h3 style="font-size: 18px; color: #666; margin-bottom: 16px;">功能色</h3>
+        <div class="color-grid" style="margin-bottom: 32px;">
+            <div class="color-item">
+                <div class="color-swatch" style="background: #52c41a;"></div>
+                <div class="color-name">成功绿</div>
+                <div class="color-value">#52c41a</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #faad14;"></div>
+                <div class="color-name">警告黄</div>
+                <div class="color-value">#faad14</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #ff4d4f;"></div>
+                <div class="color-name">危险红</div>
+                <div class="color-value">#ff4d4f</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #1890ff;"></div>
+                <div class="color-name">信息蓝</div>
+                <div class="color-value">#1890ff</div>
+            </div>
+        </div>
+        
+        <h3 style="font-size: 18px; color: #666; margin-bottom: 16px;">中性色</h3>
+        <div class="color-grid">
+            <div class="color-item">
+                <div class="color-swatch" style="background: #333333;"></div>
+                <div class="color-name">标题黑</div>
+                <div class="color-value">#333333</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #666666;"></div>
+                <div class="color-name">正文灰</div>
+                <div class="color-value">#666666</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #999999;"></div>
+                <div class="color-name">辅助灰</div>
+                <div class="color-value">#999999</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #e0e0e0;"></div>
+                <div class="color-name">边框灰</div>
+                <div class="color-value">#e0e0e0</div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #f5f7fa; border: 1px solid #e0e0e0;"></div>
+                <div class="color-name">背景灰</div>
+                <div class="color-value">#f5f7fa</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 字体规范 -->
+    <div class="color-section">
+        <h2 class="section-title">字体规范</h2>
+        <div class="typography-item">
+            <div class="typo-label">大标题 - 36rpx / 18px / Semi-bold</div>
+            <div class="typo-h1">鼠鼠工坊 精心打造</div>
+        </div>
+        <div class="typography-item">
+            <div class="typo-label">页面标题 - 32rpx / 16px / Medium</div>
+            <div class="typo-h2">订单详情</div>
+        </div>
+        <div class="typography-item">
+            <div class="typo-label">卡片标题 - 30rpx / 15px / Medium</div>
+            <div class="typo-h3">制作进度</div>
+        </div>
+        <div class="typography-item">
+            <div class="typo-label">正文 - 28rpx / 14px / Regular</div>
+            <div style="font-size: 14px; color: #333;">高品质头壳定制，让你的角色栩栩如生</div>
+        </div>
+        <div class="typography-item">
+            <div class="typo-label">辅助文字 - 26rpx / 13px / Regular</div>
+            <div style="font-size: 13px; color: #666;">下单时间: 2026-01-18</div>
+        </div>
+        <div class="typography-item">
+            <div class="typo-label">小字说明 - 24rpx / 12px / Regular</div>
+            <div style="font-size: 12px; color: #999;">数据已同步 - 2分钟前</div>
+        </div>
+    </div>
+    
+    <!-- 组件库 -->
+    <div class="color-section">
+        <h2 class="section-title">组件库</h2>
+        <div class="component-grid">
+            <!-- 按钮 -->
+            <div class="component-card">
+                <div class="component-title">按钮 Buttons</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button class="btn-primary-demo">主要按钮</button>
+                    <button class="btn-secondary-demo">次要按钮</button>
+                    <button class="btn-danger-demo">危险按钮</button>
+                </div>
+            </div>
+            
+            <!-- 标签 -->
+            <div class="component-card">
+                <div class="component-title">标签 Tags</div>
+                <div>
+                    <span class="tag-demo tag-warning">待审核</span>
+                    <span class="tag-demo tag-success">已完成</span>
+                    <span class="tag-demo tag-danger">加急</span>
+                    <span class="tag-demo tag-outline">替换脸</span>
+                    <span class="tag-demo tag-outline">头饰</span>
+                </div>
+            </div>
+            
+            <!-- 输入框 -->
+            <div class="component-card">
+                <div class="component-title">输入框 Inputs</div>
+                <input class="input-demo" placeholder="请输入角色名称" />
+                <input class="search-demo" placeholder="🔍 搜索头壳、角色名称" />
+            </div>
+            
+            <!-- 开关 -->
+            <div class="component-card">
+                <div class="component-title">开关 Switch</div>
+                <div style="display: flex; align-items: center; gap: 24px;">
+                    <div>
+                        <div class="switch-demo active"></div>
+                        <div style="font-size: 12px; color: #999; margin-top: 8px;">开启状态</div>
+                    </div>
+                    <div>
+                        <div class="switch-demo"></div>
+                        <div style="font-size: 12px; color: #999; margin-top: 8px;">关闭状态</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 进度条 -->
+            <div class="component-card">
+                <div class="component-title">进度条 Progress</div>
+                <div style="margin-bottom: 16px;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 4px;">正常进度 50%</div>
+                    <div class="progress-demo">
+                        <div class="progress-fill-demo" style="width: 50%; background: #ff8800;"></div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 4px;">即将完成 90%</div>
+                    <div class="progress-demo">
+                        <div class="progress-fill-demo" style="width: 90%; background: #faad14;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: #666; margin-bottom: 4px;">加急订单 30%</div>
+                    <div class="progress-demo">
+                        <div class="progress-fill-demo" style="width: 30%; background: #ff4d4f;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 卡片 -->
+            <div class="component-card">
+                <div class="component-title">卡片 Card</div>
+                <div class="card-demo">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="font-weight: 500;">订单号: KG20263456</span>
+                        <span class="tag-demo tag-warning" style="margin: 0;">制作中</span>
+                    </div>
+                    <div style="font-size: 13px; color: #666;">角色: 狐狸头壳</div>
+                    <div style="font-size: 12px; color: #999; margin-top: 8px;">下单时间: 2026-01-15</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 间距规范 -->
+    <div class="color-section">
+        <h2 class="section-title">间距规范</h2>
+        <div class="spacing-demo">
+            <div class="spacing-box" style="width: 8px; height: 8px;"></div>
+            <div class="spacing-label">xs <span class="spacing-value">8rpx / 4px</span></div>
+        </div>
+        <div class="spacing-demo">
+            <div class="spacing-box" style="width: 16px; height: 16px;"></div>
+            <div class="spacing-label">sm <span class="spacing-value">16rpx / 8px</span></div>
+        </div>
+        <div class="spacing-demo">
+            <div class="spacing-box" style="width: 24px; height: 24px;"></div>
+            <div class="spacing-label">md <span class="spacing-value">24rpx / 12px</span></div>
+        </div>
+        <div class="spacing-demo">
+            <div class="spacing-box" style="width: 32px; height: 32px;"></div>
+            <div class="spacing-label">lg <span class="spacing-value">32rpx / 16px</span> — 页面边距</div>
+        </div>
+        <div class="spacing-demo">
+            <div class="spacing-box" style="width: 48px; height: 48px;"></div>
+            <div class="spacing-label">xl <span class="spacing-value">48rpx / 24px</span> — 大区块间距</div>
+        </div>
+    </div>
+    
+    <!-- 页面预览 -->
+    <div class="page-preview-section">
+        <div class="color-section" style="background: transparent;">
+            <h2 class="section-title" style="color: white;">页面预览</h2>
+        </div>
+        
+        <div class="page-grid">
+            <div class="page-item">
+                <div class="page-name">首页</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <iframe src="home.html"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-item">
+                <div class="page-name">作品展示</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <iframe src="works.html"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-item">
+                <div class="page-name">个人中心</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <iframe src="profile.html"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-item">
+                <div class="page-name">订单详情</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <iframe src="order-detail.html"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-item">
+                <div class="page-name">管理后台</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <iframe src="admin.html"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-item">
+                <div class="page-name">订单审核</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <iframe src="order-review.html"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-item">
+                <div class="page-name">作品管理</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <iframe src="works-manage.html"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-item">
+                <div class="page-name">未登录状态</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <iframe src="profile-unlogin.html"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部信息 -->
+    <div style="text-align: center; color: #666; margin-top: 60px; padding: 40px;">
+        <p>© 2026 鼠鼠工坊 设计系统</p>
+        <p style="font-size: 14px; margin-top: 8px;">Design System v2.0 | Created with ❤️</p>
+    </div>
+</body>
+</html>
