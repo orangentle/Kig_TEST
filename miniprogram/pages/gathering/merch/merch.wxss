@@ -1,0 +1,404 @@
+/* pages/gathering/merch/merch.wxss */
+
+.container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding-bottom: 40rpx;
+}
+
+/* Banner */
+.banner-section {
+  padding: 0 24rpx;
+  margin-top: 16rpx;
+}
+
+.banner-swiper {
+  height: 300rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.banner-item {
+  position: relative;
+  height: 100%;
+}
+
+.banner-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24rpx;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+}
+
+.banner-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.banner-desc {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 分类导航 */
+.category-scroll {
+  padding: 24rpx 0;
+  white-space: nowrap;
+}
+
+.category-list {
+  display: inline-flex;
+  padding: 0 24rpx;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120rpx;
+  height: 120rpx;
+  margin-right: 20rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.category-item text {
+  margin-top: 8rpx;
+}
+
+.category-item.active {
+  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  color: #fff;
+}
+
+/* 区块 */
+.section {
+  padding: 0 24rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.sort-wrap {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: #666;
+  padding: 8rpx 16rpx;
+  background: #fff;
+  border-radius: 24rpx;
+}
+
+.sort-wrap text {
+  margin-right: 8rpx;
+}
+
+/* 商品网格 */
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.product-card {
+  width: calc(50% - 10rpx);
+  background: #fff;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.product-image-wrap {
+  position: relative;
+}
+
+.product-tag {
+  position: absolute;
+  top: 16rpx;
+  left: 16rpx;
+  font-size: 20rpx;
+  padding: 6rpx 16rpx;
+  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  color: #fff;
+  border-radius: 16rpx;
+}
+
+.product-info {
+  padding: 20rpx;
+}
+
+.product-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-desc {
+  font-size: 22rpx;
+  color: #999;
+  margin-bottom: 12rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.product-price {
+  display: flex;
+  align-items: baseline;
+}
+
+.price-symbol {
+  font-size: 24rpx;
+  color: #ff4d4f;
+}
+
+.price-num {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ff4d4f;
+}
+
+.price-original {
+  font-size: 22rpx;
+  color: #999;
+  text-decoration: line-through;
+  margin-left: 8rpx;
+}
+
+.product-sales {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 底部提示 */
+.footer-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx 24rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.footer-tip text {
+  margin-left: 8rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx;
+  background: #fff;
+  border-radius: 20rpx;
+}
+
+/* 详情弹窗 */
+.detail-popup {
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.detail-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.detail-close {
+  padding: 8rpx;
+}
+
+.detail-content {
+  flex: 1;
+  max-height: 60vh;
+}
+
+.detail-swiper {
+  height: 600rpx;
+}
+
+.detail-info {
+  padding: 24rpx;
+}
+
+.detail-name {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.detail-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.detail-price {
+  display: flex;
+  align-items: baseline;
+}
+
+.detail-price .price-symbol {
+  font-size: 28rpx;
+}
+
+.detail-price .price-num {
+  font-size: 48rpx;
+}
+
+.detail-sales {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.detail-desc {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.detail-section {
+  padding: 24rpx;
+  border-top: 16rpx solid #f5f7fa;
+}
+
+.section-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.specs-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.spec-item {
+  font-size: 26rpx;
+  padding: 12rpx 28rpx;
+  background: #f5f5f5;
+  color: #666;
+  border-radius: 24rpx;
+  margin-right: 16rpx;
+  margin-bottom: 16rpx;
+  border: 2rpx solid transparent;
+}
+
+.spec-item.selected {
+  background: #fff7e6;
+  color: #ff8800;
+  border-color: #ff8800;
+}
+
+.detail-content-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.detail-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  border-top: 1rpx solid #f0f0f0;
+  background: #fff;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+}
+
+.footer-icon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100rpx;
+  font-size: 22rpx;
+  color: #666;
+}
+
+.footer-icon-btn text {
+  margin-top: 4rpx;
+}
+
+.footer-right {
+  display: flex;
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin-left: 16rpx;
+}
+
+.action-btn.cart {
+  background: #fff7e6;
+  color: #ff8800;
+}
+
+.action-btn.buy {
+  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  color: #fff;
+}

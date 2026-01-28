@@ -1,0 +1,170 @@
+<!--pages/gathering/schedule/schedule.wxml - 活动安排页面-->
+<view class="container">
+  <!-- 自定义导航栏 -->
+  <t-navbar title="活动安排" left-arrow bind:go-back="goBack" />
+  
+  <!-- 月份选择器 -->
+  <view class="month-selector">
+    <view class="month-arrow" bindtap="prevMonth">
+      <t-icon name="chevron-left" size="40rpx" color="#666" />
+    </view>
+    <view class="month-display">
+      <text class="month-year">{{currentYear}}年</text>
+      <text class="month-num">{{currentMonth}}月</text>
+    </view>
+    <view class="month-arrow" bindtap="nextMonth">
+      <t-icon name="chevron-right" size="40rpx" color="#666" />
+    </view>
+  </view>
+  
+  <!-- 日历视图 -->
+  <view class="calendar-card">
+    <view class="calendar-header">
+      <text class="weekday" wx:for="{{weekdays}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="calendar-body">
+      <view 
+        class="calendar-day {{item.isCurrentMonth ? '' : 'other-month'}} {{item.isToday ? 'today' : ''}} {{item.hasEvent ? 'has-event' : ''}} {{item.isSelected ? 'selected' : ''}}"
+        wx:for="{{calendarDays}}"
+        wx:key="date"
+        bindtap="selectDate"
+        data-day="{{item}}"
+      >
+        <text class="day-num">{{item.day}}</text>
+        <view class="event-dot" wx:if="{{item.hasEvent}}"></view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 日程列表 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">{{selectedDateText}} 活动安排</text>
+    </view>
+    
+    <view class="schedule-list" wx:if="{{dayEvents.length > 0}}">
+      <view class="schedule-item" wx:for="{{dayEvents}}" wx:key="id" bindtap="showEventDetail" data-event="{{item}}">
+        <view class="schedule-time">
+          <text class="time-start">{{item.startTime}}</text>
+          <view class="time-line"></view>
+          <text class="time-end">{{item.endTime}}</text>
+        </view>
+        <view class="schedule-content">
+          <view class="schedule-card {{item.type}}">
+            <view class="schedule-header">
+              <text class="schedule-name">{{item.name}}</text>
+              <view class="schedule-type-tag">{{item.typeText}}</view>
+            </view>
+            <view class="schedule-meta">
+              <t-icon name="location" size="24rpx" color="#999" />
+              <text class="meta-text">{{item.location}}</text>
+            </view>
+            <view class="schedule-meta" wx:if="{{item.host}}">
+              <t-icon name="user" size="24rpx" color="#999" />
+              <text class="meta-text">主办：{{item.host}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty-state" wx:else>
+      <t-icon name="calendar" size="120rpx" color="#ddd" />
+      <text class="empty-text">当天暂无活动安排</text>
+    </view>
+  </view>
+  
+  <!-- 近期活动预览 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">近期活动</text>
+    </view>
+    
+    <view class="upcoming-list" wx:if="{{upcomingEvents.length > 0}}">
+      <view class="upcoming-item" wx:for="{{upcomingEvents}}" wx:key="id" bindtap="showEventDetail" data-event="{{item}}">
+        <view class="upcoming-date">
+          <text class="date-month">{{item.monthText}}</text>
+          <text class="date-day">{{item.dayNum}}</text>
+          <text class="date-weekday">{{item.weekday}}</text>
+        </view>
+        <view class="upcoming-info">
+          <view class="upcoming-name">{{item.name}}</view>
+          <view class="upcoming-time">{{item.startTime}} - {{item.endTime}}</view>
+          <view class="upcoming-location">
+            <t-icon name="location" size="24rpx" color="#999" />
+            <text>{{item.location}}</text>
+          </view>
+        </view>
+        <view class="upcoming-action">
+          <view class="upcoming-type {{item.type}}">{{item.typeText}}</view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty-state small" wx:else>
+      <text class="empty-text">暂无近期活动</text>
+    </view>
+  </view>
+</view>
+
+<!-- 活动详情弹窗 -->
+<t-popup visible="{{showDetail}}" placement="bottom" bind:visible-change="onDetailClose">
+  <view class="detail-popup">
+    <view class="detail-header">
+      <text class="detail-title">{{currentEvent.name}}</text>
+      <view class="detail-close" bindtap="closeDetail">
+        <t-icon name="close" size="40rpx" color="#999" />
+      </view>
+    </view>
+    <scroll-view scroll-y class="detail-content">
+      <view class="detail-section">
+        <view class="detail-row">
+          <t-icon name="time" size="36rpx" color="#ff8800" />
+          <view class="detail-row-content">
+            <text class="row-label">活动时间</text>
+            <text class="row-value">{{currentEvent.dateText}} {{currentEvent.startTime}} - {{currentEvent.endTime}}</text>
+          </view>
+        </view>
+        <view class="detail-row">
+          <t-icon name="location" size="36rpx" color="#ff8800" />
+          <view class="detail-row-content">
+            <text class="row-label">活动地点</text>
+            <text class="row-value">{{currentEvent.location}}</text>
+          </view>
+        </view>
+        <view class="detail-row" wx:if="{{currentEvent.host}}">
+          <t-icon name="user" size="36rpx" color="#ff8800" />
+          <view class="detail-row-content">
+            <text class="row-label">主办方</text>
+            <text class="row-value">{{currentEvent.host}}</text>
+          </view>
+        </view>
+        <view class="detail-row">
+          <t-icon name="fork" size="36rpx" color="#ff8800" />
+          <view class="detail-row-content">
+            <text class="row-label">活动类型</text>
+            <text class="row-value">{{currentEvent.typeText}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="detail-section" wx:if="{{currentEvent.description}}">
+        <text class="section-label">活动详情</text>
+        <text class="detail-desc">{{currentEvent.description}}</text>
+      </view>
+      <view class="detail-section" wx:if="{{currentEvent.agenda && currentEvent.agenda.length > 0}}">
+        <text class="section-label">活动流程</text>
+        <view class="agenda-list">
+          <view class="agenda-item" wx:for="{{currentEvent.agenda}}" wx:key="time">
+            <text class="agenda-time">{{item.time}}</text>
+            <text class="agenda-content">{{item.content}}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="detail-footer" wx:if="{{currentEvent.canSignup}}">
+      <button class="action-btn primary" bindtap="goToSignup">
+        立即报名
+      </button>
+    </view>
+  </view>
+</t-popup>

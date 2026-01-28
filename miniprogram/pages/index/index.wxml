@@ -49,7 +49,7 @@
       </view>
       
       <!-- 偶壳娃聚 -->
-      <view class="service-card" bindtap="showDeveloping">
+      <view class="service-card" bindtap="goToGathering">
         <view class="service-icon-wrap gradient-pink">
           <t-icon name="heart" size="56rpx" color="#fff" />
         </view>
@@ -57,7 +57,7 @@
           <text class="service-name">偶壳娃聚</text>
           <text class="service-desc">社区活动聚会</text>
         </view>
-        <view class="dev-tag">开发中</view>
+        <view class="hot-tag">热门</view>
       </view>
       
       <!-- 作品展示 -->

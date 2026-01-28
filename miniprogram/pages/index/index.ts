@@ -51,6 +51,13 @@ Component({
       });
     },
 
+    // 跳转到偶壳娃聚页面
+    goToGathering() {
+      wx.navigateTo({
+        url: '/pages/gathering/gathering'
+      });
+    },
+
     // 显示开发中提示
     showDeveloping() {
       wx.showToast({

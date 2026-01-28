@@ -205,7 +205,15 @@
   border-radius: 20rpx;
 }
 
-/* �ײ���Ϣ */
+.hot-tag {
+  background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+  color: #fff;
+  font-size: 22rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* 底部信息 */
 .footer-info {
   padding: 40rpx;
   text-align: center;

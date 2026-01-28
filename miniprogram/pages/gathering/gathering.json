@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-navbar": "tdesign-miniprogram/navbar/navbar"
+  },
+  "navigationBarTitleText": "偶壳娃聚"
+}

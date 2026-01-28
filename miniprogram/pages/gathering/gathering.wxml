@@ -1,0 +1,134 @@
+<!--gathering/gathering.wxml - 偶壳娃聚主页-->
+<view class="container">
+  <!-- 顶部Banner -->
+  <view class="header-banner">
+    <view class="banner-gradient"></view>
+    <view class="banner-content">
+      <image class="banner-logo" src="/assets/images/okr_logo.png" mode="aspectFit" />
+      <text class="banner-title">偶壳OKR</text>
+      <text class="banner-subtitle">与同好相聚，分享快乐时光</text>
+    </view>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="function-grid">
+    <!-- 娃聚报名 -->
+    <view class="function-card" bindtap="goToSignup">
+      <view class="card-icon-wrap bg-pink">
+        <t-icon name="edit-1" size="64rpx" color="#fff" />
+      </view>
+      <view class="card-info">
+        <text class="card-title">娃聚报名</text>
+        <text class="card-desc">报名参加近期活动</text>
+      </view>
+      <view class="card-badge" wx:if="{{activeEvents > 0}}">{{activeEvents}}个活动</view>
+      <t-icon name="chevron-right" size="40rpx" color="#ccc" />
+    </view>
+
+    <!-- 活动安排 -->
+    <view class="function-card" bindtap="goToSchedule">
+      <view class="card-icon-wrap bg-blue">
+        <t-icon name="calendar" size="64rpx" color="#fff" />
+      </view>
+      <view class="card-info">
+        <text class="card-title">活动安排</text>
+        <text class="card-desc">查看活动日程详情</text>
+      </view>
+      <t-icon name="chevron-right" size="40rpx" color="#ccc" />
+    </view>
+
+    <!-- 鼠鼠周边 -->
+    <view class="function-card" bindtap="goToMerch">
+      <view class="card-icon-wrap bg-orange">
+        <t-icon name="gift" size="64rpx" color="#fff" />
+      </view>
+      <view class="card-info">
+        <text class="card-title">鼠鼠周边</text>
+        <text class="card-desc">限定周边商品</text>
+      </view>
+      <view class="card-tag hot">热卖</view>
+      <t-icon name="chevron-right" size="40rpx" color="#ccc" />
+    </view>
+
+    <!-- 聚会相册 -->
+    <view class="function-card" bindtap="goToAlbum">
+      <view class="card-icon-wrap bg-green">
+        <t-icon name="image" size="64rpx" color="#fff" />
+      </view>
+      <view class="card-info">
+        <text class="card-title">聚会相册</text>
+        <text class="card-desc">精彩瞬间回顾</text>
+      </view>
+      <view class="card-badge" wx:if="{{albumCount > 0}}">{{albumCount}}张</view>
+      <t-icon name="chevron-right" size="40rpx" color="#ccc" />
+    </view>
+  </view>
+
+  <!-- 近期活动预告 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">📅 近期活动</text>
+      <text class="section-more" bindtap="goToSchedule">查看全部</text>
+    </view>
+
+    <view class="event-list" wx:if="{{upcomingEvents.length > 0}}">
+      <view class="event-card" wx:for="{{upcomingEvents}}" wx:key="_id" bindtap="goToEventDetail" data-id="{{item._id}}">
+        <view class="event-date">
+          <text class="date-month">{{item.month}}</text>
+          <text class="date-day">{{item.day}}</text>
+        </view>
+        <view class="event-info">
+          <text class="event-name">{{item.title}}</text>
+          <text class="event-location">📍 {{item.location}}</text>
+          <view class="event-meta">
+            <text class="event-spots">剩余名额: {{item.remainingSpots}}</text>
+            <view class="event-status {{item.status}}">{{item.statusText}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:else>
+      <t-icon name="calendar" size="80rpx" color="#ccc" />
+      <text class="empty-text">暂无近期活动安排</text>
+    </view>
+  </view>
+
+  <!-- 精彩回顾 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">📸 精彩回顾</text>
+      <text class="section-more" bindtap="goToAlbum">查看更多</text>
+    </view>
+
+    <scroll-view scroll-x class="photo-scroll" wx:if="{{recentPhotos.length > 0}}">
+      <view class="photo-item" wx:for="{{recentPhotos}}" wx:key="index" bindtap="previewPhoto" data-index="{{index}}">
+        <image class="photo-image" src="{{item.url}}" mode="aspectFill" />
+        <view class="photo-overlay">
+          <text class="photo-event">{{item.eventName}}</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="empty-state small" wx:else>
+      <text class="empty-text">暂无照片</text>
+    </view>
+  </view>
+
+  <!-- 我的报名 -->
+  <view class="section" wx:if="{{mySignups.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">🎫 我的报名</text>
+    </view>
+
+    <view class="signup-list">
+      <view class="signup-item" wx:for="{{mySignups}}" wx:key="_id">
+        <view class="signup-info">
+          <text class="signup-event">{{item.eventTitle}}</text>
+          <text class="signup-time">{{item.eventDate}}</text>
+        </view>
+        <view class="signup-status {{item.status}}">{{item.statusText}}</view>
+      </view>
+    </view>
+  </view>
+</view>

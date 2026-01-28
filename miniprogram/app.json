@@ -9,6 +9,11 @@
     "pages/admin/works-manage/works-manage",
     "pages/admin/admin",
     "pages/admin/order-review/order-review",
+    "pages/gathering/gathering",
+    "pages/gathering/signup/signup",
+    "pages/gathering/schedule/schedule",
+    "pages/gathering/merch/merch",
+    "pages/gathering/album/album",
     "pages/logs/logs",
     "pages/webview/webview"
   ],

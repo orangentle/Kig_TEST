@@ -1,0 +1,156 @@
+<!--pages/gathering/signup/signup.wxml - 娃聚报名页面-->
+<view class="container">
+  <!-- 自定义导航栏 -->
+  <t-navbar title="娃聚报名" left-arrow bind:go-back="goBack" />
+  
+  <!-- 报名须知 -->
+  <view class="notice-card" wx:if="{{showNotice}}">
+    <view class="notice-header">
+      <t-icon name="info-circle-filled" size="40rpx" color="#ff8800" />
+      <text class="notice-title">报名须知</text>
+      <view class="notice-close" bindtap="closeNotice">
+        <t-icon name="close" size="32rpx" color="#999" />
+      </view>
+    </view>
+    <view class="notice-content">
+      <view class="notice-item">1. 报名成功后请准时参加活动</view>
+      <view class="notice-item">2. 如需取消请提前24小时联系管理员</view>
+      <view class="notice-item">3. 活动期间请遵守场地规则</view>
+      <view class="notice-item">4. 爱护他人的娃娃，文明交流</view>
+    </view>
+  </view>
+  
+  <!-- 活动列表 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">可报名活动</text>
+      <view class="filter-wrap">
+        <picker mode="selector" range="{{statusOptions}}" range-key="label" bindchange="onStatusChange">
+          <view class="filter-btn">
+            <text>{{currentStatus.label}}</text>
+            <t-icon name="chevron-down" size="28rpx" />
+          </view>
+        </picker>
+      </view>
+    </view>
+    
+    <view class="event-list" wx:if="{{events.length > 0}}">
+      <view class="event-card" wx:for="{{events}}" wx:key="id" bindtap="showEventDetail" data-event="{{item}}">
+        <view class="event-cover">
+          <t-image src="{{item.coverUrl}}" mode="aspectFill" width="200rpx" height="200rpx" shape="round" />
+          <view class="event-badge {{item.status}}">{{item.statusText}}</view>
+        </view>
+        <view class="event-info">
+          <view class="event-name">{{item.name}}</view>
+          <view class="event-meta-row">
+            <t-icon name="time" size="28rpx" color="#999" />
+            <text class="meta-text">{{item.date}} {{item.time}}</text>
+          </view>
+          <view class="event-meta-row">
+            <t-icon name="location" size="28rpx" color="#999" />
+            <text class="meta-text">{{item.location}}</text>
+          </view>
+          <view class="event-meta-row">
+            <t-icon name="user" size="28rpx" color="#999" />
+            <text class="meta-text">已报名 {{item.signupCount}}/{{item.capacity}} 人</text>
+          </view>
+          <view class="event-footer">
+            <text class="event-fee" wx:if="{{item.fee > 0}}">¥{{item.fee}}</text>
+            <text class="event-fee free" wx:else>免费</text>
+            <button class="signup-btn" wx:if="{{item.canSignup}}" catchtap="doSignup" data-event="{{item}}">
+              立即报名
+            </button>
+            <button class="signup-btn disabled" wx:elif="{{item.hasSignup}}">已报名</button>
+            <button class="signup-btn disabled" wx:else>{{item.fullText || '已满员'}}</button>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty-state" wx:else>
+      <t-empty icon="search" description="暂无可报名的活动" />
+    </view>
+  </view>
+  
+  <!-- 我的报名记录 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">我的报名</text>
+      <text class="section-more" bindtap="goToMySignups">全部记录</text>
+    </view>
+    
+    <view class="my-signup-list" wx:if="{{mySignups.length > 0}}">
+      <view class="my-signup-item" wx:for="{{mySignups}}" wx:key="id" bindtap="showSignupDetail" data-item="{{item}}">
+        <view class="signup-left">
+          <view class="signup-event-name">{{item.eventName}}</view>
+          <view class="signup-time">报名时间：{{item.signupTime}}</view>
+        </view>
+        <view class="signup-right">
+          <view class="signup-status-tag {{item.status}}">{{item.statusText}}</view>
+          <t-icon name="chevron-right" size="32rpx" color="#ccc" />
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty-state small" wx:else>
+      <t-icon name="assignment" size="80rpx" color="#ddd" />
+      <text class="empty-text">暂无报名记录</text>
+    </view>
+  </view>
+</view>
+
+<!-- 活动详情弹窗 -->
+<t-popup visible="{{showDetail}}" placement="bottom" bind:visible-change="onDetailClose">
+  <view class="detail-popup">
+    <view class="detail-header">
+      <text class="detail-title">{{currentEvent.name}}</text>
+      <view class="detail-close" bindtap="closeDetail">
+        <t-icon name="close" size="40rpx" color="#999" />
+      </view>
+    </view>
+    <scroll-view scroll-y class="detail-content">
+      <t-image src="{{currentEvent.coverUrl}}" mode="aspectFill" width="100%" height="360rpx" />
+      <view class="detail-section">
+        <view class="detail-row">
+          <t-icon name="time" size="36rpx" color="#ff8800" />
+          <view class="detail-row-content">
+            <text class="row-label">活动时间</text>
+            <text class="row-value">{{currentEvent.date}} {{currentEvent.time}}</text>
+          </view>
+        </view>
+        <view class="detail-row">
+          <t-icon name="location" size="36rpx" color="#ff8800" />
+          <view class="detail-row-content">
+            <text class="row-label">活动地点</text>
+            <text class="row-value">{{currentEvent.location}}</text>
+          </view>
+        </view>
+        <view class="detail-row">
+          <t-icon name="user" size="36rpx" color="#ff8800" />
+          <view class="detail-row-content">
+            <text class="row-label">报名人数</text>
+            <text class="row-value">{{currentEvent.signupCount}}/{{currentEvent.capacity}} 人</text>
+          </view>
+        </view>
+        <view class="detail-row">
+          <t-icon name="money-circle" size="36rpx" color="#ff8800" />
+          <view class="detail-row-content">
+            <text class="row-label">活动费用</text>
+            <text class="row-value" wx:if="{{currentEvent.fee > 0}}">¥{{currentEvent.fee}}</text>
+            <text class="row-value free" wx:else>免费</text>
+          </view>
+        </view>
+      </view>
+      <view class="detail-section">
+        <text class="section-title">活动详情</text>
+        <text class="detail-desc">{{currentEvent.description}}</text>
+      </view>
+    </scroll-view>
+    <view class="detail-footer">
+      <button class="action-btn primary" wx:if="{{currentEvent.canSignup}}" bindtap="doSignup" data-event="{{currentEvent}}">
+        立即报名
+      </button>
+      <button class="action-btn disabled" wx:else>{{currentEvent.hasSignup ? '已报名' : '报名已截止'}}</button>
+    </view>
+  </view>
+</t-popup>

@@ -5,7 +5,8 @@ interface IAppOption {
     hasLogin: boolean,
     logoUrl: string,
     emptyImageUrl: string,
-    cloudEnv: string
+    cloudEnv: string,
+    cloudStorageBase: string  // 云存储基础路径
   }
 }
 
@@ -14,7 +15,8 @@ App<IAppOption>({
     hasLogin: false,
     logoUrl: '/assets/images/icon.jpg',
     emptyImageUrl: 'https://cdn-icons-png.flaticon.com/512/5445/5445197.png',
-    cloudEnv: 'cloud1-9ga5mdp1028f94eb'
+    cloudEnv: 'cloud1-9ga5mdp1028f94eb',
+    cloudStorageBase: 'cloud://cloud1-9ga5mdp1028f94eb.636c-cloud1-9ga5mdp1028f94eb-1330924565'
   },
   onLaunch() {
     // 展示本地存储能力

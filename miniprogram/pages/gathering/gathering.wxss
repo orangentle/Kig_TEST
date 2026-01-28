@@ -1,0 +1,365 @@
+/* gathering/gathering.wxss - 偶壳娃聚主页样式 */
+
+.container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding-bottom: 40rpx;
+}
+
+/* 顶部Banner */
+.header-banner {
+  position: relative;
+  height: 320rpx;
+  overflow: hidden;
+}
+
+.banner-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #ff6b9d, #ff8800);
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #fff;
+}
+
+.banner-logo {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 16rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.banner-title {
+  font-size: 44rpx;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.banner-subtitle {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+/* 功能入口网格 */
+.function-grid {
+  padding: 24rpx;
+  margin-top: -40rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.function-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-icon-wrap {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+}
+
+.bg-pink {
+  background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+}
+
+.bg-blue {
+  background: linear-gradient(135deg, #5b8def, #7fa3f7);
+}
+
+.bg-orange {
+  background: linear-gradient(135deg, #ff8800, #ffaa00);
+}
+
+.bg-green {
+  background: linear-gradient(135deg, #52c41a, #73d13d);
+}
+
+.card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.card-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.card-badge {
+  background: #ff8800;
+  color: #fff;
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  margin-right: 16rpx;
+}
+
+.card-tag {
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  margin-right: 16rpx;
+}
+
+.card-tag.hot {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+/* 区块样式 */
+.section {
+  padding: 0 24rpx;
+  margin-bottom: 32rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.section-more {
+  font-size: 26rpx;
+  color: #ff8800;
+}
+
+/* 活动列表 */
+.event-list {
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.event-card {
+  display: flex;
+  padding: 28rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.event-card:last-child {
+  border-bottom: none;
+}
+
+.event-date {
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-right: 24rpx;
+}
+
+.date-month {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.date-day {
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.event-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.event-name {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.event-location {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.event-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-spots {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.event-status {
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.event-status.open {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.event-status.upcoming {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.event-status.closed {
+  background: #f5f5f5;
+  color: #999;
+}
+
+/* 照片滚动 */
+.photo-scroll {
+  white-space: nowrap;
+}
+
+.photo-item {
+  display: inline-block;
+  width: 240rpx;
+  height: 240rpx;
+  margin-right: 16rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.photo-image {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16rpx;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+}
+
+.photo-event {
+  font-size: 22rpx;
+  color: #fff;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx;
+  background: #fff;
+  border-radius: 20rpx;
+}
+
+.empty-state.small {
+  padding: 40rpx;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #999;
+  margin-top: 16rpx;
+}
+
+/* 我的报名 */
+.signup-list {
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.signup-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.signup-item:last-child {
+  border-bottom: none;
+}
+
+.signup-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-event {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.signup-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.signup-status {
+  font-size: 24rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.signup-status.confirmed {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.signup-status.pending {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.signup-status.cancelled {
+  background: #f5f5f5;
+  color: #999;
+}

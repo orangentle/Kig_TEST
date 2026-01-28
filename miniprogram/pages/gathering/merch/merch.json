@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-action-sheet": "tdesign-miniprogram/action-sheet/action-sheet"
+  },
+  "navigationStyle": "custom"
+}

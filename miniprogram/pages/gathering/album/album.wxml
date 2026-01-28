@@ -1,0 +1,139 @@
+<!--pages/gathering/album/album.wxml - 聚会相册页面-->
+<view class="container">
+  <!-- 自定义导航栏 -->
+  <t-navbar title="聚会相册" left-arrow bind:go-back="goBack" />
+  
+  <!-- 相册分类 -->
+  <scroll-view scroll-x class="album-tabs" enhanced show-scrollbar="{{false}}">
+    <view class="tabs-inner">
+      <view 
+        class="tab-item {{currentAlbum === 'all' ? 'active' : ''}}"
+        bindtap="selectAlbum"
+        data-id="all"
+      >全部</view>
+      <view 
+        class="tab-item {{currentAlbum === item.id ? 'active' : ''}}"
+        wx:for="{{albums}}"
+        wx:key="id"
+        bindtap="selectAlbum"
+        data-id="{{item.id}}"
+      >{{item.name}}</view>
+    </view>
+  </scroll-view>
+  
+  <!-- 相册列表 -->
+  <view class="album-list" wx:if="{{currentAlbum === 'all'}}">
+    <view class="album-card" wx:for="{{albums}}" wx:key="id" bindtap="selectAlbum" data-id="{{item.id}}">
+      <view class="album-cover">
+        <t-image src="{{item.coverUrl}}" mode="aspectFill" width="100%" height="300rpx" shape="round" />
+        <view class="album-overlay">
+          <view class="album-info">
+            <text class="album-name">{{item.name}}</text>
+            <text class="album-count">{{item.photoCount}} 张照片</text>
+          </view>
+          <view class="album-date">{{item.date}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 照片瀑布流 -->
+  <view class="photo-waterfall" wx:else>
+    <view class="waterfall-column">
+      <view 
+        class="photo-item"
+        wx:for="{{leftPhotos}}"
+        wx:key="id"
+        bindtap="previewPhoto"
+        data-photo="{{item}}"
+        data-index="{{item.originalIndex}}"
+      >
+        <t-image src="{{item.url}}" mode="widthFix" width="100%" lazy-load shape="round" />
+        <view class="photo-actions">
+          <view class="action-btn" catchtap="likePhoto" data-photo="{{item}}">
+            <t-icon name="{{item.isLiked ? 'heart-filled' : 'heart'}}" size="32rpx" color="{{item.isLiked ? '#ff4d4f' : '#fff'}}" />
+            <text>{{item.likes}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="waterfall-column">
+      <view 
+        class="photo-item"
+        wx:for="{{rightPhotos}}"
+        wx:key="id"
+        bindtap="previewPhoto"
+        data-photo="{{item}}"
+        data-index="{{item.originalIndex}}"
+      >
+        <t-image src="{{item.url}}" mode="widthFix" width="100%" lazy-load shape="round" />
+        <view class="photo-actions">
+          <view class="action-btn" catchtap="likePhoto" data-photo="{{item}}">
+            <t-icon name="{{item.isLiked ? 'heart-filled' : 'heart'}}" size="32rpx" color="{{item.isLiked ? '#ff4d4f' : '#fff'}}" />
+            <text>{{item.likes}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{currentAlbum !== 'all' && currentPhotos.length === 0}}">
+    <t-icon name="image" size="120rpx" color="#ddd" />
+    <text class="empty-text">暂无照片</text>
+  </view>
+  
+  <!-- 底部上传提示 -->
+  <view class="upload-tip" wx:if="{{currentAlbum !== 'all'}}">
+    <view class="tip-content" bindtap="uploadPhoto">
+      <t-icon name="add" size="36rpx" color="#ff8800" />
+      <text>上传我的照片</text>
+    </view>
+    <text class="tip-desc">分享你在聚会中的精彩瞬间</text>
+  </view>
+</view>
+
+<!-- 照片详情弹窗 -->
+<t-popup visible="{{showPhotoDetail}}" placement="bottom" bind:visible-change="onPhotoDetailClose">
+  <view class="photo-detail-popup">
+    <view class="detail-header">
+      <view class="detail-user">
+        <t-image src="{{currentPhotoDetail.userAvatar}}" mode="aspectFill" width="80rpx" height="80rpx" shape="circle" />
+        <view class="user-info">
+          <text class="user-name">{{currentPhotoDetail.userName}}</text>
+          <text class="upload-time">{{currentPhotoDetail.uploadTime}}</text>
+        </view>
+      </view>
+      <view class="detail-close" bindtap="closePhotoDetail">
+        <t-icon name="close" size="40rpx" color="#999" />
+      </view>
+    </view>
+    
+    <view class="detail-image">
+      <t-image src="{{currentPhotoDetail.url}}" mode="widthFix" width="100%" />
+    </view>
+    
+    <view class="detail-content" wx:if="{{currentPhotoDetail.description}}">
+      <text>{{currentPhotoDetail.description}}</text>
+    </view>
+    
+    <view class="detail-actions">
+      <view class="action-item" bindtap="likeCurrentPhoto">
+        <t-icon name="{{currentPhotoDetail.isLiked ? 'heart-filled' : 'heart'}}" size="44rpx" color="{{currentPhotoDetail.isLiked ? '#ff4d4f' : '#666'}}" />
+        <text>{{currentPhotoDetail.likes}}</text>
+      </view>
+      <view class="action-item" bindtap="showComments">
+        <t-icon name="chat" size="44rpx" color="#666" />
+        <text>{{currentPhotoDetail.comments || 0}}</text>
+      </view>
+      <view class="action-item" bindtap="sharePhoto">
+        <t-icon name="share" size="44rpx" color="#666" />
+        <text>分享</text>
+      </view>
+      <view class="action-item" bindtap="savePhoto">
+        <t-icon name="download" size="44rpx" color="#666" />
+        <text>保存</text>
+      </view>
+    </view>
+  </view>
+</t-popup>
