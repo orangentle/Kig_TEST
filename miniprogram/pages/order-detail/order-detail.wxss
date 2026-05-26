@@ -1,98 +1,147 @@
 /* order-detail.wxss */
 .container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 0;
+  background: var(--color-bg);
   box-sizing: border-box;
 }
 
+/* 顶部 */
 .header-gradient {
-  background: linear-gradient(135deg, #ff9900, #ffcc00);
-  border-radius: 0 0 25rpx 25rpx;
-  padding: 24rpx;
-  color: white;
+  background: linear-gradient(135deg, #ff8800 0%, #ffa733 60%, #ffc266 100%);
+  border-radius: 0 0 32rpx 32rpx;
+  padding: 28rpx 24rpx 60rpx;
+  padding-top: calc(20rpx + env(safe-area-inset-top));
+  color: #fff;
   position: relative;
+  overflow: hidden;
+}
+
+.header-gradient::before {
+  content: "";
+  position: absolute;
+  top: -80rpx;
+  right: -80rpx;
+  width: 280rpx;
+  height: 280rpx;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
 }
 
 .nav-header {
   display: flex;
   align-items: center;
   position: relative;
+  z-index: 2;
 }
 
 .back-button {
-  padding: 8rpx;
+  padding: 12rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64rpx;
+  height: 64rpx;
+  box-sizing: border-box;
 }
 
 .page-title {
   flex: 1;
   text-align: center;
-  font-size: 32rpx;
-  font-weight: 500;
+  font-size: 34rpx;
+  font-weight: 600;
+  letter-spacing: 1rpx;
 }
 
 .decoration-image {
-  position: absolute;
-  top: 10rpx;
-  right: 10rpx;
-  width: 100rpx;
-  height: 100rpx;
-  opacity: 0.2;
+  width: 64rpx;
+  height: 64rpx;
+  opacity: 0;
 }
 
+/* 卡片 */
 .order-info-card {
-  margin: -20rpx 24rpx 24rpx;
+  margin: -40rpx 24rpx 24rpx;
   padding: 32rpx;
-  background-color: white;
-  border-radius: 16rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  border-radius: 24rpx;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 2;
 }
 
 .info-item {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 16rpx;
+  align-items: center;
+  padding: 14rpx 0;
 }
 
-.info-item:last-child {
-  margin-bottom: 0;
+.info-item:not(:last-child) {
+  border-bottom: 1rpx dashed var(--color-divider);
 }
 
 .info-label {
-  color: #999;
-  font-size: 28rpx;
+  color: var(--color-text-tertiary);
+  font-size: 26rpx;
 }
 
 .info-value {
   font-size: 28rpx;
-  font-weight: 500;
+  font-weight: 600;
+  color: var(--color-text);
 }
 
-.progress-card, .preview-card {
+.text-primary {
+  color: var(--color-primary) !important;
+}
+
+.progress-card,
+.preview-card {
   margin: 0 24rpx 24rpx;
   padding: 32rpx;
-  background-color: white;
-  border-radius: 16rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  border-radius: 24rpx;
+  box-shadow: var(--shadow-md);
 }
 
 .card-title {
   font-size: 32rpx;
-  font-weight: 500;
-  margin-bottom: 32rpx;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 28rpx;
+  padding-left: 20rpx;
+  position: relative;
 }
 
+.card-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8rpx;
+  height: 28rpx;
+  border-radius: 4rpx;
+  background: linear-gradient(180deg, #ff8800, #ffcc00);
+}
+
+/* 进度条 */
 .progress-container {
-  margin-bottom: 32rpx;
+  margin-bottom: 28rpx;
   position: relative;
 }
 
 .progress-bar {
-  height: 8rpx;
-  background-color: #e0e0e0;
-  border-radius: 4rpx;
+  height: 10rpx;
+  background-color: #f0f0f0;
+  border-radius: 999rpx;
   margin-bottom: 32rpx;
+  overflow: hidden;
   position: relative;
 }
 
@@ -101,87 +150,89 @@
   top: 0;
   left: 0;
   height: 100%;
-  background-color: #ff8800;
-  border-radius: 4rpx;
+  background: linear-gradient(90deg, #ff8800, #ffcc33);
+  border-radius: 999rpx;
+  transition: width 0.4s ease;
+  box-shadow: 0 2rpx 8rpx rgba(255, 136, 0, 0.4);
 }
 
-/* 原横向步骤样式 */
-.progress-steps {
-  display: flex;
-  justify-content: space-between;
-}
-
-.progress-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 12.5%;
-  position: relative;
-}
-
-/* 新增纵向步骤样式 */
+/* 纵向步骤 */
 .progress-steps-vertical {
   display: flex;
   flex-direction: column;
-  margin-top: 20rpx;
+  margin-top: 8rpx;
+  padding-left: 4rpx;
 }
 
 .progress-step-vertical {
   display: flex;
   flex-direction: column;
-  margin-bottom: 30rpx;
+  margin-bottom: 28rpx;
   position: relative;
+}
+
+.progress-step-vertical:last-child {
+  margin-bottom: 0;
 }
 
 .step-header {
   display: flex;
   align-items: center;
-  margin-bottom: 10rpx;
+  margin-bottom: 8rpx;
 }
 
 .step-content {
   font-size: 24rpx;
-  color: #999;
-  margin-left: 46rpx;
-  margin-bottom: 10rpx;
+  color: var(--color-text-tertiary);
+  margin-left: 48rpx;
+  line-height: 1.5;
 }
 
 .step-content.active {
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .step-line {
   position: absolute;
-  left: 16rpx;
-  top: 32rpx;
+  left: 15rpx;
+  top: 36rpx;
   width: 2rpx;
-  height: calc(100% - 10rpx);
-  background-color: #e0e0e0;
+  height: calc(100% + 10rpx);
+  background-color: #e8e8e8;
   z-index: 0;
+}
+
+.progress-step-vertical.active .step-line {
+  background-color: #ffcc66;
 }
 
 .progress-dot {
   width: 32rpx;
   height: 32rpx;
   border-radius: 50%;
-  background-color: white;
+  background-color: #fff;
   border: 6rpx solid #e0e0e0;
-  margin-right: 14rpx;
+  margin-right: 16rpx;
   z-index: 1;
+  box-sizing: border-box;
+  transition: all 0.3s;
 }
 
 .progress-dot.active {
-  border-color: #ff8800;
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+  box-shadow: 0 0 0 6rpx rgba(255, 136, 0, 0.15);
 }
 
 .progress-label {
   font-size: 28rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
+  font-weight: 500;
 }
 
 .progress-label.active {
-  color: #333;
-  font-weight: 500;
+  color: var(--color-text);
+  font-weight: 600;
 }
 
 .current-status {
@@ -191,23 +242,24 @@
 
 .status-badge {
   display: inline-block;
-  background-color: #fff0e0;
-  color: #ff8800;
-  padding: 8rpx 24rpx;
+  background: linear-gradient(135deg, #fff4e6, #ffe9c2);
+  color: var(--color-primary);
+  padding: 10rpx 28rpx;
   border-radius: 999rpx;
-  font-size: 28rpx;
-  font-weight: 500;
+  font-size: 26rpx;
+  font-weight: 600;
+  border: 1rpx solid #ffd699;
 }
 
 .preview-image {
   width: 100%;
   border-radius: 16rpx;
   overflow: hidden;
-  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .contact-button-container {
   margin: 24rpx;
   margin-top: auto;
-  padding-bottom: 48rpx;
-} 
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+}

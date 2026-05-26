@@ -1,11 +1,57 @@
 <view class="container">
   <view class="hero">
-    <image class="cover" src="{{work.coverFileId || '/assets/images/icon.jpg'}}" mode="widthFix" />
+    <image class="cover" src="{{work.coverFileId || '/assets/images/icon.jpg'}}" mode="aspectFill" />
+    <view class="hero-mask"></view>
+    <view class="hero-info">
+      <view class="hero-title">{{work.roleName}}</view>
+      <view class="hero-source">来源 · {{work.source}}</view>
+    </view>
   </view>
-  <view class="card">
-    <view class="title">{{work.roleName}}</view>
-    <view class="meta">来源：{{work.source}}</view>
-    <view class="meta">参考价格：{{work.price !== undefined && work.price !== null ? work.price : '未填写'}}</view>
-    <view class="meta">分类：{{work.category}} ｜ 时间：{{work.date}}</view>
+
+  <view class="content">
+    <view class="info-card">
+      <view class="info-row">
+        <view class="info-label">
+          <t-icon name="tag" size="32rpx" color="#ff8800" />
+          <text>分类</text>
+        </view>
+        <view class="info-value">{{work.category || '未分类'}}</view>
+      </view>
+      <view class="divider"></view>
+      <view class="info-row">
+        <view class="info-label">
+          <t-icon name="time" size="32rpx" color="#ff8800" />
+          <text>完成时间</text>
+        </view>
+        <view class="info-value">{{work.date}}</view>
+      </view>
+      <view class="divider"></view>
+      <view class="info-row">
+        <view class="info-label">
+          <t-icon name="money" size="32rpx" color="#ff8800" />
+          <text>参考价格</text>
+        </view>
+        <view class="info-value price">
+          <text wx:if="{{work.price !== undefined && work.price !== null}}">¥ {{work.price}}</text>
+          <text wx:else class="placeholder">未公开</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="tip-card">
+      <t-icon name="info-circle" size="32rpx" color="#ff8800" />
+      <text class="tip-text">每件作品均为手工定制,价格依角色复杂度浮动,详情请咨询客服。</text>
+    </view>
+  </view>
+
+  <view class="action-bar">
+    <t-button
+      theme="primary"
+      size="large"
+      block
+      shape="round"
+      class="primary-button"
+      bind:tap="goToOrder"
+    >我也想定制同款</t-button>
   </view>
 </view>

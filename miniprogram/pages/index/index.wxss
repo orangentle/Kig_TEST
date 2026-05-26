@@ -3,25 +3,37 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #fff9f0 0%, #ffffff 100%);
+  background: var(--color-bg);
 }
 
-/* 顶部Banner区域 */
+/* 顶部Banner */
 .header-banner {
   position: relative;
-  padding: 80rpx 40rpx 80rpx;
-  padding-top: calc(80rpx + env(safe-area-inset-top));
-  background: linear-gradient(135deg, #ff9900 0%, #ffcc00 100%);
-  border-radius: 0 0 60rpx 60rpx;
+  padding: 80rpx 40rpx 120rpx;
+  padding-top: calc(60rpx + env(safe-area-inset-top));
+  background: linear-gradient(135deg, #ff8800 0%, #ffa733 55%, #ffc266 100%);
+  border-radius: 0 0 48rpx 48rpx;
+  overflow: hidden;
 }
 
 .banner-bg {
   position: absolute;
-  top: -50%;
-  right: -30%;
-  width: 400rpx;
-  height: 400rpx;
-  background: rgba(255, 255, 255, 0.1);
+  top: -160rpx;
+  right: -160rpx;
+  width: 480rpx;
+  height: 480rpx;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+}
+
+.banner-bg::after {
+  content: "";
+  position: absolute;
+  bottom: -380rpx;
+  left: -180rpx;
+  width: 320rpx;
+  height: 320rpx;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
 }
 
@@ -36,19 +48,20 @@
 .logo-section {
   display: flex;
   align-items: center;
-  margin-bottom: 32rpx;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 20rpx 40rpx;
+  margin-bottom: 36rpx;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 18rpx 36rpx 18rpx 18rpx;
   border-radius: 100rpx;
+  backdrop-filter: blur(10rpx);
 }
 
 .logo {
-  width: 120rpx;
-  height: 120rpx;
+  width: 96rpx;
+  height: 96rpx;
   border-radius: 50%;
-  border: 6rpx solid rgba(255, 255, 255, 0.8);
-  margin-right: 28rpx;
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+  border: 4rpx solid rgba(255, 255, 255, 0.85);
+  margin-right: 20rpx;
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
 }
 
@@ -58,75 +71,55 @@
 }
 
 .title {
-  font-size: 48rpx;
-  font-weight: bold;
+  font-size: 40rpx;
+  font-weight: 700;
   color: #fff;
-  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
   letter-spacing: 4rpx;
+  line-height: 1.2;
 }
 
 .subtitle {
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: rgba(255, 255, 255, 0.9);
-  margin-top: 4rpx;
+  margin-top: 6rpx;
+  letter-spacing: 1rpx;
 }
 
 .banner-slogan {
-  margin-bottom: 40rpx;
+  margin-bottom: 44rpx;
 }
 
 .slogan-main {
-  font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.92);
   letter-spacing: 2rpx;
 }
 
 .order-button {
-  width: 400rpx !important;
-  height: 88rpx !important;
-  font-size: 32rpx !important;
-  font-weight: bold !important;
+  width: 380rpx !important;
+  height: 92rpx !important;
+  font-size: 30rpx !important;
+  font-weight: 600 !important;
   background: #fff !important;
-  color: #ff9900 !important;
+  color: #ff8800 !important;
   border: none !important;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15) !important;
+  border-radius: 999rpx !important;
+  box-shadow: 0 12rpx 28rpx rgba(0, 0, 0, 0.18) !important;
 }
 
-/* ����������� */
+/* 服务区 */
 .services-section {
   flex: 1;
-  padding: 40rpx 32rpx;
-  margin-top: -40rpx;
-}
-
-.section-title-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 32rpx;
-}
-
-.title-line {
-  width: 80rpx;
-  height: 2rpx;
-  background: linear-gradient(90deg, transparent, #ff9900);
-}
-
-.title-line:last-child {
-  background: linear-gradient(90deg, #ff9900, transparent);
-}
-
-.title-text {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #333;
-  margin: 0 24rpx;
+  padding: 32rpx 28rpx 40rpx;
+  margin-top: -56rpx;
+  position: relative;
+  z-index: 2;
 }
 
 .service-grid {
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: 20rpx;
 }
 
 .service-card {
@@ -134,50 +127,34 @@
   align-items: center;
   background: #fff;
   border-radius: 24rpx;
-  padding: 32rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
+  padding: 28rpx 32rpx;
+  box-shadow: var(--shadow-md);
+  transition: all 0.25s ease;
 }
 
 .service-card:active {
   transform: scale(0.98);
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .service-icon-wrap {
-  width: 100rpx;
-  height: 100rpx;
-  border-radius: 24rpx;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 22rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 28rpx;
+  margin-right: 24rpx;
   flex-shrink: 0;
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.08);
 }
 
-.gradient-orange {
-  background: linear-gradient(135deg, #ff9900, #ffcc00);
-}
-
-.gradient-pink {
-  background: linear-gradient(135deg, #ff6b9d, #ff9a8b);
-}
-
-.gradient-green {
-  background: linear-gradient(135deg, #36cfc9, #73d13d);
-}
-
-.gradient-purple {
-  background: linear-gradient(135deg, #597ef7, #9254de);
-}
-
-.gradient-blue {
-  background: linear-gradient(135deg, #40a9ff, #1890ff);
-}
-
-.gradient-yellow {
-  background: linear-gradient(135deg, #ffc53d, #faad14);
-}
+.gradient-orange { background: linear-gradient(135deg, #ff9900, #ffcc00); }
+.gradient-pink   { background: linear-gradient(135deg, #ff6b9d, #ff9a8b); }
+.gradient-green  { background: linear-gradient(135deg, #36cfc9, #73d13d); }
+.gradient-purple { background: linear-gradient(135deg, #597ef7, #9254de); }
+.gradient-blue   { background: linear-gradient(135deg, #40a9ff, #1890ff); }
+.gradient-yellow { background: linear-gradient(135deg, #ffc53d, #faad14); }
 
 .service-info {
   flex: 1;
@@ -186,40 +163,44 @@
 }
 
 .service-name {
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 600;
-  color: #333;
-  margin-bottom: 8rpx;
+  color: #1a1a1a;
+  margin-bottom: 6rpx;
 }
 
 .service-desc {
   font-size: 24rpx;
-  color: #999;
+  color: #8a8a8a;
 }
 
 .dev-tag {
-  background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
-  color: #999;
-  font-size: 22rpx;
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
+  background: #f2f3f5;
+  color: #8a8a8a;
+  font-size: 20rpx;
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  font-weight: 500;
 }
 
 .hot-tag {
   background: linear-gradient(135deg, #ff6b9d, #ff8fab);
   color: #fff;
-  font-size: 22rpx;
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
+  font-size: 20rpx;
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  font-weight: 500;
+  box-shadow: 0 4rpx 10rpx rgba(255, 107, 157, 0.3);
 }
 
-/* 底部信息 */
+/* 底部 */
 .footer-info {
-  padding: 40rpx;
+  padding: 32rpx 40rpx 48rpx;
   text-align: center;
 }
 
 .footer-text {
   font-size: 22rpx;
-  color: #ccc;
+  color: #c0c0c0;
+  letter-spacing: 1rpx;
 }

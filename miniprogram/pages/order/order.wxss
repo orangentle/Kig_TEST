@@ -1,62 +1,87 @@
 /* order.wxss */
 .container {
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: var(--color-bg);
   display: flex;
   flex-direction: column;
 }
 
+/* 页面头部 */
 .page-header {
-  background: linear-gradient(135deg, #ff9900, #ffcc00);
-  padding: 40rpx 32rpx;
+  background: linear-gradient(135deg, #ff8800 0%, #ffa733 60%, #ffc266 100%);
+  padding: 48rpx 36rpx 64rpx;
+  padding-top: calc(40rpx + env(safe-area-inset-top));
   color: #fff;
+  border-radius: 0 0 36rpx 36rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: "";
+  position: absolute;
+  top: -100rpx;
+  right: -80rpx;
+  width: 320rpx;
+  height: 320rpx;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
 }
 
 .page-title {
-  font-size: 40rpx;
-  font-weight: bold;
+  font-size: 42rpx;
+  font-weight: 700;
   display: block;
   margin-bottom: 12rpx;
+  letter-spacing: 1rpx;
+  position: relative;
+  z-index: 2;
 }
 
 .page-subtitle {
   font-size: 26rpx;
   opacity: 0.9;
+  position: relative;
+  z-index: 2;
 }
 
+/* 滚动表单 */
 .form-scroll {
   flex: 1;
-  height: calc(100vh - 350rpx);
+  margin-top: -36rpx;
+  position: relative;
+  z-index: 2;
 }
 
 .form-content {
-  padding: 24rpx;
+  padding: 24rpx 24rpx 0;
 }
 
+/* 区段卡片 */
 .section {
   background-color: #fff;
-  border-radius: 16rpx;
+  border-radius: 24rpx;
   margin-bottom: 24rpx;
   overflow: hidden;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-md);
 }
 
 .section-title {
   display: flex;
   align-items: center;
-  padding: 24rpx 32rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  padding: 28rpx 32rpx;
+  border-bottom: 1rpx solid var(--color-divider);
   font-size: 30rpx;
-  font-weight: bold;
-  color: #333;
+  font-weight: 600;
+  color: var(--color-text);
 }
 
 .section-title t-icon {
-  margin-right: 12rpx;
+  margin-right: 14rpx;
 }
 
 .form-item {
-  padding: 0 16rpx;
+  padding: 4rpx 16rpx;
 }
 
 /* 身材数据预览 */
@@ -75,86 +100,93 @@
 
 .body-data-item .label {
   font-size: 26rpx;
-  color: #666;
+  color: var(--color-text-tertiary);
   margin-right: 8rpx;
 }
 
 .body-data-item .value {
   font-size: 28rpx;
-  color: #333;
-  font-weight: 500;
+  color: var(--color-text);
+  font-weight: 600;
 }
 
 .body-data-tip {
-  padding: 32rpx;
+  padding: 36rpx 32rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #999;
+  color: var(--color-text-tertiary);
   font-size: 26rpx;
 }
 
-/* 上传区域 */
+.body-data-tip text {
+  margin-bottom: 16rpx;
+}
+
+/* 上传区 */
 .upload-area {
-  padding: 24rpx 32rpx;
+  padding: 28rpx 32rpx;
 }
 
 .upload-tip {
   display: block;
-  font-size: 24rpx;
-  color: #999;
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
   margin-top: 16rpx;
-}
-
-/* 底部提交栏 */
-.submit-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  padding: 20rpx 32rpx;
-  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
-  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.08);
-}
-
-.submit-tip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16rpx;
-  font-size: 24rpx;
-  color: #666;
-}
-
-.submit-tip t-icon {
-  margin-right: 8rpx;
-}
-
-.bottom-placeholder {
-  height: 200rpx;
-}
-
-/* 主题按钮 */
-.t-button--primary {
-  background-color: #ff8800 !important;
-  border-color: #ff8800 !important;
 }
 
 /* 加急提示 */
 .urgent-notice {
   display: flex;
   align-items: center;
-  padding: 20rpx 32rpx;
-  background: linear-gradient(135deg, #fff8f0, #fff0e0);
-  margin: 0 16rpx 16rpx;
-  border-radius: 12rpx;
-  border: 1rpx solid #ffe0c0;
+  padding: 20rpx 24rpx;
+  background: linear-gradient(135deg, #fff5e6, #ffe9c2);
+  margin: 0 24rpx 24rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid #ffd699;
 }
 
 .urgent-text {
   font-size: 24rpx;
-  color: #ff6600;
+  color: #b56a00;
   margin-left: 12rpx;
   flex: 1;
+  line-height: 1.5;
+}
+
+/* 底部占位 + 提交栏 */
+.bottom-placeholder {
+  height: 220rpx;
+}
+
+.submit-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 16rpx 32rpx 20rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -6rpx 20rpx rgba(0, 0, 0, 0.06);
+  z-index: 99;
+}
+
+.submit-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14rpx;
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
+}
+
+.submit-tip t-icon {
+  margin-right: 8rpx;
+}
+
+/* 主题按钮 */
+.t-button--primary {
+  background: linear-gradient(90deg, #ff8800, #ffaa33) !important;
+  border-color: transparent !important;
+  box-shadow: 0 6rpx 16rpx rgba(255, 136, 0, 0.28) !important;
 }

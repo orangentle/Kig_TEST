@@ -65,6 +65,15 @@ Page({
     }
   },
 
+  goToOrder() {
+    wx.switchTab({
+      url: '/pages/order/order',
+      fail: () => {
+        wx.navigateTo({ url: '/pages/order/order' });
+      }
+    });
+  },
+
   formatDate(ts: number) {
     const d = new Date(ts);
     const y = d.getFullYear();

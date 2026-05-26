@@ -1,4 +1,14 @@
 {
   "component": true,
-  "usingComponents": {}
-} 
+  "navigationBarTitleText": "管理后台",
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-search": "tdesign-miniprogram/search/search",
+    "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "t-empty": "tdesign-miniprogram/empty/empty"
+  }
+}

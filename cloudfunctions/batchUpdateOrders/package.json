@@ -1,0 +1,9 @@
+{
+  "name": "batchUpdateOrders",
+  "version": "1.0.0",
+  "description": "批量更新订单：推进阶段/加急/归档/分配排单号",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

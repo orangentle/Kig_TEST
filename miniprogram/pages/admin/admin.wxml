@@ -1,285 +1,350 @@
-<!--admin.wxml-->
-<view class="container">
-  <!-- 顶部导航 -->
-  <view class="header-gradient">
-    <view class="admin-header">
-      <view class="admin-logo">
-        <image class="admin-avatar" src="/assets/images/icon.jpg" mode="aspectFill"></image>
-        <text class="admin-title">鼠鼠工坊管理后台</text>
-      </view>
-      <view class="admin-info">
-        <text class="admin-name">管理员</text>
-        <image class="admin-avatar-small" src="/assets/images/icon.jpg" mode="aspectFill"></image>
+<!--admin.wxml - 管理后台 -->
+<view class="admin-page">
+  <!-- 顶部 -->
+  <view class="top-bar">
+    <view class="top-title">
+      <text class="brand">鼠鼠工坊</text>
+      <text class="sub">管理后台</text>
+    </view>
+    <view class="top-actions">
+      <view class="icon-btn" bindtap="onOpenAddSheet">
+        <t-icon name="add" size="44rpx" color="#fff" />
       </view>
     </view>
   </view>
-  
-  <!-- 筛选标签 -->
-  <view class="filter-tabs">
-    <scroll-view scroll-x class="tabs-container">
-      <view 
-        class="tab-item {{currentTab === 'all' ? 'tab-active' : ''}}" 
-        bindtap="onTabChange" 
-        data-tab="all"
-      >全部未完成 ({{orderCounts.all || 0}})</view>
-      <view 
-        class="tab-item {{currentTab === 'design' ? 'tab-active' : ''}}" 
-        bindtap="onTabChange" 
-        data-tab="design"
-      >设计确认 ({{orderCounts.design || 0}})</view>
-      <view 
-        class="tab-item {{currentTab === 'model' ? 'tab-active' : ''}}" 
-        bindtap="onTabChange" 
-        data-tab="model"
-      >模型制作 ({{orderCounts.model || 0}})</view>
-      <view 
-        class="tab-item {{currentTab === 'print' ? 'tab-active' : ''}}" 
-        bindtap="onTabChange" 
-        data-tab="print"
-      >打印中 ({{orderCounts.print || 0}})</view>
-      <view 
-        class="tab-item {{currentTab === 'polish' ? 'tab-active' : ''}}" 
-        bindtap="onTabChange" 
-        data-tab="polish"
-      >打磨上色 ({{orderCounts.polish || 0}})</view>
-      <view 
-        class="tab-item {{currentTab === 'assembly' ? 'tab-active' : ''}}" 
-        bindtap="onTabChange" 
-        data-tab="assembly"
-      >组装 ({{orderCounts.assembly || 0}})</view>
-    </scroll-view>
-  </view>
-  
-  <!-- 搜索框 -->
-  <view class="search-container">
-    <t-search
-      value="{{searchValue}}"
-      placeholder="搜索订单号或客户名称"
-      bind:change="onSearchChange"
-      bind:submit="onSearch"
-    />
-  </view>
-  
-  <!-- 订单表格 -->
-  <view class="table-container">
-    <!-- 表格头部 -->
-    <scroll-view scroll-x enable-flex class="table-scroll">
-      <view class="table-header">
-        <view class="table-row">
-          <view class="table-cell cell-status">状态</view>
-          <view class="table-cell cell-id">淘宝订单号</view>
-          <view class="table-cell cell-customer">客户</view>
-          <view class="table-cell cell-role">角色</view>
-          <view class="table-cell cell-progress">进度</view>
-          <view class="table-cell cell-time">下单时间</view>
-          <view class="table-cell cell-deadline">预期完成</view>
-          <view class="table-cell cell-action">操作</view>
-        </view>
+
+  <!-- 概览卡 -->
+  <scroll-view scroll-x class="stats-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="stats-row">
+      <view class="stat-card total" data-key="total" bindtap="onStatCardTap">
+        <text class="stat-num">{{stats.total}}</text>
+        <text class="stat-label">订单总数</text>
       </view>
-      
-      <!-- 表格内容 -->
-      <view class="table-body">
-        <block wx:if="{{filteredOrders.length > 0}}">
-          <view 
-            class="table-row {{item.status === 'urgent' ? 'row-urgent' : ''}}" 
-            wx:for="{{filteredOrders}}" 
-            wx:key="orderId"
-            bindtap="onOrderClick"
-            data-order-id="{{item.tbOrderId}}"
-          >
-            <view class="table-cell cell-status">
-              <view class="status-dot {{item.status === 'urgent' ? 'dot-urgent' : item.status === 'soon' ? 'dot-soon' : 'dot-normal'}}"></view>
-            </view>
-            <view class="table-cell cell-id">{{item.tbOrderId}}</view>
-            <view class="table-cell cell-customer">{{item.customerName}}</view>
-            <view class="table-cell cell-role">{{item.roleName}}</view>
-            <view class="table-cell cell-progress">
-              <view class="table-progress">
-                <text class="progress-text">{{item.progressStage}}</text>
-                <view class="progress-bar">
-                  <view class="progress-fill" style="width: {{item.progressPercent}}%; background-color: {{item.status === 'urgent' ? '#ff4d4f' : item.status === 'soon' ? '#faad14' : '#ff8800'}}"></view>
-                </view>
-                <text class="progress-percent">{{item.progressPercent}}%</text>
-              </view>
-            </view>
-            <view class="table-cell cell-time">{{item.orderTime}}</view>
-            <view class="table-cell cell-deadline">{{item.deadline}}</view>
-            <view class="table-cell cell-action">
-              <view class="cell-action-btn">查看</view>
+      <view class="stat-card pending" data-key="pending" bindtap="onStatCardTap">
+        <text class="stat-num">{{stats.pending}}</text>
+        <text class="stat-label">待审核</text>
+      </view>
+      <view class="stat-card processing" data-key="processing" bindtap="onStatCardTap">
+        <text class="stat-num">{{stats.processing}}</text>
+        <text class="stat-label">制作中</text>
+      </view>
+      <view class="stat-card urgent" data-key="urgent" bindtap="onStatCardTap">
+        <text class="stat-num">{{stats.urgent}}</text>
+        <text class="stat-label">加急</text>
+      </view>
+      <view class="stat-card overdue" data-key="overdue" bindtap="onStatCardTap">
+        <text class="stat-num">{{stats.overdue}}</text>
+        <text class="stat-label">已逾期</text>
+      </view>
+      <view class="stat-card completed" data-key="completed" bindtap="onStatCardTap">
+        <text class="stat-num">{{stats.completed}}</text>
+        <text class="stat-label">已完成</text>
+      </view>
+      <view class="stat-card archived" data-key="archived" bindtap="onStatCardTap">
+        <text class="stat-num">{{stats.archived}}</text>
+        <text class="stat-label">已归档</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 搜索 + 工具栏 -->
+  <view class="toolbar">
+    <view class="search-wrap">
+      <t-search
+        value="{{searchValue}}"
+        placeholder="订单号/客户/角色"
+        bind:change="onSearchChange"
+        bind:submit="onSearchSubmit"
+        bind:clear="onSearchClear"
+      />
+    </view>
+    <view class="tool-btn" bindtap="openSortPopup">
+      <t-icon name="order-ascending" size="36rpx" color="#666" />
+      <text>排序</text>
+    </view>
+    <view class="tool-btn" bindtap="openFilterPopup">
+      <t-icon name="filter" size="36rpx" color="#666" />
+      <text>筛选</text>
+    </view>
+    <view class="tool-btn {{selectionMode ? 'tool-active' : ''}}" bindtap="onToggleSelectionMode">
+      <t-icon name="check" size="36rpx" color="{{selectionMode ? '#ff8800' : '#666'}}" />
+      <text>{{selectionMode ? '退出' : '多选'}}</text>
+    </view>
+  </view>
+
+  <!-- 阶段标签 -->
+  <scroll-view scroll-x class="tabs-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="tabs-row">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="key"
+        class="tab-chip {{currentTab === item.key ? 'tab-chip-active' : ''}}"
+        data-tab="{{item.key}}"
+        bindtap="onTabTap"
+      >{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <!-- 列表头部信息 -->
+  <view class="list-meta">
+    <text class="list-total">共 {{total}} 条</text>
+    <view wx:if="{{selectionMode}}" class="list-select-all" bindtap="onSelectAllCurrent">
+      <text>{{selectedIds.length === orders.length && orders.length > 0 ? '取消全选' : '全选本页'}}</text>
+    </view>
+  </view>
+
+  <!-- 订单列表 -->
+  <scroll-view
+    scroll-y
+    class="order-list"
+    bindscrolltolower="onScrollToLower"
+    lower-threshold="200"
+    enhanced
+    show-scrollbar="{{false}}"
+  >
+    <view wx:if="{{isLoading}}" class="loading-block">
+      <t-loading theme="circular" size="40rpx" /><text>加载中...</text>
+    </view>
+
+    <block wx:elif="{{orders.length > 0}}">
+      <view
+        wx:for="{{orders}}"
+        wx:key="_id"
+        class="order-card {{item.isUrgent ? 'card-urgent' : ''}} {{selectedSet[item._id] ? 'card-selected' : ''}}"
+        data-id="{{item._id}}"
+        data-tb-id="{{item.tbOrderId}}"
+        bindtap="onOrderTap"
+        bindlongpress="onOrderLongPress"
+      >
+        <!-- 左侧色条 -->
+        <view class="card-stripe stripe-{{item.isUrgent ? 'urgent' : item.status === 'completed' ? 'completed' : item.status === 'pending' ? 'pending' : 'normal'}}"></view>
+
+        <!-- 复选框 -->
+        <view wx:if="{{selectionMode}}" class="card-check">
+          <view class="check-box {{selectedSet[item._id] ? 'check-box-on' : ''}}">
+            <t-icon wx:if="{{selectedSet[item._id]}}" name="check" size="28rpx" color="#fff" />
+          </view>
+        </view>
+
+        <!-- 内容 -->
+        <view class="card-body">
+          <view class="card-row-1">
+            <text class="role-name">{{item.roleName || '未命名'}}</text>
+            <view class="status-pill {{item.isUrgent ? 'pill-urgent' : item.status === 'completed' ? 'pill-completed' : item.status === 'pending' ? 'pill-pending' : 'pill-normal'}}">
+              {{item.isUrgent ? '加急' : item.status === 'completed' ? '已完成' : item.status === 'pending' ? '待审核' : item.progressStage || '进行中'}}
             </view>
           </view>
-        </block>
-        
-        <view class="empty-state" wx:if="{{filteredOrders.length === 0}}">
-          <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
-          <text class="empty-text">暂无相关订单</text>
+          <view class="card-row-2">
+            <text class="customer">{{item.customerName || '未填客户'}}</text>
+            <text class="dot-sep">·</text>
+            <text class="tb-id">{{item.tbOrderId}}</text>
+          </view>
+          <view class="card-row-3">
+            <view class="progress-mini">
+              <view class="progress-mini-bar">
+                <view class="progress-mini-fill" style="width:{{item.progressPercent}}%"></view>
+              </view>
+              <text class="progress-mini-num">{{item.progressPercent}}%</text>
+            </view>
+          </view>
+          <view class="card-row-4">
+            <text class="meta-text">下单 {{item.orderTime}}</text>
+            <text class="meta-text">截止 {{item.deadline}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{isLoadingMore}}" class="loading-more">
+        <t-loading theme="circular" size="32rpx" /><text>加载更多...</text>
+      </view>
+      <view wx:elif="{{!hasMore && orders.length > 0}}" class="no-more">已显示全部</view>
+    </block>
+
+    <view wx:else class="empty-block">
+      <t-empty description="暂无订单" />
+    </view>
+  </scroll-view>
+
+  <!-- 批量操作栏 -->
+  <view wx:if="{{selectionMode && selectedIds.length > 0}}" class="batch-bar">
+    <view class="batch-info">
+      <text>已选 {{selectedIds.length}} 条</text>
+      <text class="batch-clear" bindtap="onClearSelection">清空</text>
+    </view>
+    <scroll-view scroll-x class="batch-actions" enhanced show-scrollbar="{{false}}">
+      <view class="batch-row">
+        <view class="batch-btn" bindtap="onBatchAdvance">
+          <t-icon name="arrow-right" size="32rpx" color="#ff8800" /><text>推进阶段</text>
+        </view>
+        <view class="batch-btn" bindtap="onBatchSetStageOpen">
+          <t-icon name="precise-monitor" size="32rpx" color="#ff8800" /><text>设为阶段</text>
+        </view>
+        <view class="batch-btn" bindtap="onBatchMarkUrgent">
+          <t-icon name="error-circle" size="32rpx" color="#ff4d4f" /><text>设加急</text>
+        </view>
+        <view class="batch-btn" bindtap="onBatchUnmarkUrgent">
+          <t-icon name="close-circle" size="32rpx" color="#666" /><text>取消加急</text>
+        </view>
+        <view class="batch-btn" bindtap="onBatchAssignQueue">
+          <t-icon name="numbers" size="32rpx" color="#1890ff" /><text>分配排单号</text>
+        </view>
+        <view class="batch-btn" bindtap="onBatchArchive">
+          <t-icon name="folder" size="32rpx" color="#52c41a" /><text>归档</text>
         </view>
       </view>
     </scroll-view>
   </view>
-  
-  <!-- 底部操作栏 -->
-  <view class="footer-actions">
-    <t-button 
-      icon="check-circle" 
-      variant="outline" 
-      theme="primary" 
-      class="action-button" 
-      bind:tap="onOrderReview"
-    >订单审核</t-button>
-    <t-button 
-      icon="add" 
-      variant="outline" 
-      theme="primary" 
-      class="action-button" 
-      bind:tap="onAddOrder"
-    >新增订单</t-button>
-    <t-button 
-      icon="file-copy" 
-      theme="primary" 
-      class="action-button primary-button" 
-      bind:tap="onManageWorks"
-    >作品管理</t-button>
-  </view>
-  
-  <!-- 新增订单表单弹窗 -->
-  <view class="order-form-modal {{showOrderForm ? 'show' : ''}}" wx:if="{{showOrderForm}}">
-    <view class="order-form-content">
+
+  <!-- 排序弹窗 -->
+  <t-popup visible="{{showSortPopup}}" placement="bottom" bind:visible-change="closeSortPopup">
+    <view class="popup-panel">
+      <view class="popup-title">排序方式</view>
+      <view
+        wx:for="{{sortOptions}}"
+        wx:key="key"
+        class="popup-row {{(sortBy + '-' + sortOrder) === item.key ? 'popup-row-active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="onSortPick"
+      >
+        <text>{{item.label}}</text>
+        <t-icon wx:if="{{(sortBy + '-' + sortOrder) === item.key}}" name="check" color="#ff8800" size="36rpx" />
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- 批量设置阶段弹窗 -->
+  <t-popup visible="{{showBatchStagePopup}}" placement="bottom" bind:visible-change="onBatchSetStageClose">
+    <view class="popup-panel">
+      <view class="popup-title">设置阶段（{{selectedIds.length}} 条）</view>
+      <view
+        wx:for="{{stageOptions}}"
+        wx:key="value"
+        class="popup-row"
+        data-value="{{item.value}}"
+        bindtap="onBatchSetStagePick"
+      >
+        <text>{{item.label}}</text>
+        <text class="popup-row-meta">{{item.percent}}%</text>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- 筛选弹窗 -->
+  <t-popup visible="{{showFilterPopup}}" placement="right" bind:visible-change="closeFilterPopup">
+    <view class="filter-panel">
+      <view class="filter-header">
+        <text class="filter-title">筛选</text>
+        <t-icon name="close" size="48rpx" color="#999" bindtap="closeFilterPopup" />
+      </view>
+      <view class="filter-body">
+        <view class="filter-group">
+          <view class="filter-label">下单日期 起</view>
+          <picker mode="date" value="{{dateFrom}}" bindchange="onFilterDateFromChange">
+            <view class="filter-picker">{{dateFrom || '请选择'}}</view>
+          </picker>
+        </view>
+        <view class="filter-group">
+          <view class="filter-label">下单日期 止</view>
+          <picker mode="date" value="{{dateTo}}" bindchange="onFilterDateToChange">
+            <view class="filter-picker">{{dateTo || '请选择'}}</view>
+          </picker>
+        </view>
+        <view class="filter-group filter-toggle" bindtap="onToggleIncludeArchived">
+          <text>包含已归档</text>
+          <switch checked="{{includeArchived}}" color="#ff8800" disabled />
+        </view>
+      </view>
+      <view class="filter-footer">
+        <t-button variant="outline" size="large" bind:tap="onResetFilter">重置</t-button>
+        <t-button theme="primary" size="large" class="primary-button" bind:tap="onApplyFilter">应用</t-button>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- 新增/管理 抽屉 -->
+  <t-popup visible="{{showAddSheet}}" placement="bottom" bind:visible-change="onCloseAddSheet">
+    <view class="action-sheet">
+      <view class="action-row" bindtap="onAddOrder">
+        <t-icon name="add-circle" size="44rpx" color="#ff8800" />
+        <text>新增订单</text>
+      </view>
+      <view class="action-row" bindtap="onOrderReview">
+        <t-icon name="task-checked" size="44rpx" color="#1890ff" />
+        <text>订单审核</text>
+      </view>
+      <view class="action-row" bindtap="onManageWorks">
+        <t-icon name="image" size="44rpx" color="#52c41a" />
+        <text>作品管理</text>
+      </view>
+      <view class="action-row" bindtap="onExport">
+        <t-icon name="download" size="44rpx" color="#666" />
+        <text>导出数据</text>
+      </view>
+      <view class="action-cancel" bindtap="onCloseAddSheet">取消</view>
+    </view>
+  </t-popup>
+
+  <!-- 新增订单表单 -->
+  <t-popup visible="{{showOrderForm}}" placement="bottom" bind:visible-change="onCloseOrderForm">
+    <view class="form-popup">
       <view class="form-header">
         <text class="form-title">新增订单</text>
-        <view class="form-close" bindtap="onCloseOrderForm">×</view>
+        <t-icon name="close" size="48rpx" color="#999" bindtap="onCloseOrderForm" />
       </view>
-      
       <scroll-view scroll-y class="form-body">
         <view class="form-item">
           <text class="form-label">淘宝订单号 <text class="required">*</text></text>
-          <input 
-            class="form-input" 
-            placeholder="请输入淘宝订单号" 
-            value="{{orderForm.tbOrderId}}" 
-            bindinput="onFormInputChange" 
-            data-field="tbOrderId"
-          />
+          <input class="form-input" placeholder="请输入" value="{{orderForm.tbOrderId}}" data-field="tbOrderId" bindinput="onFormInputChange" />
         </view>
-        
         <view class="form-item">
           <text class="form-label">排单号</text>
-          <input 
-            class="form-input" 
-            placeholder="请输入排单号" 
-            value="{{orderForm.queueNumber}}" 
-            bindinput="onFormInputChange" 
-            data-field="queueNumber"
-          />
+          <input class="form-input" placeholder="请输入(可批量分配)" value="{{orderForm.queueNumber}}" data-field="queueNumber" bindinput="onFormInputChange" />
         </view>
-        
         <view class="form-item">
           <text class="form-label">客户名称 <text class="required">*</text></text>
-          <input 
-            class="form-input" 
-            placeholder="请输入客户名称" 
-            value="{{orderForm.customerName}}" 
-            bindinput="onFormInputChange" 
-            data-field="customerName"
-          />
+          <input class="form-input" placeholder="请输入" value="{{orderForm.customerName}}" data-field="customerName" bindinput="onFormInputChange" />
         </view>
-        
         <view class="form-item">
           <text class="form-label">角色名称 <text class="required">*</text></text>
-          <input 
-            class="form-input" 
-            placeholder="请输入角色名称" 
-            value="{{orderForm.roleName}}" 
-            bindinput="onFormInputChange" 
-            data-field="roleName"
-          />
+          <input class="form-input" placeholder="请输入" value="{{orderForm.roleName}}" data-field="roleName" bindinput="onFormInputChange" />
         </view>
-        
         <view class="form-item">
           <text class="form-label">下单时间 <text class="required">*</text></text>
-          <picker 
-            mode="date" 
-            value="{{orderForm.orderTime}}" 
-            bindchange="onDateChange" 
-            data-field="orderTime"
-          >
-            <view class="form-picker">
-              {{orderForm.orderTime || '请选择下单时间'}}
-            </view>
+          <picker mode="date" value="{{orderForm.orderTime}}" data-field="orderTime" bindchange="onDateChange">
+            <view class="form-picker">{{orderForm.orderTime || '请选择'}}</view>
           </picker>
         </view>
-        
         <view class="form-item">
-          <text class="form-label">预期完成时间 <text class="required">*</text></text>
-          <picker 
-            mode="date" 
-            value="{{orderForm.deadline}}" 
-            bindchange="onDateChange" 
-            data-field="deadline"
-          >
-            <view class="form-picker">
-              {{orderForm.deadline || '请选择预期完成时间'}}
-            </view>
+          <text class="form-label">预期完成 <text class="required">*</text></text>
+          <picker mode="date" value="{{orderForm.deadline}}" data-field="deadline" bindchange="onDateChange">
+            <view class="form-picker">{{orderForm.deadline || '请选择'}}</view>
           </picker>
         </view>
-        
         <view class="form-item">
-          <text class="form-label">制作进度</text>
-          <picker 
-            mode="selector" 
-            range="{{stageOptions}}" 
-            range-key="label" 
-            value="{{stageIndex}}"
-            bindchange="onStageChange"
-          >
-            <view class="form-picker">
-              {{orderForm.progressStage || '请选择制作阶段'}}
-              <view class="progress-info">
-                <text class="progress-percent">{{orderForm.progressPercent}}%</text>
-              </view>
-            </view>
+          <text class="form-label">制作阶段</text>
+          <picker mode="selector" range="{{stageOptions}}" range-key="label" value="{{stageIndex}}" bindchange="onStageChange">
+            <view class="form-picker">{{orderForm.progressStage}} · {{orderForm.progressPercent}}%</view>
           </picker>
         </view>
-        
-        <view class="form-item">
-          <text class="form-label">是否加急</text>
-          <switch 
-            checked="{{orderForm.isUrgent}}" 
-            color="#ff4d4f" 
-            bindchange="onToggleUrgent"
-          />
+        <view class="form-item form-row-toggle">
+          <text class="form-label">加急</text>
+          <switch checked="{{orderForm.isUrgent}}" color="#ff4d4f" bindchange="onToggleUrgent" />
         </view>
-        
         <view class="form-item">
-          <text class="form-label">预期成品展示图</text>
+          <text class="form-label">预期成品图</text>
           <view class="image-uploader" bindtap="onChooseImage">
-            <block wx:if="{{tempImagePath}}">
-              <image class="preview-image" src="{{tempImagePath}}" mode="aspectFit"></image>
-              <view class="upload-progress" wx:if="{{uploadProgress > 0 && uploadProgress < 100}}">
-                {{uploadProgress}}%
-              </view>
-            </block>
-            <view class="upload-placeholder" wx:else>
+            <image wx:if="{{tempImagePath}}" class="preview-img" src="{{tempImagePath}}" mode="aspectFit" />
+            <view wx:else class="upload-placeholder">
               <text class="upload-icon">+</text>
               <text class="upload-text">选择图片</text>
             </view>
           </view>
         </view>
       </scroll-view>
-      
       <view class="form-footer">
-        <t-button 
-          variant="outline" 
-          class="form-button cancel-button" 
-          bindtap="onCloseOrderForm"
-        >取消</t-button>
-        <t-button 
-          theme="primary" 
-          class="form-button submit-button" 
-          bindtap="onSubmitOrderForm"
-          loading="{{isSubmitting}}"
-        >提交</t-button>
+        <t-button variant="outline" size="large" bind:tap="onCloseOrderForm">取消</t-button>
+        <t-button theme="primary" size="large" class="primary-button" loading="{{isSubmitting}}" bind:tap="onSubmitOrderForm">提交</t-button>
       </view>
     </view>
-  </view>
-</view> 
+  </t-popup>
+</view>

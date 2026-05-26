@@ -1,521 +1,604 @@
-// admin.ts
+// admin.ts - 管理后台（支持千级订单：分页 + 批量 + 筛选）
 interface OrderItem {
-  orderId: string;
-  tbOrderId: string;  // 添加淘宝订单号字段
+  _id: string;
+  orderId?: string;
+  tbOrderId: string;
+  queueNumber?: string;
   customerName: string;
   roleName: string;
-  status: 'urgent' | 'normal' | 'soon';
+  status: string;
   progressStage: string;
   progressPercent: number;
   orderTime: string;
   deadline: string;
-  stage: 'design' | 'model' | 'print' | 'polish' | 'assembly' | 'quality' | 'shipping';
+  stage: string;
+  isUrgent?: boolean;
+  isArchived?: boolean;
+  createTime?: any;
 }
 
-// 新增订单表单数据接口
-interface OrderForm {
-  tbOrderId: string;  // 淘宝订单号
-  queueNumber: string; // 排单号
-  customerName: string; // 客户名称
-  roleName: string; // 角色名称
-  orderTime: string; // 下单时间
-  deadline: string; // 预期完成时间
-  progressPercent: number; // 制作进度
-  progressStage: string; // 进度阶段描述
-  stage: string; // 制作阶段
-  isUrgent: boolean; // 是否加急
-  previewImage: string; // 预期成品展示图
+interface OverviewStats {
+  total: number;
+  pending: number;
+  processing: number;
+  urgent: number;
+  overdue: number;
+  completed: number;
+  archived: number;
 }
+
+const STAGE_OPTIONS = [
+  { value: 'confirm',  label: '订单确认',   percent: 10 },
+  { value: 'design',   label: '设计图确认', percent: 20 },
+  { value: 'model',    label: '模型制作',   percent: 30 },
+  { value: 'print',    label: '打印中',     percent: 50 },
+  { value: 'polish',   label: '打磨上色',   percent: 70 },
+  { value: 'assembly', label: '组装',       percent: 80 },
+  { value: 'quality',  label: '质检',       percent: 90 },
+  { value: 'shipping', label: '发货',       percent: 100 }
+];
+
+const TABS = [
+  { key: 'all',      label: '全部' },
+  { key: 'pending',  label: '待审核' },
+  { key: 'urgent',   label: '加急' },
+  { key: 'overdue',  label: '逾期' },
+  { key: 'confirm',  label: '订单确认' },
+  { key: 'design',   label: '设计' },
+  { key: 'model',    label: '模型' },
+  { key: 'print',    label: '打印' },
+  { key: 'polish',   label: '打磨' },
+  { key: 'assembly', label: '组装' },
+  { key: 'quality',  label: '质检' },
+  { key: 'shipping', label: '发货' }
+];
 
 Component({
   data: {
-    searchValue: '',
-    currentTab: 'all',
+    // 列表数据
     orders: [] as OrderItem[],
-    filteredOrders: [] as OrderItem[],
-    orderCounts: {
-      all: 0,
-      design: 0,
-      model: 0,
-      print: 0,
-      polish: 0,
-      assembly: 0
-    },
-    // 新增订单表单相关数据
+    page: 1,
+    pageSize: 20,
+    total: 0,
+    hasMore: false,
+    isLoading: false,
+    isLoadingMore: false,
+
+    // 筛选
+    currentTab: 'all',
+    tabs: TABS,
+    searchValue: '',
+    sortBy: 'createTime',
+    sortOrder: 'desc' as 'asc' | 'desc',
+    dateFrom: '',
+    dateTo: '',
+    includeArchived: false,
+
+    // 选择模式
+    selectionMode: false,
+    selectedIds: [] as string[],
+    selectedSet: {} as Record<string, boolean>,
+
+    // 概览
+    stats: {
+      total: 0, pending: 0, processing: 0, urgent: 0,
+      overdue: 0, completed: 0, archived: 0
+    } as OverviewStats,
+
+    // 弹窗
+    showFilterPopup: false,
+    showSortPopup: false,
+    showBatchStagePopup: false,
     showOrderForm: false,
+    showAddSheet: false,
+
+    // 阶段选项
+    stageOptions: STAGE_OPTIONS,
+    stageIndex: 0,
+    batchStageIndex: 0,
+
+    // 新增订单表单
     orderForm: {
-      tbOrderId: '',
-      queueNumber: '',
-      customerName: '',
-      roleName: '',
-      orderTime: '',
-      deadline: '',
-      progressPercent: 0,
-      progressStage: '订单确认',
-      stage: 'confirm',
-      isUrgent: false,
-      previewImage: ''
-    } as OrderForm,
-    // 制作阶段选项
-    stageOptions: [
-      { label: '订单确认', value: 'confirm', percent: 10 },
-      { label: '设计图确认', value: 'design', percent: 20 },
-      { label: '模型制作', value: 'model', percent: 30 },
-      { label: '打印中', value: 'print', percent: 50 },
-      { label: '打磨上色', value: 'polish', percent: 70 },
-      { label: '组装', value: 'assembly', percent: 80 },
-      { label: '质检', value: 'quality', percent: 90 },
-      { label: '发货', value: 'shipping', percent: 100 }
-    ],
-    stageIndex: 0, // 当前选中的制作阶段索引
+      tbOrderId: '', queueNumber: '', customerName: '', roleName: '',
+      orderTime: '', deadline: '',
+      progressPercent: 10, progressStage: '订单确认', stage: 'confirm',
+      isUrgent: false, previewImage: ''
+    },
     todayDate: '',
     tempImagePath: '',
     uploadProgress: 0,
-    isSubmitting: false
+    isSubmitting: false,
+
+    // 排序选项
+    sortOptions: [
+      { key: 'createTime-desc', label: '最新下单' },
+      { key: 'createTime-asc',  label: '最早下单' },
+      { key: 'deadline-asc',    label: '即将到期' },
+      { key: 'progressPercent-desc', label: '进度靠后' },
+      { key: 'progressPercent-asc',  label: '进度靠前' }
+    ]
   },
 
   lifetimes: {
     attached() {
-      this.loadOrders();
-      // 设置今天日期作为默认下单时间
       const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const day = String(today.getDate()).padStart(2, '0');
-      this.setData({
-        todayDate: `${year}-${month}-${day}`,
-        'orderForm.orderTime': `${year}-${month}-${day}`
-      });
-      
-      // 设置初始阶段索引
-      this.updateStageIndex();
+      const ymd = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      this.setData({ todayDate: ymd, 'orderForm.orderTime': ymd });
+      this.refresh();
+    }
+  },
+
+  pageLifetimes: {
+    show() {
+      // 从子页面返回后刷新
+      if (this.data.orders.length > 0) {
+        this.refresh(true);
+      }
     }
   },
 
   methods: {
-    // 加载订单数据
-    loadOrders() {
-      // 从云数据库获取订单数据
-      wx.cloud.callFunction({
-        name: 'getOrders',
-        success: (res: any) => {
-          const orders = res.result.data || [];
-          
-          // 按照下单时间排序，最早的在顶部
-          orders.sort((a: OrderItem, b: OrderItem) => {
-            return new Date(a.orderTime).getTime() - new Date(b.orderTime).getTime();
-          });
-          
-          this.setData({
-            orders: orders
-          });
-          
-          this.updateOrderCounts();
-          this.applyFilters();
-        },
-        fail: (err: any) => {
-          console.error('获取订单失败', err);
+    // ============ 加载数据 ============
+    async refresh(silent: boolean = false) {
+      this.setData({ page: 1, orders: [], selectedIds: [], selectedSet: {} });
+      await Promise.all([this.loadOrders(silent), this.loadStats()]);
+    },
+
+    async loadOrders(silent: boolean = false) {
+      if (!silent) this.setData({ isLoading: true });
+
+      const params = this.buildQueryParams();
+      try {
+        const res: any = await wx.cloud.callFunction({
+          name: 'getOrders',
+          data: params
+        });
+        const result = res.result || {};
+        if (result.success === false) throw new Error(result.error || '加载失败');
+
+        const list: OrderItem[] = result.data || [];
+        this.setData({
+          orders: list,
+          total: result.total || 0,
+          hasMore: !!result.hasMore,
+          isLoading: false
+        });
+      } catch (err) {
+        console.warn('云数据库加载失败，使用模拟数据', err);
+        this.loadMockOrders();
+        this.setData({ isLoading: false });
+      }
+    },
+
+    async loadMore() {
+      if (this.data.isLoadingMore || !this.data.hasMore) return;
+      this.setData({ isLoadingMore: true, page: this.data.page + 1 });
+
+      const params = this.buildQueryParams();
+      try {
+        const res: any = await wx.cloud.callFunction({
+          name: 'getOrders',
+          data: params
+        });
+        const result = res.result || {};
+        const list: OrderItem[] = result.data || [];
+        this.setData({
+          orders: [...this.data.orders, ...list],
+          hasMore: !!result.hasMore,
+          isLoadingMore: false
+        });
+      } catch (err) {
+        console.error('加载更多失败', err);
+        this.setData({ isLoadingMore: false, page: this.data.page - 1 });
+      }
+    },
+
+    async loadStats() {
+      const queries = [
+        { key: 'total',      params: { countOnly: true } },
+        { key: 'pending',    params: { countOnly: true, status: 'pending' } },
+        { key: 'urgent',     params: { countOnly: true, isUrgent: true } },
+        { key: 'overdue',    params: { countOnly: true, overdueOnly: true } },
+        { key: 'completed',  params: { countOnly: true, status: 'completed' } },
+        { key: 'archived',   params: { countOnly: true, isArchived: true } }
+      ];
+
+      try {
+        const results = await Promise.all(
+          queries.map(q => wx.cloud.callFunction({ name: 'getOrders', data: q.params }))
+        );
+        const stats: any = { processing: 0 };
+        results.forEach((r: any, i) => {
+          stats[queries[i].key] = r.result?.total || 0;
+        });
+        stats.processing = Math.max(0, stats.total - stats.completed - stats.archived - stats.pending);
+        this.setData({ stats });
+      } catch (err) {
+        // 静默失败，不影响主列表
+        console.warn('概览统计加载失败', err);
+      }
+    },
+
+    buildQueryParams() {
+      const { currentTab, searchValue, sortBy, sortOrder, page, pageSize, dateFrom, dateTo, includeArchived } = this.data;
+      const params: any = {
+        page,
+        pageSize,
+        sortBy,
+        sortOrder,
+        isArchived: includeArchived ? undefined : false
+      };
+
+      if (searchValue) params.keyword = searchValue.trim();
+      if (dateFrom) params.dateFrom = dateFrom;
+      if (dateTo) params.dateTo = dateTo;
+
+      // tab 映射
+      if (currentTab === 'pending') params.status = 'pending';
+      else if (currentTab === 'urgent') params.isUrgent = true;
+      else if (currentTab === 'overdue') params.overdueOnly = true;
+      else if (currentTab !== 'all') params.stage = currentTab;
+
+      return params;
+    },
+
+    loadMockOrders() {
+      const mock: OrderItem[] = [
+        { _id: 'm1', tbOrderId: 'TB456789123', queueNumber: 'RS-2025-001', customerName: '张小华', roleName: '兔子头壳', status: 'soon', progressStage: '质检', progressPercent: 90, orderTime: '2025-09-20', deadline: '2025-12-10', stage: 'quality', isUrgent: false },
+        { _id: 'm2', tbOrderId: 'TB123456789', queueNumber: 'RS-2025-002', customerName: '王小明', roleName: '狐狸头壳', status: 'urgent', progressStage: '打印中', progressPercent: 50, orderTime: '2025-10-15', deadline: '2025-12-30', stage: 'print', isUrgent: true },
+        { _id: 'm3', tbOrderId: 'TB987654321', queueNumber: 'RS-2025-003', customerName: '李小红', roleName: '猫咪头壳', status: 'normal', progressStage: '模型制作', progressPercent: 30, orderTime: '2025-11-05', deadline: '2026-01-15', stage: 'model', isUrgent: false },
+        { _id: 'm4', tbOrderId: 'TB789123456', queueNumber: 'RS-2025-004', customerName: '赵小刚', roleName: '熊猫头壳', status: 'normal', progressStage: '设计图确认', progressPercent: 20, orderTime: '2025-11-20', deadline: '2026-02-10', stage: 'design', isUrgent: false },
+        { _id: 'm5', tbOrderId: 'TB555000111', queueNumber: 'RS-2025-005', customerName: '钱小光', roleName: '柴犬头壳', status: 'normal', progressStage: '打磨上色', progressPercent: 70, orderTime: '2025-10-28', deadline: '2025-12-20', stage: 'polish', isUrgent: false },
+        { _id: 'm6', tbOrderId: 'TB222333444', queueNumber: '', customerName: '孙小丽', roleName: '小狼头壳', status: 'pending', progressStage: '待审核', progressPercent: 0, orderTime: '2025-11-25', deadline: '2026-03-01', stage: 'confirm', isUrgent: false }
+      ];
+      this.setData({
+        orders: mock,
+        total: mock.length,
+        hasMore: false,
+        stats: { total: 6, pending: 1, processing: 5, urgent: 1, overdue: 0, completed: 0, archived: 0 }
+      });
+    },
+
+    // ============ 筛选 / 搜索 / 排序 ============
+    onTabTap(e: any) {
+      const tab = e.currentTarget.dataset.tab;
+      if (tab === this.data.currentTab) return;
+      this.setData({ currentTab: tab });
+      this.refresh();
+    },
+
+    onStatCardTap(e: any) {
+      const key = e.currentTarget.dataset.key;
+      const map: Record<string, string> = {
+        total: 'all', pending: 'pending', urgent: 'urgent',
+        overdue: 'overdue', processing: 'all', completed: 'all', archived: 'all'
+      };
+      const tab = map[key] || 'all';
+      const includeArchived = key === 'archived';
+      this.setData({ currentTab: tab, includeArchived });
+      this.refresh();
+    },
+
+    onSearchChange(e: any) {
+      this.setData({ searchValue: e.detail.value });
+    },
+
+    onSearchSubmit() {
+      this.refresh();
+    },
+
+    onSearchClear() {
+      this.setData({ searchValue: '' });
+      this.refresh();
+    },
+
+    openSortPopup() {
+      this.setData({ showSortPopup: true });
+    },
+
+    closeSortPopup() {
+      this.setData({ showSortPopup: false });
+    },
+
+    onSortPick(e: any) {
+      const key = e.currentTarget.dataset.key;
+      const [sortBy, sortOrder] = key.split('-');
+      this.setData({ sortBy, sortOrder, showSortPopup: false });
+      this.refresh();
+    },
+
+    openFilterPopup() {
+      this.setData({ showFilterPopup: true });
+    },
+
+    closeFilterPopup() {
+      this.setData({ showFilterPopup: false });
+    },
+
+    onFilterDateFromChange(e: any) {
+      this.setData({ dateFrom: e.detail.value });
+    },
+
+    onFilterDateToChange(e: any) {
+      this.setData({ dateTo: e.detail.value });
+    },
+
+    onToggleIncludeArchived() {
+      this.setData({ includeArchived: !this.data.includeArchived });
+    },
+
+    onApplyFilter() {
+      this.setData({ showFilterPopup: false });
+      this.refresh();
+    },
+
+    onResetFilter() {
+      this.setData({ dateFrom: '', dateTo: '', includeArchived: false, showFilterPopup: false });
+      this.refresh();
+    },
+
+    // ============ 选择模式 / 批量 ============
+    onToggleSelectionMode() {
+      const next = !this.data.selectionMode;
+      this.setData({
+        selectionMode: next,
+        selectedIds: [],
+        selectedSet: {}
+      });
+    },
+
+    onToggleSelect(e: any) {
+      if (!this.data.selectionMode) return;
+      const id = e.currentTarget.dataset.id;
+      const set = { ...this.data.selectedSet };
+      let ids = [...this.data.selectedIds];
+      if (set[id]) {
+        delete set[id];
+        ids = ids.filter(x => x !== id);
+      } else {
+        set[id] = true;
+        ids.push(id);
+      }
+      this.setData({ selectedIds: ids, selectedSet: set });
+    },
+
+    onSelectAllCurrent() {
+      const allIds = this.data.orders.map(o => o._id);
+      const allSelected = allIds.every(id => this.data.selectedSet[id]);
+      if (allSelected) {
+        this.setData({ selectedIds: [], selectedSet: {} });
+      } else {
+        const set: Record<string, boolean> = {};
+        allIds.forEach(id => set[id] = true);
+        this.setData({ selectedIds: allIds, selectedSet: set });
+      }
+    },
+
+    onClearSelection() {
+      this.setData({ selectedIds: [], selectedSet: {} });
+    },
+
+    async runBatch(action: string, payload?: any) {
+      const ids = this.data.selectedIds;
+      if (ids.length === 0) {
+        wx.showToast({ title: '请先选择订单', icon: 'none' });
+        return;
+      }
+      wx.showLoading({ title: '处理中...' });
+      try {
+        const res: any = await wx.cloud.callFunction({
+          name: 'batchUpdateOrders',
+          data: { orderIds: ids, action, payload }
+        });
+        wx.hideLoading();
+        const r = res.result || {};
+        if (r.success) {
           wx.showToast({
-            title: '获取订单失败',
+            title: `成功 ${r.succeeded}${r.failed ? ` / 失败 ${r.failed}` : ''}`,
             icon: 'none'
           });
-          
-          // 加载失败时使用模拟数据
-          this.loadMockOrders();
+          this.setData({ selectionMode: false, selectedIds: [], selectedSet: {} });
+          this.refresh(true);
+        } else {
+          wx.showToast({ title: r.error || '操作失败', icon: 'none' });
+        }
+      } catch (err) {
+        wx.hideLoading();
+        wx.showToast({ title: '网络异常', icon: 'none' });
+      }
+    },
+
+    onBatchAdvance() {
+      wx.showModal({
+        title: '批量推进',
+        content: `将所选 ${this.data.selectedIds.length} 条订单推进到下一阶段?`,
+        confirmColor: '#ff8800',
+        success: (res) => {
+          if (res.confirm) this.runBatch('advance-stage');
         }
       });
     },
-    
-    // 加载模拟订单数据
-    loadMockOrders() {
-      // 模拟数据，实际应从服务器获取
-      const mockData: OrderItem[] = [
-        {
-          orderId: 'order-001',
-          tbOrderId: 'TB456789123',
-          customerName: '张小华',
-          roleName: '兔子头壳',
-          status: 'soon',
-          progressStage: '质检',
-          progressPercent: 90,
-          orderTime: '2025-09-20',
-          deadline: '2025-12-10',
-          stage: 'quality'
-        },
-        {
-          orderId: 'order-002',
-          tbOrderId: 'TB123456789',
-          customerName: '王小明',
-          roleName: '狐狸头壳',
-          status: 'urgent',
-          progressStage: '打印中',
-          progressPercent: 50,
-          orderTime: '2025-10-15',
-          deadline: '2025-12-30',
-          stage: 'print'
-        },
-        {
-          orderId: 'order-003',
-          tbOrderId: 'TB987654321',
-          customerName: '李小红',
-          roleName: '猫咪头壳',
-          status: 'normal',
-          progressStage: '模型制作',
-          progressPercent: 30,
-          orderTime: '2025-11-05',
-          deadline: '2025-01-15',
-          stage: 'model'
-        },
-        {
-          orderId: 'order-004',
-          tbOrderId: 'TB789123456',
-          customerName: '赵小刚',
-          roleName: '熊猫头壳',
-          status: 'normal',
-          progressStage: '设计图确认',
-          progressPercent: 20,
-          orderTime: '2025-11-20',
-          deadline: '2025-02-10',
-          stage: 'design'
+
+    onBatchMarkUrgent() {
+      this.runBatch('mark-urgent');
+    },
+
+    onBatchUnmarkUrgent() {
+      this.runBatch('unmark-urgent');
+    },
+
+    onBatchArchive() {
+      wx.showModal({
+        title: '批量归档',
+        content: `归档所选 ${this.data.selectedIds.length} 条订单?归档后将从主列表移除。`,
+        confirmColor: '#ff8800',
+        success: (res) => {
+          if (res.confirm) this.runBatch('archive');
         }
-      ];
-      
-      // 按照下单时间排序，最早的在顶部
-      mockData.sort((a, b) => {
-        return new Date(a.orderTime).getTime() - new Date(b.orderTime).getTime();
-      });
-      
-      this.setData({
-        orders: mockData
-      });
-      
-      this.updateOrderCounts();
-      this.applyFilters();
-    },
-
-    // 更新订单数量统计
-    updateOrderCounts() {
-      const { orders } = this.data;
-      const counts = {
-        all: orders.length,
-        design: orders.filter(o => o.stage === 'design').length,
-        model: orders.filter(o => o.stage === 'model').length,
-        print: orders.filter(o => o.stage === 'print').length,
-        polish: orders.filter(o => o.stage === 'polish').length,
-        assembly: orders.filter(o => o.stage === 'assembly').length
-      };
-      
-      this.setData({
-        orderCounts: counts
       });
     },
 
-    // 搜索框内容变化
-    onSearchChange(e: any) {
-      this.setData({
-        searchValue: e.detail.value
-      });
+    onBatchAssignQueue() {
+      this.runBatch('assign-queue');
     },
 
-    // 提交搜索
-    onSearch() {
-      this.applyFilters();
+    onBatchSetStageOpen() {
+      this.setData({ showBatchStagePopup: true });
     },
 
-    // 标签切换
-    onTabChange(e: any) {
-      const tab = e.currentTarget.dataset.tab;
-      
-      this.setData({
-        currentTab: tab
-      });
-      
-      this.applyFilters();
+    onBatchSetStageClose() {
+      this.setData({ showBatchStagePopup: false });
     },
 
-    // 应用筛选
-    applyFilters() {
-      const { searchValue, currentTab, orders } = this.data;
-      let filtered = [...orders];
-      
-      // 应用标签筛选
-      if (currentTab !== 'all') {
-        filtered = filtered.filter(order => order.stage === currentTab);
+    onBatchSetStagePick(e: any) {
+      const value = e.currentTarget.dataset.value;
+      this.setData({ showBatchStagePopup: false });
+      this.runBatch('set-stage', { stage: value });
+    },
+
+    // ============ 触底加载 ============
+    onScrollToLower() {
+      this.loadMore();
+    },
+
+    // ============ 单个订单点击 ============
+    onOrderTap(e: any) {
+      if (this.data.selectionMode) {
+        this.onToggleSelect(e);
+        return;
       }
-      
-      // 应用搜索筛选
-      if (searchValue) {
-        const keyword = searchValue.toLowerCase();
-        filtered = filtered.filter(order => 
-          order.tbOrderId.toLowerCase().includes(keyword) || 
-          order.customerName.toLowerCase().includes(keyword) ||
-          order.roleName.toLowerCase().includes(keyword)
-        );
-      }
-      
-      this.setData({
-        filteredOrders: filtered
-      });
-    },
-
-    // 点击订单
-    onOrderClick(e: any) {
-      const orderId = e.currentTarget.dataset.orderId;
-      
+      const tbOrderId = e.currentTarget.dataset.tbId;
       wx.navigateTo({
-        url: `/pages/order-detail/order-detail?id=${orderId}&admin=true`
+        url: `/pages/order-detail/order-detail?id=${tbOrderId}&admin=true`
       });
     },
 
-    // 更新阶段索引
-    updateStageIndex() {
-      const { stageOptions } = this.data;
-      const stageValue = this.data.orderForm.stage;
-      let index = 0;
-      
-      for (let i = 0; i < stageOptions.length; i++) {
-        if (stageOptions[i].value === stageValue) {
-          index = i;
-          break;
-        }
+    onOrderLongPress(e: any) {
+      if (!this.data.selectionMode) {
+        const id = e.currentTarget.dataset.id;
+        const set: Record<string, boolean> = { [id]: true };
+        this.setData({ selectionMode: true, selectedIds: [id], selectedSet: set });
       }
-      
-      this.setData({
-        stageIndex: index
-      });
     },
-    
-    // 新增订单
+
+    // ============ 操作菜单 ============
     onAddOrder() {
       this.setData({
         showOrderForm: true,
+        showAddSheet: false,
         orderForm: {
-          tbOrderId: '',
-          queueNumber: '',
-          customerName: '',
-          roleName: '',
-          orderTime: this.data.todayDate,
-          deadline: '',
-          progressPercent: 10,
-          progressStage: '订单确认',
-          stage: 'confirm',
-          isUrgent: false,
-          previewImage: ''
-        }
-      }, () => {
-        // 更新阶段索引
-        this.updateStageIndex();
-      });
-      
-      this.setData({
-        tempImagePath: '',
-        uploadProgress: 0
+          tbOrderId: '', queueNumber: '', customerName: '', roleName: '',
+          orderTime: this.data.todayDate, deadline: '',
+          progressPercent: 10, progressStage: '订单确认', stage: 'confirm',
+          isUrgent: false, previewImage: ''
+        },
+        tempImagePath: '', uploadProgress: 0, stageIndex: 0
       });
     },
-    
-    // 关闭订单表单
+
     onCloseOrderForm() {
-      this.setData({
-        showOrderForm: false
-      });
+      this.setData({ showOrderForm: false });
     },
-    
-    // 表单输入变化
+
     onFormInputChange(e: any) {
       const { field } = e.currentTarget.dataset;
-      const { value } = e.detail;
-      
-      this.setData({
-        [`orderForm.${field}`]: value
-      });
+      this.setData({ [`orderForm.${field}`]: e.detail.value });
     },
-    
-    // 切换是否加急
+
     onToggleUrgent() {
-      this.setData({
-        'orderForm.isUrgent': !this.data.orderForm.isUrgent
-      });
+      this.setData({ 'orderForm.isUrgent': !this.data.orderForm.isUrgent });
     },
-    
-    // 选择日期
+
     onDateChange(e: any) {
       const { field } = e.currentTarget.dataset;
-      const { value } = e.detail;
-      
-      this.setData({
-        [`orderForm.${field}`]: value
-      });
+      this.setData({ [`orderForm.${field}`]: e.detail.value });
     },
-    
-    // 选择图片
-    onChooseImage() {
-      wx.chooseImage({
-        count: 1,
-        sizeType: ['compressed'],
-        sourceType: ['album', 'camera'],
-        success: (res) => {
-          this.setData({
-            tempImagePath: res.tempFilePaths[0]
-          });
-        }
-      });
-    },
-    
-    // 选择制作阶段
+
     onStageChange(e: any) {
-      const { value } = e.detail;
-      const index = parseInt(value);
-      const stageOption = this.data.stageOptions[index];
-      
-      if (stageOption) {
-        this.setData({
-          'orderForm.stage': stageOption.value,
-          'orderForm.progressStage': stageOption.label,
-          'orderForm.progressPercent': stageOption.percent,
-          stageIndex: index
-        });
-      }
-    },
-    
-    // 提交表单
-    async onSubmitOrderForm() {
-      const { orderForm, tempImagePath } = this.data;
-      
-      // 表单验证
-      if (!orderForm.tbOrderId) {
-        wx.showToast({
-          title: '请输入淘宝订单号',
-          icon: 'none'
-        });
-        return;
-      }
-      
-      if (!orderForm.customerName) {
-        wx.showToast({
-          title: '请输入客户名称',
-          icon: 'none'
-        });
-        return;
-      }
-      
-      if (!orderForm.roleName) {
-        wx.showToast({
-          title: '请输入角色名称',
-          icon: 'none'
-        });
-        return;
-      }
-      
-      if (!orderForm.orderTime) {
-        wx.showToast({
-          title: '请选择下单时间',
-          icon: 'none'
-        });
-        return;
-      }
-      
-      if (!orderForm.deadline) {
-        wx.showToast({
-          title: '请选择预期完成时间',
-          icon: 'none'
-        });
-        return;
-      }
-      
+      const idx = parseInt(e.detail.value);
+      const opt = this.data.stageOptions[idx];
       this.setData({
-        isSubmitting: true
+        stageIndex: idx,
+        'orderForm.stage': opt.value,
+        'orderForm.progressStage': opt.label,
+        'orderForm.progressPercent': opt.percent
       });
-      
-      try {
-        let previewImageUrl = '';
-        
-        // 如果有选择图片，先上传图片
-        if (tempImagePath) {
-          const uploadRes = await this.uploadImage(tempImagePath);
-          previewImageUrl = uploadRes.fileID;
-        }
-        
-        // 创建新订单
-        const orderData = {
-          ...orderForm,
-          previewImage: previewImageUrl,
-          status: orderForm.isUrgent ? 'urgent' : 'normal',
-          createTime: new Date()
-        };
-        
-        await wx.cloud.callFunction({
-          name: 'createOrder',
-          data: orderData
-        });
-        
-        wx.showToast({
-          title: '创建订单成功',
-          icon: 'success'
-        });
-        
-        // 关闭表单并刷新数据
-        this.setData({
-          showOrderForm: false,
-          isSubmitting: false
-        });
-        
-        this.loadOrders();
-      } catch (error) {
-        console.error('创建订单失败', error);
-        wx.showToast({
-          title: '创建订单失败',
-          icon: 'none'
-        });
-        this.setData({
-          isSubmitting: false
-        });
-      }
     },
-    
-    // 上传图片到云存储
+
+    onChooseImage() {
+      wx.chooseMedia({
+        count: 1,
+        mediaType: ['image'],
+        sizeType: ['compressed'],
+        success: (res) => {
+          this.setData({ tempImagePath: res.tempFiles[0].tempFilePath });
+        }
+      });
+    },
+
     uploadImage(filePath: string): Promise<any> {
       return new Promise((resolve, reject) => {
-        const cloudPath = `images/orders/${new Date().getTime()}_${Math.random().toString(36).slice(-6)}.${filePath.match(/\.(\w+)$/)?.[1] || 'png'}`;
-        
-        const uploadTask = wx.cloud.uploadFile({
-          cloudPath,
-          filePath,
-          success: (res) => {
-            resolve(res);
-          },
-          fail: (err) => {
-            reject(err);
+        const ext = filePath.match(/\.(\w+)$/)?.[1] || 'png';
+        const cloudPath = `images/orders/${Date.now()}_${Math.random().toString(36).slice(-6)}.${ext}`;
+        const task = wx.cloud.uploadFile({ cloudPath, filePath, success: resolve, fail: reject });
+        task.onProgressUpdate((res) => this.setData({ uploadProgress: res.progress }));
+      });
+    },
+
+    async onSubmitOrderForm() {
+      const { orderForm, tempImagePath } = this.data;
+      const required = ['tbOrderId', 'customerName', 'roleName', 'orderTime', 'deadline'];
+      const labels: any = { tbOrderId: '淘宝订单号', customerName: '客户名称', roleName: '角色名称', orderTime: '下单时间', deadline: '预期完成时间' };
+      for (const f of required) {
+        if (!(orderForm as any)[f]) {
+          wx.showToast({ title: `请填写${labels[f]}`, icon: 'none' });
+          return;
+        }
+      }
+
+      this.setData({ isSubmitting: true });
+      try {
+        let previewImage = '';
+        if (tempImagePath) {
+          const r = await this.uploadImage(tempImagePath);
+          previewImage = r.fileID;
+        }
+        await wx.cloud.callFunction({
+          name: 'createOrder',
+          data: {
+            ...orderForm,
+            previewImage,
+            status: orderForm.isUrgent ? 'urgent' : 'normal',
+            createTime: new Date()
           }
         });
-        
-        uploadTask.onProgressUpdate((res) => {
-          this.setData({
-            uploadProgress: res.progress
-          });
-        });
-      });
+        wx.showToast({ title: '创建成功', icon: 'success' });
+        this.setData({ showOrderForm: false, isSubmitting: false });
+        this.refresh();
+      } catch (err) {
+        wx.showToast({ title: '创建失败', icon: 'none' });
+        this.setData({ isSubmitting: false });
+      }
     },
 
-    // 导出数据
-    onExportData() {
-      wx.showToast({
-        title: '导出数据功能开发中',
-        icon: 'none'
-      });
+    onOpenAddSheet() {
+      this.setData({ showAddSheet: true });
     },
 
-    // 订单审核
+    onCloseAddSheet() {
+      this.setData({ showAddSheet: false });
+    },
+
     onOrderReview() {
-      wx.navigateTo({
-        url: '/pages/admin/order-review/order-review'
-      });
+      wx.navigateTo({ url: '/pages/admin/order-review/order-review' });
     },
 
-    // 作品管理
     onManageWorks() {
-      wx.navigateTo({
-        url: '/pages/admin/works-manage/works-manage'
-      });
+      wx.navigateTo({ url: '/pages/admin/works-manage/works-manage' });
+    },
+
+    onExport() {
+      wx.showToast({ title: '导出功能开发中', icon: 'none' });
     }
   }
-}) 
+});

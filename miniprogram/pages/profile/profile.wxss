@@ -1,43 +1,47 @@
 /* profile.wxss */
 .container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f5f7fa;
+  background-color: var(--color-bg);
 }
 
+/* 头部 - 复用 app.wxss .header-gradient,这里仅做页面级覆盖 */
 .header-gradient {
-  padding: 32rpx 24rpx;
-  background: linear-gradient(135deg, #ff9900, #ffcc00);
-  color: white;
-  border-radius: 0 0 30rpx 30rpx;
+  padding-bottom: 80rpx;
 }
 
 .header-title {
   font-size: 36rpx;
-  font-weight: bold;
+  font-weight: 600;
   text-align: center;
+  color: #fff;
+  position: relative;
+  z-index: 2;
 }
 
+/* 未登录态 */
 .login-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48rpx 32rpx;
+  padding: 80rpx 48rpx;
 }
 
 .avatar-placeholder {
-  margin-bottom: 32rpx;
-  width: 160rpx;
-  height: 160rpx;
+  margin-bottom: 36rpx;
+  width: 180rpx;
+  height: 180rpx;
   border-radius: 50%;
   overflow: hidden;
   background-color: #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-md);
+  border: 6rpx solid #fff;
 }
 
 .avatar-image {
@@ -48,46 +52,48 @@
 
 .login-tip {
   font-size: 28rpx;
-  color: #999;
-  margin-bottom: 48rpx;
+  color: var(--color-text-tertiary);
+  margin-bottom: 56rpx;
 }
 
 .login-button {
   width: 80%;
 }
 
+/* 已登录头部 */
 .user-info-container {
-  padding: 24rpx;
+  padding: 8rpx 4rpx 0;
   display: flex;
   align-items: center;
   position: relative;
+  z-index: 2;
 }
 
-/* 头像容器和编辑图标 */
 .avatar-container {
   position: relative;
   margin-right: 24rpx;
 }
 
 .user-avatar {
-  width: 120rpx;
-  height: 120rpx;
+  width: 128rpx;
+  height: 128rpx;
   border-radius: 50%;
-  border: 4rpx solid rgba(255, 255, 255, 0.5);
+  border: 4rpx solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.15);
 }
 
 .avatar-edit-icon {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 36rpx;
-  height: 36rpx;
+  width: 40rpx;
+  height: 40rpx;
   background-color: #ff8800;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2rpx solid #fff;
+  border: 3rpx solid #fff;
 }
 
 .user-info {
@@ -98,129 +104,154 @@
 
 .user-name {
   font-size: 36rpx;
-  font-weight: bold;
-  color: white;
-  margin-bottom: 8rpx;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6rpx;
+  letter-spacing: 0.5rpx;
 }
 
 .user-id {
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.85);
 }
 
-/* 编辑资料按钮 */
 .edit-profile-btn {
   margin-left: auto;
   z-index: 10;
   position: relative;
 }
 
+/* 内容区 */
 .page-container {
   flex: 1;
-  padding: 24rpx;
+  padding: 0 24rpx 32rpx;
+  margin-top: -40rpx;
+  position: relative;
+  z-index: 3;
 }
 
 /* 订单统计 */
 .stats-container {
   display: flex;
   justify-content: space-around;
-  background-color: white;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  margin-bottom: 24rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  border-radius: var(--radius-md);
+  padding: 32rpx 16rpx;
+  margin-bottom: 28rpx;
+  box-shadow: var(--shadow-md);
 }
 
 .stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.stat-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 16rpx;
+  bottom: 16rpx;
+  width: 1rpx;
+  background-color: var(--color-divider);
 }
 
 .stat-number {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #ff8800;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--color-primary);
   margin-bottom: 8rpx;
+  line-height: 1;
 }
 
 .stat-label {
-  font-size: 24rpx;
-  color: #999;
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
 }
 
-/* 订单列表 */
+/* 订单段 */
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16rpx;
+  padding: 0 4rpx;
 }
 
 .section-title {
   font-size: 32rpx;
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--color-text);
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8rpx;
+  height: 28rpx;
+  border-radius: 4rpx;
+  background: linear-gradient(180deg, #ff8800, #ffcc00);
 }
 
 .section-more {
   font-size: 24rpx;
-  color: #ff8800;
+  color: var(--color-primary);
 }
 
+/* 订单列表 */
 .order-list {
-  margin-bottom: 24rpx;
+  margin-bottom: 32rpx;
 }
 
 .order-item {
-  background-color: white;
-  border-radius: 12rpx;
-  padding: 24rpx;
+  background-color: #fff;
+  border-radius: var(--radius-md);
+  padding: 28rpx;
   margin-bottom: 16rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.order-item:active {
+  transform: scale(0.99);
+  box-shadow: var(--shadow-md);
 }
 
 .order-item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16rpx;
+  margin-bottom: 18rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx dashed var(--color-divider);
 }
 
 .order-id {
-  font-size: 28rpx;
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
   font-weight: 500;
 }
 
 .order-status {
-  font-size: 24rpx;
-  padding: 4rpx 16rpx;
+  font-size: 22rpx;
+  padding: 6rpx 18rpx;
   border-radius: 999rpx;
+  font-weight: 500;
 }
 
-.status-pending {
-  background-color: #fffbe6;
-  color: #faad14;
-}
-
-.status-approved {
-  background-color: #e6f7ff;
-  color: #1890ff;
-}
-
-.status-normal {
-  background-color: #fff0e0;
-  color: #ff8800;
-}
-
-.status-completed {
-  background-color: #f6ffed;
-  color: #52c41a;
-}
-
-.status-rejected {
-  background-color: #fff1f0;
-  color: #ff4d4f;
-}
+.status-pending { background-color: #fffbe6; color: #faad14; }
+.status-approved { background-color: #e6f4ff; color: #1890ff; }
+.status-normal { background-color: #fff4e6; color: #ff8800; }
+.status-completed { background-color: #f0faf3; color: #52c41a; }
+.status-rejected { background-color: #fff1f0; color: #ff4d4f; }
 
 .order-item-content {
   display: flex;
@@ -233,50 +264,58 @@
 }
 
 .order-role {
-  font-size: 28rpx;
-  margin-bottom: 8rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 6rpx;
 }
 
 .order-time {
-  font-size: 24rpx;
-  color: #999;
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
 }
 
 .order-action {
-  color: #ff8800;
-  font-size: 28rpx;
+  color: var(--color-primary);
+  font-size: 26rpx;
+  font-weight: 500;
+  padding-left: 16rpx;
 }
 
+/* 空状态 */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 80rpx 0;
+  background: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .empty-image {
-  width: 200rpx;
-  height: 200rpx;
-  margin-bottom: 24rpx;
-  opacity: 0.5;
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.4;
+  border-radius: 50%;
 }
 
 .empty-text {
-  font-size: 28rpx;
-  color: #999;
+  font-size: 26rpx;
+  color: var(--color-text-tertiary);
 }
 
-/* 联系客服按钮样式 */
+/* 服务按钮 */
 .service-container {
-  margin-top: 48rpx;
+  margin-top: 24rpx;
 }
 
 .service-button {
   width: 100%;
 }
 
-/* 管理员入口样式 */
 .admin-button {
   width: 100%;
   margin-bottom: 24rpx;
@@ -286,18 +325,18 @@
   width: 100%;
   text-align: center;
   padding: 16rpx 0;
-  margin-bottom: 24rpx;
+  margin-bottom: 16rpx;
 }
 
 .admin-click-hint {
   font-size: 24rpx;
-  color: #ff8800;
+  color: var(--color-primary);
 }
 
-/* 编辑个人资料弹窗 */
+/* 编辑弹窗 */
 .edit-profile-popup {
   background-color: #fff;
-  border-radius: 24rpx 24rpx 0 0;
+  border-radius: 32rpx 32rpx 0 0;
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -309,17 +348,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 32rpx 32rpx 20rpx;
+  padding: 36rpx 32rpx 20rpx;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .edit-profile-title {
-  font-size: 36rpx;
-  font-weight: bold;
+  font-size: 34rpx;
+  font-weight: 700;
 }
 
 .edit-profile-content {
   height: 1000rpx;
-  padding: 0 32rpx;
+  padding: 24rpx 32rpx 0;
   box-sizing: border-box;
 }
 
@@ -327,46 +367,48 @@
   padding-bottom: 40rpx;
 }
 
-/* 信息分组 */
 .info-section {
-  margin-bottom: 32rpx;
+  margin-bottom: 36rpx;
 }
 
 .section-title-small {
-  font-size: 30rpx;
-  font-weight: bold;
-  color: #333;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-text);
   margin-bottom: 20rpx;
   padding-left: 16rpx;
-  border-left: 6rpx solid #ff8800;
+  border-left: 6rpx solid var(--color-primary);
+  line-height: 1.2;
 }
 
 .edit-avatar-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 32rpx;
+  margin-bottom: 36rpx;
 }
 
 .edit-avatar {
-  width: 140rpx;
-  height: 140rpx;
+  width: 150rpx;
+  height: 150rpx;
   border-radius: 50%;
   margin-bottom: 12rpx;
-  border: 2rpx solid #f0f0f0;
+  border: 4rpx solid #f5f5f5;
+  box-shadow: var(--shadow-sm);
 }
 
 .edit-avatar-hint {
-  font-size: 26rpx;
-  color: #ff8800;
+  font-size: 24rpx;
+  color: var(--color-primary);
 }
 
 .edit-input-section {
-  margin-bottom: 20rpx;
+  margin-bottom: 16rpx;
 }
 
 .edit-profile-footer {
-  padding: 20rpx 32rpx 32rpx;
+  padding: 24rpx 32rpx 36rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
   background-color: #fff;
-  border-top: 1rpx solid #f0f0f0;
-} 
+  border-top: 1rpx solid var(--color-divider);
+}
