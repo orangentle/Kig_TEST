@@ -11,8 +11,14 @@
     </view>
   </view>
 
+  <!-- 订单不存在 -->
+  <view class="not-found" wx:if="{{notFound}}">
+    <text class="not-found-title">订单不存在</text>
+    <text class="not-found-tip">请检查订单号是否正确</text>
+  </view>
+
   <!-- 订单信息卡 -->
-  <view class="order-info-card">
+  <view class="order-info-card" wx:if="{{!notFound}}">
     <view class="card-head">
       <view class="role-block">
         <text class="role-name">{{order.roleName}}</text>
@@ -40,7 +46,7 @@
   </view>
 
   <!-- 制作进度 -->
-  <view class="progress-card">
+  <view class="progress-card" wx:if="{{!notFound}}">
     <view class="card-title">
       <text class="title-text">制作进度</text>
       <text class="title-pct">{{progressPercent}}%</text>
@@ -78,7 +84,7 @@
   </view>
 
   <!-- 联系客服 -->
-  <view class="contact-button-container">
+  <view class="contact-button-container" wx:if="{{!notFound}}">
     <view class="contact-btn" bindtap="onContactService">
       <t-icon name="chat" size="32rpx" color="#fff" />
       <text>联系客服</text>

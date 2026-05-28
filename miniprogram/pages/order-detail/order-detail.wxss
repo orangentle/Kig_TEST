@@ -346,3 +346,27 @@
   transform: scale(0.98);
   box-shadow: 0 4rpx 12rpx rgba(255, 144, 32, 0.2);
 }
+
+/* 订单不存在 */
+.not-found {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 48rpx;
+}
+
+.not-found-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #3a2410;
+  margin-bottom: 16rpx;
+  letter-spacing: 2rpx;
+}
+
+.not-found-tip {
+  font-size: 24rpx;
+  color: #a08060;
+  letter-spacing: 1rpx;
+}

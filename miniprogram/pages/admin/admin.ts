@@ -158,9 +158,9 @@ Component({
           isLoading: false
         });
       } catch (err) {
-        console.warn('云数据库加载失败，使用模拟数据', err);
-        this.loadMockOrders();
-        this.setData({ isLoading: false });
+        console.error('订单加载失败', err);
+        this.setData({ isLoading: false, orders: [], total: 0, hasMore: false });
+        wx.showToast({ title: '加载失败，请重试', icon: 'none' });
       }
     },
 
@@ -234,23 +234,6 @@ Component({
       else if (currentTab !== 'all') params.stage = currentTab;
 
       return params;
-    },
-
-    loadMockOrders() {
-      const mock: OrderItem[] = [
-        { _id: 'm1', tbOrderId: 'TB456789123', queueNumber: 'RS-2025-001', customerName: '张小华', roleName: '兔子头壳', status: 'soon', progressStage: '假毛', progressPercent: 80, orderTime: '2025-09-20', deadline: '2025-12-10', stage: 'hair', isUrgent: false },
-        { _id: 'm2', tbOrderId: 'TB123456789', queueNumber: 'RS-2025-002', customerName: '王小明', roleName: '狐狸头壳', status: 'urgent', progressStage: '建模', progressPercent: 30, orderTime: '2025-10-15', deadline: '2025-12-30', stage: 'modeling', isUrgent: true },
-        { _id: 'm3', tbOrderId: 'TB987654321', queueNumber: 'RS-2025-003', customerName: '李小红', roleName: '猫咪头壳', status: 'normal', progressStage: '建模', progressPercent: 30, orderTime: '2025-11-05', deadline: '2026-01-15', stage: 'modeling', isUrgent: false },
-        { _id: 'm4', tbOrderId: 'TB789123456', queueNumber: 'RS-2025-004', customerName: '赵小刚', roleName: '熊猫头壳', status: 'normal', progressStage: '已排单', progressPercent: 10, orderTime: '2025-11-20', deadline: '2026-02-10', stage: 'queued', isUrgent: false },
-        { _id: 'm5', tbOrderId: 'TB555000111', queueNumber: 'RS-2025-005', customerName: '钱小光', roleName: '柴犬头壳', status: 'normal', progressStage: '上妆', progressPercent: 55, orderTime: '2025-10-28', deadline: '2025-12-20', stage: 'painting', isUrgent: false },
-        { _id: 'm6', tbOrderId: 'TB222333444', queueNumber: '', customerName: '孙小丽', roleName: '小狼头壳', status: 'pending', progressStage: '待审核', progressPercent: 0, orderTime: '2025-11-25', deadline: '2026-03-01', stage: 'queued', isUrgent: false }
-      ];
-      this.setData({
-        orders: mock,
-        total: mock.length,
-        hasMore: false,
-        stats: { total: 6, pending: 1, processing: 5, urgent: 1, overdue: 0, completed: 0, archived: 0 }
-      });
     },
 
     // ============ 筛选 / 搜索 / 排序 ============
