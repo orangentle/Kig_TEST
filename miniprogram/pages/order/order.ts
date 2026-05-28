@@ -1,5 +1,6 @@
 // order.ts
 import Message from 'tdesign-miniprogram/message/index';
+import type { BodyMeasurements } from '../../types/order';
 
 const app = getApp<IAppOption>();
 
@@ -16,13 +17,6 @@ interface OrderFormData {
   replaceFaceCount: number;
   isUrgent: boolean;
   remark: string;
-}
-
-interface BodyMeasurements {
-  height?: number;
-  weight?: number;
-  headCircumference?: number;
-  shoulderWidth?: number;
 }
 
 Page({

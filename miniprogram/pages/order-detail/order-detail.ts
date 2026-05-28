@@ -1,19 +1,7 @@
 // order-detail.ts
+import type { Order } from '../../types/order';
 
-interface OrderDetail {
-  tbOrderId: string;
-  queueNumber: string;
-  orderId: string;
-  customerName: string;
-  roleName: string;
-  orderTime: string;
-  deadline: string;
-  progressPercent: number;
-  progressStage: string;
-  stage: string;
-  status: string;
-  previewImage?: string;
-}
+type OrderDetail = Order;
 
 interface Step {
   title: string;
@@ -36,7 +24,7 @@ Page({
       stage: '',
       status: '',
       previewImage: ''
-    } as OrderDetail,
+    } as unknown as OrderDetail,
     currentStepIndex: 0,
     progressPercent: 0,
     steps: [

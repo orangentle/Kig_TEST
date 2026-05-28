@@ -1,23 +1,15 @@
 // 获取应用实例
-const globalApp = getApp<IAppOption>();
+import type { OrderStatus } from '../../types/order';
+import type { UserProfile } from '../../types/user';
 
-// 用户信息接口
-interface UserInfo {
-  avatarUrl: string;
-  nickName: string;
-  city?: string;
-  country?: string;
-  gender?: number;
-  language?: string;
-  province?: string;
-}
+const globalApp = getApp<IAppOption>();
 
 interface OrderInfo {
   orderId: string;
   tbOrderId: string;
   roleName: string;
   orderTime: string;
-  status: 'pending' | 'approved' | 'rejected' | 'processing' | 'completed';
+  status: OrderStatus;
 }
 
 interface OrderStats {
@@ -25,32 +17,6 @@ interface OrderStats {
   processing: number;
   completed: number;
   total: number;
-}
-
-// 身材数据接口
-interface BodyMeasurements {
-  height?: number;    // 身高(cm)
-  weight?: number;    // 体重(kg)
-  headCircumference?: number;  // 头围(cm)
-  shoulderWidth?: number;      // 肩宽(cm)
-}
-
-// 用户资料接口
-interface UserProfile {
-  _id?: string;
-  _openid?: string;
-  avatarUrl: string;
-  nickName: string;
-  userId: string;
-  // 用户信息
-  taobaoName?: string;    // 淘宝名称
-  qq?: string;            // QQ账号
-  phone?: string;         // 手机号
-  email?: string;
-  // 身材数据
-  bodyMeasurements?: BodyMeasurements;
-  isAdmin?: boolean;
-  createTime?: number;
 }
 
 Component({
@@ -308,7 +274,7 @@ Component({
           
           // 计算订单统计数据
           const stats = {
-            pending: orders.filter(order => order.status === 'pending' || order.status === 'approved').length,
+            pending: orders.filter(order => order.status === 'pending').length,
             processing: orders.filter(order => order.status === 'processing').length,
             completed: orders.filter(order => order.status === 'completed').length,
             total: orders.length

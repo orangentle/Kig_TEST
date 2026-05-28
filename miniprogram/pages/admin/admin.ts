@@ -1,21 +1,8 @@
 // admin.ts - 管理后台（支持千级订单：分页 + 批量 + 筛选）
-interface OrderItem {
-  _id: string;
-  orderId?: string;
-  tbOrderId: string;
-  queueNumber?: string;
-  customerName: string;
-  roleName: string;
-  status: string;
-  progressStage: string;
-  progressPercent: number;
-  orderTime: string;
-  deadline: string;
-  stage: string;
-  isUrgent?: boolean;
-  isArchived?: boolean;
-  createTime?: any;
-}
+import type { Order, StageDef } from '../../types/order';
+import { STAGE_FLOW } from '../../types/order';
+
+type OrderItem = Order;
 
 interface OverviewStats {
   total: number;
@@ -27,13 +14,7 @@ interface OverviewStats {
   archived: number;
 }
 
-const STAGE_OPTIONS = [
-  { value: 'queued',   label: '已排单', percent: 10 },
-  { value: 'modeling', label: '建模',   percent: 30 },
-  { value: 'painting', label: '上妆',   percent: 55 },
-  { value: 'hair',     label: '假毛',   percent: 80 },
-  { value: 'shipped',  label: '已发货', percent: 100 }
-];
+const STAGE_OPTIONS: StageDef[] = STAGE_FLOW;
 
 const TABS = [
   { key: 'all',      label: '全部' },
