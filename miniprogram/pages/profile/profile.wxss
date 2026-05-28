@@ -1,23 +1,41 @@
-/* profile.wxss */
+/* profile.wxss — 北欧极简 · 暖色克制 */
 .container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg);
+  background: #fdf8f0;
 }
 
-/* 头部 - 复用 app.wxss .header-gradient,这里仅做页面级覆盖 */
+/* 顶部 — 不再使用大块橙色渐变，回到米底 */
 .header-gradient {
-  padding-bottom: 80rpx;
+  padding: 24rpx 32rpx 60rpx;
+  padding-top: calc(40rpx + env(safe-area-inset-top));
+  background: #fdf8f0;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-gradient::before {
+  content: "";
+  position: absolute;
+  top: -120rpx;
+  right: -100rpx;
+  width: 320rpx;
+  height: 320rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffe9c2, transparent 70%);
+  pointer-events: none;
 }
 
 .header-title {
-  font-size: 36rpx;
-  font-weight: 600;
+  font-size: 42rpx;
+  font-weight: 700;
   text-align: center;
-  color: #fff;
+  color: #3a2410;
+  letter-spacing: 6rpx;
   position: relative;
   z-index: 2;
+  font-family: "Hannotate SC", "Yuanti SC", "STKaiti", "KaiTi", "PingFang SC", sans-serif;
 }
 
 /* 未登录态 */
@@ -27,7 +45,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80rpx 48rpx;
+  padding: 60rpx 48rpx;
 }
 
 .avatar-placeholder {
@@ -36,12 +54,12 @@
   height: 180rpx;
   border-radius: 50%;
   overflow: hidden;
-  background-color: #f0f0f0;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-md);
-  border: 6rpx solid #fff;
+  border: 4rpx solid #fff;
+  box-shadow: 0 8rpx 24rpx rgba(168, 90, 21, 0.12);
 }
 
 .avatar-image {
@@ -51,9 +69,10 @@
 }
 
 .login-tip {
-  font-size: 28rpx;
-  color: var(--color-text-tertiary);
+  font-size: 26rpx;
+  color: #a08060;
   margin-bottom: 56rpx;
+  letter-spacing: 2rpx;
 }
 
 .login-button {
@@ -77,29 +96,31 @@
   width: 180rpx;
   height: 180rpx;
   border-radius: 50%;
-  background-color: #f0f0f0;
-  box-shadow: var(--shadow-md);
-  border: 6rpx solid #fff;
+  background: #fff;
+  border: 4rpx solid #fff;
+  box-shadow: 0 8rpx 24rpx rgba(168, 90, 21, 0.12);
 }
 
 .login-avatar-hint {
   font-size: 24rpx;
-  color: var(--color-text-tertiary);
+  color: #a08060;
   margin-top: 16rpx;
+  letter-spacing: 1rpx;
 }
 
 .login-nick-wrap {
   width: 80%;
   background: #fff;
-  border-radius: 16rpx;
+  border: 1rpx solid #f0e6d6;
+  border-radius: 20rpx;
   padding: 20rpx 28rpx;
   margin-bottom: 40rpx;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2rpx 12rpx rgba(168, 90, 21, 0.04);
 }
 
 .login-nick-input {
   font-size: 30rpx;
-  color: var(--color-text-primary);
+  color: #3a2410;
   width: 100%;
 }
 
@@ -121,8 +142,8 @@
   width: 128rpx;
   height: 128rpx;
   border-radius: 50%;
-  border: 4rpx solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.15);
+  border: 4rpx solid #fff;
+  box-shadow: 0 6rpx 16rpx rgba(168, 90, 21, 0.12);
 }
 
 .avatar-edit-icon {
@@ -131,7 +152,7 @@
   right: 0;
   width: 40rpx;
   height: 40rpx;
-  background-color: #ff8800;
+  background: #ff9020;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -148,14 +169,15 @@
 .user-name {
   font-size: 36rpx;
   font-weight: 700;
-  color: #fff;
-  margin-bottom: 6rpx;
-  letter-spacing: 0.5rpx;
+  color: #3a2410;
+  margin-bottom: 8rpx;
+  letter-spacing: 2rpx;
 }
 
 .user-id {
   font-size: 22rpx;
-  color: rgba(255, 255, 255, 0.85);
+  color: #a08060;
+  letter-spacing: 1rpx;
 }
 
 .edit-profile-btn {
@@ -177,11 +199,12 @@
 .stats-container {
   display: flex;
   justify-content: space-around;
-  background-color: #fff;
-  border-radius: var(--radius-md);
-  padding: 32rpx 16rpx;
+  background: #fff;
+  border: 1rpx solid #f0e6d6;
+  border-radius: 24rpx;
+  padding: 28rpx 16rpx;
   margin-bottom: 28rpx;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 2rpx 12rpx rgba(168, 90, 21, 0.04);
 }
 
 .stat-item {
@@ -196,23 +219,25 @@
   content: "";
   position: absolute;
   right: 0;
-  top: 16rpx;
-  bottom: 16rpx;
+  top: 12rpx;
+  bottom: 12rpx;
   width: 1rpx;
-  background-color: var(--color-divider);
+  background: #f0e6d6;
 }
 
 .stat-number {
   font-size: 40rpx;
   font-weight: 700;
-  color: var(--color-primary);
+  color: #ff9020;
   margin-bottom: 8rpx;
   line-height: 1;
+  font-family: "Hannotate SC", "Yuanti SC", "PingFang SC", sans-serif;
 }
 
 .stat-label {
   font-size: 22rpx;
-  color: var(--color-text-tertiary);
+  color: #a08060;
+  letter-spacing: 1rpx;
 }
 
 /* 订单段 */
@@ -225,11 +250,12 @@
 }
 
 .section-title {
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 600;
-  color: var(--color-text);
+  color: #3a2410;
   position: relative;
-  padding-left: 20rpx;
+  padding-left: 16rpx;
+  letter-spacing: 2rpx;
 }
 
 .section-title::before {
@@ -238,15 +264,16 @@
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 8rpx;
-  height: 28rpx;
+  width: 6rpx;
+  height: 24rpx;
   border-radius: 4rpx;
-  background: linear-gradient(180deg, #ff8800, #ffcc00);
+  background: #ff9020;
 }
 
 .section-more {
   font-size: 24rpx;
-  color: var(--color-primary);
+  color: #c25a1a;
+  letter-spacing: 1rpx;
 }
 
 /* 订单列表 */
@@ -255,32 +282,34 @@
 }
 
 .order-item {
-  background-color: #fff;
-  border-radius: var(--radius-md);
-  padding: 28rpx;
+  background: #fff;
+  border: 1rpx solid #f0e6d6;
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
   margin-bottom: 16rpx;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2rpx 12rpx rgba(168, 90, 21, 0.04);
   transition: all 0.2s ease;
 }
 
 .order-item:active {
   transform: scale(0.99);
-  box-shadow: var(--shadow-md);
+  background: #fdf8f0;
 }
 
 .order-item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18rpx;
-  padding-bottom: 16rpx;
-  border-bottom: 1rpx dashed var(--color-divider);
+  margin-bottom: 16rpx;
+  padding-bottom: 14rpx;
+  border-bottom: 1rpx dashed #f0e6d6;
 }
 
 .order-id {
-  font-size: 24rpx;
-  color: var(--color-text-tertiary);
+  font-size: 22rpx;
+  color: #a08060;
   font-weight: 500;
+  letter-spacing: 1rpx;
 }
 
 .order-status {
@@ -288,13 +317,14 @@
   padding: 6rpx 18rpx;
   border-radius: 999rpx;
   font-weight: 500;
+  letter-spacing: 1rpx;
 }
 
-.status-pending { background-color: #fffbe6; color: #faad14; }
-.status-approved { background-color: #e6f4ff; color: #1890ff; }
-.status-normal { background-color: #fff4e6; color: #ff8800; }
-.status-completed { background-color: #f0faf3; color: #52c41a; }
-.status-rejected { background-color: #fff1f0; color: #ff4d4f; }
+.status-pending { background: #fff4e6; color: #c25a1a; border: 1rpx solid #ffd8a8; }
+.status-approved { background: #eaf3ff; color: #2070d8; border: 1rpx solid #cce0f5; }
+.status-normal { background: #fff4e6; color: #ff9020; border: 1rpx solid #ffd8a8; }
+.status-completed { background: #eef7ee; color: #4a8a4a; border: 1rpx solid #c8e6c8; }
+.status-rejected { background: #fdecec; color: #d04848; border: 1rpx solid #f5cccc; }
 
 .order-item-content {
   display: flex;
@@ -309,20 +339,22 @@
 .order-role {
   font-size: 30rpx;
   font-weight: 600;
-  color: var(--color-text);
+  color: #3a2410;
   margin-bottom: 6rpx;
+  letter-spacing: 1rpx;
 }
 
 .order-time {
   font-size: 22rpx;
-  color: var(--color-text-tertiary);
+  color: #a08060;
 }
 
 .order-action {
-  color: var(--color-primary);
-  font-size: 26rpx;
+  color: #c25a1a;
+  font-size: 24rpx;
   font-weight: 500;
   padding-left: 16rpx;
+  letter-spacing: 1rpx;
 }
 
 /* 空状态 */
@@ -333,21 +365,23 @@
   justify-content: center;
   padding: 80rpx 0;
   background: #fff;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  border: 1rpx solid #f0e6d6;
+  border-radius: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(168, 90, 21, 0.04);
 }
 
 .empty-image {
-  width: 160rpx;
-  height: 160rpx;
+  width: 140rpx;
+  height: 140rpx;
   margin-bottom: 20rpx;
-  opacity: 0.4;
+  opacity: 0.5;
   border-radius: 50%;
 }
 
 .empty-text {
-  font-size: 26rpx;
-  color: var(--color-text-tertiary);
+  font-size: 24rpx;
+  color: #a08060;
+  letter-spacing: 1rpx;
 }
 
 /* 服务按钮 */
@@ -355,12 +389,12 @@
   margin-top: 24rpx;
 }
 
-.service-button {
+.service-button,
+.admin-button {
   width: 100%;
 }
 
 .admin-button {
-  width: 100%;
   margin-bottom: 24rpx;
 }
 
@@ -372,13 +406,23 @@
 }
 
 .admin-click-hint {
-  font-size: 24rpx;
-  color: var(--color-primary);
+  font-size: 22rpx;
+  color: #c25a1a;
+  letter-spacing: 1rpx;
+}
+
+/* 把 t-button primary 在该页强制为单色暖橙 */
+.primary-button {
+  background: #ff9020 !important;
+  border-radius: 999rpx !important;
+  box-shadow: 0 8rpx 20rpx rgba(255, 144, 32, 0.25) !important;
+  letter-spacing: 4rpx !important;
+  font-weight: 500 !important;
 }
 
 /* 编辑弹窗 */
 .edit-profile-popup {
-  background-color: #fff;
+  background: #fff;
   border-radius: 32rpx 32rpx 0 0;
   width: 100%;
   box-sizing: border-box;
@@ -391,13 +435,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 36rpx 32rpx 20rpx;
-  border-bottom: 1rpx solid var(--color-divider);
+  padding: 32rpx 32rpx 20rpx;
+  border-bottom: 1rpx solid #f5efe4;
 }
 
 .edit-profile-title {
-  font-size: 34rpx;
+  font-size: 32rpx;
   font-weight: 700;
+  color: #3a2410;
+  letter-spacing: 2rpx;
 }
 
 .edit-profile-content {
@@ -415,13 +461,14 @@
 }
 
 .section-title-small {
-  font-size: 28rpx;
+  font-size: 26rpx;
   font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 20rpx;
+  color: #3a2410;
+  margin-bottom: 18rpx;
   padding-left: 16rpx;
-  border-left: 6rpx solid var(--color-primary);
+  border-left: 6rpx solid #ff9020;
   line-height: 1.2;
+  letter-spacing: 2rpx;
 }
 
 .edit-avatar-section {
@@ -436,13 +483,14 @@
   height: 150rpx;
   border-radius: 50%;
   margin-bottom: 12rpx;
-  border: 4rpx solid #f5f5f5;
-  box-shadow: var(--shadow-sm);
+  border: 4rpx solid #fff;
+  box-shadow: 0 6rpx 16rpx rgba(168, 90, 21, 0.12);
 }
 
 .edit-avatar-hint {
-  font-size: 24rpx;
-  color: var(--color-primary);
+  font-size: 22rpx;
+  color: #c25a1a;
+  letter-spacing: 1rpx;
 }
 
 .edit-input-section {
@@ -452,6 +500,6 @@
 .edit-profile-footer {
   padding: 24rpx 32rpx 36rpx;
   padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
-  background-color: #fff;
-  border-top: 1rpx solid var(--color-divider);
+  background: #fff;
+  border-top: 1rpx solid #f5efe4;
 }

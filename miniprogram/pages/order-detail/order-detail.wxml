@@ -1,89 +1,87 @@
 <!--order-detail.wxml-->
 <view class="container">
-  <!-- 顶部导航 -->
-  <view class="header-gradient">
-    <view class="nav-header">
+  <!-- 顶部 -->
+  <view class="page-header">
+    <view class="nav-bar">
       <view class="back-button" bindtap="onBack">
-        <t-icon name="chevron-left" size="48rpx" color="#fff" />
+        <t-icon name="chevron-left" size="40rpx" color="#c25a1a" />
       </view>
       <text class="page-title">订单详情</text>
-      <image class="decoration-image" src="/assets/images/icon.jpg" mode="aspectFill"></image>
+      <view class="nav-placeholder"></view>
     </view>
   </view>
-  
-  <!-- 订单信息 -->
+
+  <!-- 订单信息卡 -->
   <view class="order-info-card">
-    <view class="info-item">
-      <text class="info-label">淘宝订单号</text>
-      <text class="info-value">{{order.tbOrderId}}</text>
+    <view class="card-head">
+      <view class="role-block">
+        <text class="role-name">{{order.roleName}}</text>
+        <text class="role-sub" wx:if="{{order.queueNumber}}">{{order.queueNumber}}</text>
+      </view>
+      <view class="status-pill {{order.status === 'urgent' ? 'pill-urgent' : order.status === 'completed' ? 'pill-done' : 'pill-normal'}}">
+        {{order.status === 'urgent' ? '加急' : order.status === 'completed' ? '已完成' : order.status === 'pending' ? '待审核' : '进行中'}}
+      </view>
     </view>
-    <view class="info-item">
-      <text class="info-label">排单号</text>
-      <text class="info-value">{{order.queueNumber}}</text>
-    </view>
-    <view class="info-item">
-      <text class="info-label">角色名称</text>
-      <text class="info-value">{{order.roleName}}</text>
-    </view>
-    <view class="info-item">
-      <text class="info-label">预期完成时间</text>
-      <text class="info-value text-primary">{{order.deadline}}</text>
+
+    <view class="info-grid">
+      <view class="info-item">
+        <text class="info-label">淘宝订单号</text>
+        <text class="info-value">{{order.tbOrderId}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">下单时间</text>
+        <text class="info-value">{{order.orderTime}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">预期完成</text>
+        <text class="info-value highlight">{{order.deadline}}</text>
+      </view>
     </view>
   </view>
-  
+
   <!-- 制作进度 -->
   <view class="progress-card">
-    <view class="card-title">制作进度</view>
-    
-    <view class="progress-container">
-      <view class="progress-bar">
-        <view class="progress-fill" style="width: {{progressPercent}}%"></view>
-      </view>
-      
-      <view class="progress-steps-vertical">
-        <view 
-          class="progress-step-vertical {{index <= currentStepIndex ? 'active' : 'inactive'}}" 
-          wx:for="{{steps}}" 
-          wx:key="index"
-        >
-          <view class="step-header">
-            <view class="progress-dot {{index <= currentStepIndex ? 'active' : 'inactive'}}"></view>
-            <text class="progress-label {{index <= currentStepIndex ? 'active' : 'inactive'}}">{{item.title}}</text>
-          </view>
-          <view class="step-content {{index <= currentStepIndex ? 'active' : 'inactive'}}">
-            {{item.content}}
-          </view>
-          <view class="step-line" wx:if="{{index < steps.length - 1}}"></view>
+    <view class="card-title">
+      <text class="title-text">制作进度</text>
+      <text class="title-pct">{{progressPercent}}%</text>
+    </view>
+
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+    </view>
+
+    <view class="steps">
+      <view
+        class="step {{index <= currentStepIndex ? 'active' : ''}} {{index === currentStepIndex ? 'current' : ''}}"
+        wx:for="{{steps}}"
+        wx:key="index"
+      >
+        <view class="step-marker">
+          <view class="dot"></view>
+          <view class="line" wx:if="{{index < steps.length - 1}}"></view>
         </view>
-      </view>
-    </view>
-    
-    <view class="current-status">
-      <view class="status-badge">
-        当前进度：{{steps[currentStepIndex].title}}
+        <view class="step-body">
+          <text class="step-title">{{item.title}}</text>
+          <text class="step-content">{{item.content}}</text>
+        </view>
+        <text class="step-tag" wx:if="{{index === currentStepIndex}}">进行中</text>
       </view>
     </view>
   </view>
-  
-  <!-- 预期成品图 -->
-  <view class="preview-card">
-    <view class="card-title">预期成品展示</view>
-    <image 
-      class="preview-image" 
-      src="{{order.previewImage || '/assets/images/icon.jpg'}}" 
-      mode="widthFix"
-    ></image>
+
+  <!-- 预期成品 -->
+  <view class="preview-card" wx:if="{{order.previewImage}}">
+    <view class="card-title">
+      <text class="title-text">预期成品</text>
+    </view>
+    <image class="preview-image" src="{{order.previewImage}}" mode="widthFix"></image>
   </view>
-  
+
   <!-- 联系客服 -->
   <view class="contact-button-container">
-    <t-button 
-      icon="chat" 
-      theme="primary" 
-      size="large" 
-      block 
-      bind:tap="onContactService"
-      class="primary-button"
-    >联系客服</t-button>
+    <view class="contact-btn" bindtap="onContactService">
+      <t-icon name="chat" size="32rpx" color="#fff" />
+      <text>联系客服</text>
+    </view>
   </view>
-</view> 
+</view>
