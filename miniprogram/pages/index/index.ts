@@ -11,6 +11,12 @@ Component({
     },
     hasUserInfo: false,
     logoUrl: '',
+
+    // 订单查询弹窗
+    showQueryPopup: false,
+    queryValue: '',
+    queryError: '',
+    demoOrderIds: ['TB123456789', 'TB987654321', 'TB456789123', 'TB789123456'],
   },
 
   lifetimes: {
@@ -53,34 +59,46 @@ Component({
 
     // 订单查询：通过淘宝订单号查询进度
     queryOrder() {
-      const validOrderIds = ['TB123456789', 'TB987654321', 'TB456789123', 'TB789123456'];
-      wx.showModal({
-        title: '订单查询',
-        editable: true,
-        placeholderText: '请输入淘宝订单号 (如 TB123456789)',
-        confirmText: '查询',
-        confirmColor: '#ff8800',
-        success: (res) => {
-          if (!res.confirm) return;
-          const tbOrderId = (res.content || '').trim();
-          if (!tbOrderId) {
-            wx.showToast({ title: '请输入订单号', icon: 'none' });
-            return;
-          }
-          if (!validOrderIds.includes(tbOrderId)) {
-            wx.showModal({
-              title: '未找到订单',
-              content: `未查询到订单号 ${tbOrderId}\n\n可使用以下测试订单号：\n${validOrderIds.join('\n')}`,
-              showCancel: false,
-              confirmText: '我知道了',
-              confirmColor: '#ff8800'
-            });
-            return;
-          }
-          wx.navigateTo({
-            url: `/pages/order-detail/order-detail?id=${tbOrderId}`
-          });
-        }
+      this.setData({
+        showQueryPopup: true,
+        queryValue: '',
+        queryError: ''
+      });
+    },
+
+    onQueryPopupClose() {
+      this.setData({ showQueryPopup: false });
+    },
+
+    onQueryInput(e: any) {
+      this.setData({
+        queryValue: e.detail.value,
+        queryError: ''
+      });
+    },
+
+    onQueryClear() {
+      this.setData({ queryValue: '', queryError: '' });
+    },
+
+    onQuickPick(e: any) {
+      const id = e.currentTarget.dataset.id;
+      this.setData({ queryValue: id, queryError: '' });
+    },
+
+    onQuerySubmit() {
+      const tbOrderId = (this.data.queryValue || '').trim();
+      if (!tbOrderId) {
+        this.setData({ queryError: '请输入订单号' });
+        return;
+      }
+      if (!this.data.demoOrderIds.includes(tbOrderId)) {
+        this.setData({ queryError: `未查询到订单号 ${tbOrderId}` });
+        return;
+      }
+      this.setData({ showQueryPopup: false });
+      wx.navigateTo({
+        url: `/pages/order-detail/order-detail?id=${tbOrderId}`
       });
     },
 

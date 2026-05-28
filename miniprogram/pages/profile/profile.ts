@@ -86,7 +86,11 @@ Component({
       neckCircumference: 0,
       shoulderWidth: 0
     }, // 临时存储编辑中的身材数据
-    tempAvatarPath: '' // 临时存储选择的头像路径
+    tempAvatarPath: '', // 临时存储选择的头像路径
+    loginForm: {
+      avatarUrl: '',     // chooseAvatar 返回的临时路径
+      nickName: ''       // nickname 输入框的值
+    }
   },
 
   lifetimes: {
@@ -174,102 +178,102 @@ Component({
       }
     },
     
-    // 获取用户信息并注册
-    async onGetUserInfo(e: any) {
-      if (e.detail.userInfo) {
-        try {
-          this.setData({ isLoading: true });
-          
-        const userInfo = e.detail.userInfo;
-          
-          // 调用云函数登录
-          const { result } = await wx.cloud.callFunction({
-            name: 'login',
-          }) as any;
-          
-          if (result && result.openid) {
-            // 生成用户ID
-            const userId = result.openid.slice(-8);
-            
-            // 创建用户资料
-            const userProfile: UserProfile = {
-              avatarUrl: userInfo.avatarUrl,
-              nickName: userInfo.nickName,
-              userId: userId,
-              createTime: Date.now()
-            };
-            
-            // 存储到云数据库
-            const db = wx.cloud.database();
-            
-            // 检查用户是否已存在
-            const userCheck = await db.collection('users').where({
-              _openid: result.openid
-            }).get();
-            
-            let isAdmin = false;
-            
-            if (userCheck.data.length === 0) {
-              // 新用户，添加到数据库
-              await db.collection('users').add({
-                data: userProfile
-              });
-            } else {
-              // 更新用户信息
-              const docId = userCheck.data[0]._id as string;
-              const existingUser = userCheck.data[0] as UserProfile;
-              
-              // 保留原有的isAdmin状态
-              isAdmin = existingUser.isAdmin || false;
-              
-              await db.collection('users').doc(docId).update({
-                data: {
-                  avatarUrl: userInfo.avatarUrl,
-                  nickName: userInfo.nickName,
-                  updateTime: Date.now()
-                }
-              });
-            }
-        
-        // 更新全局数据
-            globalApp.globalData.userInfo = userInfo;
-            globalApp.globalData.hasLogin = true;
-        
-        // 存储用户信息
-        wx.setStorageSync('userInfo', userInfo);
-        
-        this.setData({
-          hasLogin: true,
-              userInfo,
-              userId,
-              isAdmin
-        });
-        
-        // 加载订单数据
-        this.loadOrders();
-        
-        wx.showToast({
-          title: '登录成功',
-          icon: 'success'
-        });
-          }
-        } catch (error) {
-          console.error('登录失败', error);
-          wx.showToast({
-            title: '登录失败，请重试',
-            icon: 'none'
-          });
-        } finally {
-          this.setData({ isLoading: false });
-        }
-      } else {
-        wx.showToast({
-          title: '登录失败，请重试',
-          icon: 'none'
-        });
-      }
+    // 获取用户信息并注册（已废弃：微信 2022/10 后 getUserInfo 不再返回真实信息，改用 onLoginSubmit）
+    async onGetUserInfo(_e: any) {
+      this.onLoginSubmit();
     },
     
+    // 登录：选择头像（微信原生能力，返回临时文件路径）
+    onLoginChooseAvatar(e: any) {
+      const { avatarUrl } = e.detail || {};
+      if (avatarUrl) {
+        this.setData({ 'loginForm.avatarUrl': avatarUrl });
+      }
+    },
+
+    // 登录：昵称输入（type="nickname" 获焦时微信会展示用户昵称建议）
+    onLoginNicknameInput(e: any) {
+      this.setData({ 'loginForm.nickName': (e.detail.value || '').trim() });
+    },
+
+    // 登录：提交
+    async onLoginSubmit() {
+      const { avatarUrl, nickName } = this.data.loginForm;
+      if (!avatarUrl) {
+        wx.showToast({ title: '请先选择头像', icon: 'none' });
+        return;
+      }
+      if (!nickName) {
+        wx.showToast({ title: '请输入昵称', icon: 'none' });
+        return;
+      }
+
+      this.setData({ isLoading: true });
+      wx.showLoading({ title: '登录中...' });
+
+      try {
+        const { result } = await wx.cloud.callFunction({ name: 'login' }) as any;
+        if (!result || !result.openid) throw new Error('获取 openid 失败');
+        const openid = result.openid;
+        const userId = openid.slice(-8);
+
+        const ext = avatarUrl.match(/\.([^.?]+)(\?|$)/)?.[1] || 'png';
+        const cloudPath = `images/avatars/${userId}_${Date.now()}.${ext}`;
+        const up = await wx.cloud.uploadFile({ cloudPath, filePath: avatarUrl });
+        const cloudAvatar = up.fileID;
+
+        const db = wx.cloud.database();
+        const userCheck = await db.collection('users').where({ _openid: openid }).get();
+
+        let isAdmin = false;
+        if (userCheck.data.length === 0) {
+          await db.collection('users').add({
+            data: {
+              avatarUrl: cloudAvatar,
+              nickName,
+              userId,
+              createTime: Date.now()
+            }
+          });
+        } else {
+          const doc = userCheck.data[0] as UserProfile;
+          isAdmin = doc.isAdmin || false;
+          await db.collection('users').doc(doc._id as string).update({
+            data: {
+              avatarUrl: cloudAvatar,
+              nickName,
+              updateTime: Date.now()
+            }
+          });
+        }
+
+        const userInfo = { avatarUrl: cloudAvatar, nickName };
+        globalApp.globalData.userInfo = {
+          ...userInfo,
+          city: '', country: '', gender: 0, language: 'zh_CN', province: ''
+        } as any;
+        globalApp.globalData.hasLogin = true;
+        wx.setStorageSync('userInfo', userInfo);
+
+        this.setData({
+          hasLogin: true,
+          userInfo,
+          userId,
+          isAdmin,
+          loginForm: { avatarUrl: '', nickName: '' }
+        });
+
+        this.loadOrders();
+        wx.showToast({ title: '登录成功', icon: 'success' });
+      } catch (err) {
+        console.error('登录失败', err);
+        wx.showToast({ title: '登录失败，请重试', icon: 'none' });
+      } finally {
+        wx.hideLoading();
+        this.setData({ isLoading: false });
+      }
+    },
+
     // 加载订单数据
     async loadOrders() {
       try {

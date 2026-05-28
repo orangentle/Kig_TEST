@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>鼠鼠工坊 · 管理后台 · 操作指引</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #fff4e6 0%, #fff8f0 50%, #fff 100%);
+    min-height: 100vh;
+    padding: 60px 40px;
+    color: #222;
+  }
+  .doc {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  .doc-header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .doc-title {
+    font-size: 48px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ff7700, #ffaa33);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+  }
+  .doc-sub {
+    font-size: 18px;
+    color: #888;
+    margin-top: 10px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 60px;
+    align-items: flex-start;
+  }
+
+  /* 手机外框 */
+  .phone {
+    width: 420px;
+    border-radius: 50px;
+    background: #111;
+    padding: 16px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.25), 0 10px 30px rgba(255,136,0,0.15);
+    position: sticky;
+    top: 40px;
+  }
+  .phone-screen {
+    background: #f6f7fb;
+    border-radius: 36px;
+    overflow: hidden;
+    position: relative;
+    height: 820px;
+    overflow-y: auto;
+  }
+  .phone-screen::-webkit-scrollbar { display: none; }
+
+  /* 状态栏 */
+  .status-bar {
+    height: 36px;
+    background: linear-gradient(135deg, #ff8800 0%, #ffa733 60%, #ffc266 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* 顶部 */
+  .top-bar {
+    padding: 14px 14px 12px;
+    background: linear-gradient(135deg, #ff8800 0%, #ffa733 60%, #ffc266 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-size: 19px; font-weight: 700; }
+  .sub-title { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+  .icon-btn-r {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 18px; font-weight: 700;
+  }
+
+  /* 统计卡 */
+  .stats-wrap {
+    background: linear-gradient(180deg, #ffa733 0%, #ffa733 40%, #f6f7fb 40%);
+    padding: 6px 0 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .stats-wrap::-webkit-scrollbar { display: none; }
+  .stats-row {
+    display: inline-flex;
+    padding: 4px 14px;
+    gap: 8px;
+  }
+  .stat-card {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #fff;
+    padding: 10px 12px;
+    border-radius: 12px;
+    width: 80px;
+    box-shadow: 0 4px 12px rgba(20,24,40,0.06);
+  }
+  .stat-num { font-size: 18px; font-weight: 700; line-height: 1.1; }
+  .stat-label { font-size: 11px; color: #999; margin-top: 4px; }
+  .stat-card.total .stat-num { color: #ff8800; }
+  .stat-card.pending .stat-num { color: #faad14; }
+  .stat-card.processing .stat-num { color: #1890ff; }
+  .stat-card.urgent .stat-num { color: #ff4d4f; }
+  .stat-card.overdue .stat-num { color: #ff4d4f; }
+  .stat-card.completed .stat-num { color: #52c41a; }
+
+  /* 工具栏 */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px 6px;
+    gap: 6px;
+  }
+  .search-box {
+    flex: 1;
+    background: #fff;
+    border-radius: 18px;
+    padding: 7px 14px;
+    font-size: 12px;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .tool-btn {
+    background: #fff;
+    border-radius: 10px;
+    padding: 6px 8px;
+    font-size: 10px;
+    color: #666;
+    text-align: center;
+    min-width: 40px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .tool-btn.active { background: #fff4e6; color: #ff8800; }
+  .tool-icon { font-size: 16px; display: block; }
+
+  /* tabs */
+  .tabs {
+    padding: 6px 0 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs-row { display: inline-flex; padding: 0 12px; gap: 6px; }
+  .chip {
+    background: #fff;
+    color: #666;
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .chip-active {
+    background: linear-gradient(135deg, #ff8800, #ffaa33);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(255,136,0,0.3);
+  }
+
+  /* 列表头 */
+  .list-meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 14px 8px;
+    font-size: 12px;
+    color: #999;
+  }
+  .list-select-all { color: #ff8800; font-weight: 500; }
+
+  /* 订单卡 */
+  .order-list { padding: 0 12px 80px; }
+  .order-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 12px 14px 12px 18px;
+    margin-bottom: 10px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    gap: 10px;
+  }
+  .order-card.urgent {
+    background: linear-gradient(90deg, #fff5f5 0%, #fff 30%);
+  }
+  .order-card.selected {
+    background: #fff8f0;
+    box-shadow: 0 0 0 1.5px #ff8800, 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .stripe {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px; border-radius: 14px 0 0 14px;
+  }
+  .stripe-normal { background: #d0d0d0; }
+  .stripe-urgent { background: #ff4d4f; }
+  .stripe-pending { background: #faad14; }
+  .stripe-completed { background: #52c41a; }
+
+  .checkbox {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #d0d0d0;
+    background: #fff;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .checkbox.on {
+    background: #ff8800;
+    border-color: #ff8800;
+    color: #fff;
+    text-align: center;
+    line-height: 18px;
+    font-size: 12px;
+  }
+  .checkbox.on::after { content: "✓"; }
+
+  .card-body { flex: 1; min-width: 0; }
+  .row1 {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4px;
+  }
+  .role { font-size: 15px; font-weight: 600; }
+  .pill {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .pill-normal { background: #fff4e6; color: #ff8800; }
+  .pill-urgent { background: #fff1f0; color: #ff4d4f; }
+  .pill-pending { background: #fffbe6; color: #faad14; }
+  .pill-completed { background: #f0faf3; color: #52c41a; }
+
+  .row2 { font-size: 12px; color: #777; margin-bottom: 6px; }
+  .row2 .dot { color: #ccc; margin: 0 6px; }
+  .row2 .tb-id { color: #aaa; font-size: 11px; }
+
+  .progress-mini {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+  }
+  .bar {
+    flex: 1; height: 4px; background: #f0f0f0; border-radius: 999px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff8800, #ffcc33);
+    border-radius: 999px;
+  }
+  .progress-num { font-size: 11px; color: #666; font-weight: 600; }
+
+  .row4 {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: #aaa;
+  }
+
+  /* 批量操作栏 */
+  .batch-bar {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    background: #fff;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+    padding: 8px 0 12px;
+  }
+  .batch-info {
+    display: flex; justify-content: space-between;
+    padding: 4px 16px 6px;
+    font-size: 12px;
+    color: #666; font-weight: 600;
+  }
+  .batch-clear { color: #ff8800; }
+  .batch-row {
+    display: flex; gap: 8px;
+    padding: 0 12px;
+    overflow-x: auto;
+  }
+  .batch-row::-webkit-scrollbar { display: none; }
+  .batch-btn {
+    background: #f7f8fa;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 10px;
+    color: #666;
+    min-width: 64px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .batch-btn .ic { display: block; font-size: 18px; margin-bottom: 2px; }
+
+  /* ============ 右侧操作指引 ============ */
+  .guide {
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px 50px;
+    box-shadow: 0 20px 60px rgba(20,24,40,0.06);
+  }
+  .guide h2 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: #222;
+  }
+  .guide h2 span {
+    color: #ff8800;
+  }
+  .guide-intro {
+    font-size: 15px;
+    color: #888;
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+
+  .feature {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #eef0f4;
+  }
+  .feature:last-child { border-bottom: none; }
+  .feature-num {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff8800, #ffaa33);
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(255,136,0,0.3);
+  }
+  .feature-body { flex: 1; }
+  .feature-title {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #222;
+  }
+  .feature-title .tag {
+    display: inline-block;
+    background: #fff4e6;
+    color: #ff8800;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 8px;
+    font-weight: 500;
+    vertical-align: middle;
+  }
+  .feature-desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .feature-list {
+    background: #fafbfc;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.9;
+    border-left: 3px solid #ff8800;
+  }
+  .feature-list b { color: #ff8800; font-weight: 600; }
+  .kbd {
+    display: inline-block;
+    background: #f0f0f0;
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-size: 12px;
+    font-family: Monaco, monospace;
+    color: #555;
+  }
+
+  .summary {
+    margin-top: 40px;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, #fff8f0 0%, #fff4e6 100%);
+    border-radius: 16px;
+    border-left: 4px solid #ff8800;
+  }
+  .summary-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff8800;
+    margin-bottom: 10px;
+  }
+  .summary p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-title">鼠鼠工坊 · 管理后台</div>
+    <div class="doc-sub">订单批量管理 · 操作指引</div>
+  </div>
+
+  <div class="layout">
+
+    <!-- 手机端示意 -->
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span>●●● 100%</span>
+        </div>
+
+        <!-- 顶部 -->
+        <div class="top-bar">
+          <div>
+            <div class="brand">鼠鼠工坊</div>
+            <div class="sub-title">管理后台</div>
+          </div>
+          <div class="icon-btn-r">+</div>
+        </div>
+
+        <!-- 概览卡 -->
+        <div class="stats-wrap">
+          <div class="stats-row">
+            <div class="stat-card total"><span class="stat-num">50</span><span class="stat-label">订单总数</span></div>
+            <div class="stat-card pending"><span class="stat-num">5</span><span class="stat-label">待审核</span></div>
+            <div class="stat-card processing"><span class="stat-num">33</span><span class="stat-label">制作中</span></div>
+            <div class="stat-card urgent"><span class="stat-num">7</span><span class="stat-label">加急</span></div>
+            <div class="stat-card overdue"><span class="stat-num">4</span><span class="stat-label">已逾期</span></div>
+            <div class="stat-card completed"><span class="stat-num">6</span><span class="stat-label">已完成</span></div>
+          </div>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="toolbar">
+          <div class="search-box">🔍 订单号/客户/角色</div>
+          <div class="tool-btn"><span class="tool-icon">⇅</span>排序</div>
+          <div class="tool-btn"><span class="tool-icon">⛀</span>筛选</div>
+          <div class="tool-btn active"><span class="tool-icon">✓</span>退出</div>
+        </div>
+
+        <!-- tabs -->
+        <div class="tabs">
+          <div class="tabs-row">
+            <div class="chip chip-active">全部</div>
+            <div class="chip">待审核</div>
+            <div class="chip">加急</div>
+            <div class="chip">逾期</div>
+            <div class="chip">订单确认</div>
+            <div class="chip">设计</div>
+            <div class="chip">模型</div>
+            <div class="chip">打印</div>
+            <div class="chip">打磨</div>
+          </div>
+        </div>
+
+        <div class="list-meta">
+          <span>共 50 条</span>
+          <span class="list-select-all">取消全选</span>
+        </div>
+
+        <!-- 订单列表 -->
+        <div class="order-list">
+          <div class="order-card urgent selected">
+            <div class="stripe stripe-urgent"></div>
+            <div class="checkbox on"></div>
+            <div class="card-body">
+              <div class="row1">
+                <span class="role">狐狸头壳</span>
+                <span class="pill pill-urgent">加急</span>
+              </div>
+              <div class="row2">
+                <b>王小明</b><span class="dot">·</span><span class="tb-id">TB123456789</span>
+              </div>
+              <div class="progress-mini">
+                <div class="bar"><div class="bar-fill" style="width:50%"></div></div>
+                <span class="progress-num">50%</span>
+              </div>
+              <div class="row4">
+                <span>下单 2025-10-15</span><span>截止 2025-12-30</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-card selected">
+            <div class="stripe stripe-normal"></div>
+            <div class="checkbox on"></div>
+            <div class="card-body">
+              <div class="row1">
+                <span class="role">兔子头壳</span>
+                <span class="pill pill-normal">质检</span>
+              </div>
+              <div class="row2">
+                <b>张小华</b><span class="dot">·</span><span class="tb-id">TB456789123</span>
+              </div>
+              <div class="progress-mini">
+                <div class="bar"><div class="bar-fill" style="width:90%"></div></div>
+                <span class="progress-num">90%</span>
+              </div>
+              <div class="row4">
+                <span>下单 2025-09-20</span><span>截止 2025-12-10</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-card">
+            <div class="stripe stripe-pending"></div>
+            <div class="checkbox"></div>
+            <div class="card-body">
+              <div class="row1">
+                <span class="role">小狼头壳</span>
+                <span class="pill pill-pending">待审核</span>
+              </div>
+              <div class="row2">
+                <b>孙小丽</b><span class="dot">·</span><span class="tb-id">TB222333444</span>
+              </div>
+              <div class="progress-mini">
+                <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
+                <span class="progress-num">0%</span>
+              </div>
+              <div class="row4">
+                <span>下单 2025-11-25</span><span>截止 2026-03-01</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-card">
+            <div class="stripe stripe-completed"></div>
+            <div class="checkbox"></div>
+            <div class="card-body">
+              <div class="row1">
+                <span class="role">甘雨头壳</span>
+                <span class="pill pill-completed">已完成</span>
+              </div>
+              <div class="row2">
+                <b>李小红</b><span class="dot">·</span><span class="tb-id">TB987654321</span>
+              </div>
+              <div class="progress-mini">
+                <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
+                <span class="progress-num">100%</span>
+              </div>
+              <div class="row4">
+                <span>下单 2025-08-10</span><span>截止 2025-11-15</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 批量操作栏 -->
+        <div class="batch-bar">
+          <div class="batch-info">
+            <span>已选 2 条</span>
+            <span class="batch-clear">清空</span>
+          </div>
+          <div class="batch-row">
+            <div class="batch-btn"><span class="ic">→</span>推进阶段</div>
+            <div class="batch-btn"><span class="ic">⊙</span>设为阶段</div>
+            <div class="batch-btn"><span class="ic">!</span>设加急</div>
+            <div class="batch-btn"><span class="ic">⊘</span>取消加急</div>
+            <div class="batch-btn"><span class="ic">#</span>分配排单号</div>
+            <div class="batch-btn"><span class="ic">▣</span>归档</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 操作指引 -->
+    <div class="guide">
+      <h2>核心功能 <span>·</span> 6 项</h2>
+      <p class="guide-intro">
+        管理后台围绕"千级订单"场景设计，支持分页加载、多维筛选、批量操作。<br>
+        所有写操作通过云函数 <b>batchUpdateOrders</b> 校验管理员权限，操作日志写入 updateTime。
+      </p>
+
+      <div class="feature">
+        <div class="feature-num">1</div>
+        <div class="feature-body">
+          <div class="feature-title">概览卡 <span class="tag">点击即筛选</span></div>
+          <div class="feature-desc">
+            顶部 7 张统计卡显示订单总数、待审核、制作中、加急、逾期、已完成、已归档。
+          </div>
+          <div class="feature-list">
+            <b>使用：</b>点任意一张卡 → 自动切换对应 tab/筛选条件<br>
+            <b>例：</b>点"加急" → 列表只显示 isUrgent=true 的订单
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-num">2</div>
+        <div class="feature-body">
+          <div class="feature-title">搜索 + 筛选 + 排序</div>
+          <div class="feature-desc">
+            支持模糊搜索订单号/客户/角色；按下单日期筛选；多维排序。
+          </div>
+          <div class="feature-list">
+            <b>搜索：</b>顶部搜索框输入 → 回车<br>
+            <b>排序：</b>"排序"按钮 → 最新下单 / 即将到期 / 进度靠前/后<br>
+            <b>筛选：</b>"筛选"按钮 → 起止日期 / 是否包含已归档
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-num">3</div>
+        <div class="feature-body">
+          <div class="feature-title">阶段标签 <span class="tag">12 个 tab</span></div>
+          <div class="feature-desc">
+            全部 / 待审核 / 加急 / 逾期 + 8 个制作阶段（订单确认 → 发货）。
+          </div>
+          <div class="feature-list">
+            <b>使用：</b>横滑切换 tab → 列表实时刷新<br>
+            <b>分页：</b>每页 20 条，下滑触底自动加载更多
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-num">4</div>
+        <div class="feature-body">
+          <div class="feature-title">多选 + 批量操作 <span class="tag">核心</span></div>
+          <div class="feature-desc">
+            点"多选"或长按任一订单进入多选模式。批量操作单次最多 500 条。
+          </div>
+          <div class="feature-list">
+            <b>进入多选：</b>顶部"多选"按钮 / 长按订单卡<br>
+            <b>勾选订单：</b>点卡片左侧圆点 / 点"全选本页"<br>
+            <b>批量操作（底部浮窗）：</b><br>
+            　• <b>推进阶段</b> — 把所选订单各自往下一阶段推一格<br>
+            　• <b>设为阶段</b> — 指定阶段（如全部设到"打印中"）<br>
+            　• <b>设/取消加急</b> — 切换 isUrgent + status<br>
+            　• <b>分配排单号</b> — 自动生成 RatStudio-2026-NNN 序列<br>
+            　• <b>归档</b> — 从主列表移除（不删除数据）
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-num">5</div>
+        <div class="feature-body">
+          <div class="feature-title">单订单操作</div>
+          <div class="feature-desc">
+            非多选模式下，点订单卡进入详情页，可单独修改字段、查看历史。
+          </div>
+          <div class="feature-list">
+            <b>点订单：</b>跳转到订单详情（admin 模式，含编辑入口）<br>
+            <b>色条：</b>灰=普通 / 红=加急 / 黄=待审 / 绿=完成
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-num">6</div>
+        <div class="feature-body">
+          <div class="feature-title">新增订单 + 审核 + 作品 + 导出</div>
+          <div class="feature-desc">
+            右上角"+"按钮打开操作菜单。
+          </div>
+          <div class="feature-list">
+            <b>新增订单：</b>表单填写淘宝单号/客户/角色/截止日期/预览图<br>
+            <b>订单审核：</b>跳转待审核订单专属页<br>
+            <b>作品管理：</b>跳转完成作品维护页<br>
+            <b>导出数据：</b>Excel 导出（开发中）
+          </div>
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="summary-title">⚡ 性能 & 安全</div>
+        <p>
+          列表分页 20 条/页 + 复合索引（isArchived+stage+createTime）支撑千级订单秒级响应。<br>
+          所有批量写操作经云函数 <b>batchUpdateOrders</b> 校验：仅 users 集合中 isAdmin=true 的账号可调用。
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

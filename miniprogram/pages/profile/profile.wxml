@@ -5,21 +5,46 @@
     <view class="header-gradient">
       <text class="header-title">个人中心</text>
     </view>
-    
+
     <view class="login-container">
-      <view class="avatar-placeholder">
-        <image class="avatar-image" src="/assets/images/icon.jpg" mode="aspectFill"></image>
+      <text class="login-tip">完善头像和昵称即可登录</text>
+
+      <!-- 头像：微信原生 chooseAvatar 能力 -->
+      <button
+        class="login-avatar-btn"
+        open-type="chooseAvatar"
+        bindchooseavatar="onLoginChooseAvatar"
+      >
+        <image
+          class="login-avatar-image"
+          src="{{loginForm.avatarUrl || '/assets/images/icon.jpg'}}"
+          mode="aspectFill"
+        ></image>
+        <text class="login-avatar-hint">{{loginForm.avatarUrl ? '点击更换头像' : '点击选择头像'}}</text>
+      </button>
+
+      <!-- 昵称：使用 type="nickname"，获焦时微信会展示昵称建议 -->
+      <view class="login-nick-wrap">
+        <input
+          class="login-nick-input"
+          type="nickname"
+          placeholder="请输入昵称"
+          value="{{loginForm.nickName}}"
+          bindinput="onLoginNicknameInput"
+          bindblur="onLoginNicknameInput"
+        />
       </view>
-      <text class="login-tip">登录后查看您的订单信息</text>
-      <t-button 
-        theme="primary" 
-        size="large" 
-        shape="round" 
-        open-type="getUserInfo" 
-        bindgetuserinfo="onGetUserInfo"
+
+      <t-button
+        theme="primary"
+        size="large"
+        shape="round"
+        block
+        loading="{{isLoading}}"
+        bind:tap="onLoginSubmit"
         class="login-button primary-button"
       >
-        微信一键登录
+        登录
       </t-button>
     </view>
   </block>

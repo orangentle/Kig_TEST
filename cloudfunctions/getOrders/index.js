@@ -56,7 +56,7 @@ exports.main = async (event) => {
     }
     if (overdueOnly) {
       condition.deadline = _.lt(new Date());
-      condition.stage = _.neq('shipping');
+      condition.stage = _.neq('shipped');
     }
 
     let query = ordersCollection.where(condition);

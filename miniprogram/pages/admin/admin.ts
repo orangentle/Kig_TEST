@@ -28,14 +28,11 @@ interface OverviewStats {
 }
 
 const STAGE_OPTIONS = [
-  { value: 'confirm',  label: '订单确认',   percent: 10 },
-  { value: 'design',   label: '设计图确认', percent: 20 },
-  { value: 'model',    label: '模型制作',   percent: 30 },
-  { value: 'print',    label: '打印中',     percent: 50 },
-  { value: 'polish',   label: '打磨上色',   percent: 70 },
-  { value: 'assembly', label: '组装',       percent: 80 },
-  { value: 'quality',  label: '质检',       percent: 90 },
-  { value: 'shipping', label: '发货',       percent: 100 }
+  { value: 'queued',   label: '已排单', percent: 10 },
+  { value: 'modeling', label: '建模',   percent: 30 },
+  { value: 'painting', label: '上妆',   percent: 55 },
+  { value: 'hair',     label: '假毛',   percent: 80 },
+  { value: 'shipped',  label: '已发货', percent: 100 }
 ];
 
 const TABS = [
@@ -43,14 +40,11 @@ const TABS = [
   { key: 'pending',  label: '待审核' },
   { key: 'urgent',   label: '加急' },
   { key: 'overdue',  label: '逾期' },
-  { key: 'confirm',  label: '订单确认' },
-  { key: 'design',   label: '设计' },
-  { key: 'model',    label: '模型' },
-  { key: 'print',    label: '打印' },
-  { key: 'polish',   label: '打磨' },
-  { key: 'assembly', label: '组装' },
-  { key: 'quality',  label: '质检' },
-  { key: 'shipping', label: '发货' }
+  { key: 'queued',   label: '已排单' },
+  { key: 'modeling', label: '建模' },
+  { key: 'painting', label: '上妆' },
+  { key: 'hair',     label: '假毛' },
+  { key: 'shipped',  label: '已发货' }
 ];
 
 Component({
@@ -101,7 +95,7 @@ Component({
     orderForm: {
       tbOrderId: '', queueNumber: '', customerName: '', roleName: '',
       orderTime: '', deadline: '',
-      progressPercent: 10, progressStage: '订单确认', stage: 'confirm',
+      progressPercent: 10, progressStage: '已排单', stage: 'queued',
       isUrgent: false, previewImage: ''
     },
     todayDate: '',
@@ -244,12 +238,12 @@ Component({
 
     loadMockOrders() {
       const mock: OrderItem[] = [
-        { _id: 'm1', tbOrderId: 'TB456789123', queueNumber: 'RS-2025-001', customerName: '张小华', roleName: '兔子头壳', status: 'soon', progressStage: '质检', progressPercent: 90, orderTime: '2025-09-20', deadline: '2025-12-10', stage: 'quality', isUrgent: false },
-        { _id: 'm2', tbOrderId: 'TB123456789', queueNumber: 'RS-2025-002', customerName: '王小明', roleName: '狐狸头壳', status: 'urgent', progressStage: '打印中', progressPercent: 50, orderTime: '2025-10-15', deadline: '2025-12-30', stage: 'print', isUrgent: true },
-        { _id: 'm3', tbOrderId: 'TB987654321', queueNumber: 'RS-2025-003', customerName: '李小红', roleName: '猫咪头壳', status: 'normal', progressStage: '模型制作', progressPercent: 30, orderTime: '2025-11-05', deadline: '2026-01-15', stage: 'model', isUrgent: false },
-        { _id: 'm4', tbOrderId: 'TB789123456', queueNumber: 'RS-2025-004', customerName: '赵小刚', roleName: '熊猫头壳', status: 'normal', progressStage: '设计图确认', progressPercent: 20, orderTime: '2025-11-20', deadline: '2026-02-10', stage: 'design', isUrgent: false },
-        { _id: 'm5', tbOrderId: 'TB555000111', queueNumber: 'RS-2025-005', customerName: '钱小光', roleName: '柴犬头壳', status: 'normal', progressStage: '打磨上色', progressPercent: 70, orderTime: '2025-10-28', deadline: '2025-12-20', stage: 'polish', isUrgent: false },
-        { _id: 'm6', tbOrderId: 'TB222333444', queueNumber: '', customerName: '孙小丽', roleName: '小狼头壳', status: 'pending', progressStage: '待审核', progressPercent: 0, orderTime: '2025-11-25', deadline: '2026-03-01', stage: 'confirm', isUrgent: false }
+        { _id: 'm1', tbOrderId: 'TB456789123', queueNumber: 'RS-2025-001', customerName: '张小华', roleName: '兔子头壳', status: 'soon', progressStage: '假毛', progressPercent: 80, orderTime: '2025-09-20', deadline: '2025-12-10', stage: 'hair', isUrgent: false },
+        { _id: 'm2', tbOrderId: 'TB123456789', queueNumber: 'RS-2025-002', customerName: '王小明', roleName: '狐狸头壳', status: 'urgent', progressStage: '建模', progressPercent: 30, orderTime: '2025-10-15', deadline: '2025-12-30', stage: 'modeling', isUrgent: true },
+        { _id: 'm3', tbOrderId: 'TB987654321', queueNumber: 'RS-2025-003', customerName: '李小红', roleName: '猫咪头壳', status: 'normal', progressStage: '建模', progressPercent: 30, orderTime: '2025-11-05', deadline: '2026-01-15', stage: 'modeling', isUrgent: false },
+        { _id: 'm4', tbOrderId: 'TB789123456', queueNumber: 'RS-2025-004', customerName: '赵小刚', roleName: '熊猫头壳', status: 'normal', progressStage: '已排单', progressPercent: 10, orderTime: '2025-11-20', deadline: '2026-02-10', stage: 'queued', isUrgent: false },
+        { _id: 'm5', tbOrderId: 'TB555000111', queueNumber: 'RS-2025-005', customerName: '钱小光', roleName: '柴犬头壳', status: 'normal', progressStage: '上妆', progressPercent: 55, orderTime: '2025-10-28', deadline: '2025-12-20', stage: 'painting', isUrgent: false },
+        { _id: 'm6', tbOrderId: 'TB222333444', queueNumber: '', customerName: '孙小丽', roleName: '小狼头壳', status: 'pending', progressStage: '待审核', progressPercent: 0, orderTime: '2025-11-25', deadline: '2026-03-01', stage: 'queued', isUrgent: false }
       ];
       this.setData({
         orders: mock,
@@ -442,6 +436,17 @@ Component({
       this.runBatch('assign-queue');
     },
 
+    onBatchUnlock() {
+      wx.showModal({
+        title: '解锁订单',
+        content: `解锁所选 ${this.data.selectedIds.length} 条订单，允许客户修改？`,
+        confirmColor: '#ff8800',
+        success: (res) => {
+          if (res.confirm) this.runBatch('unlock');
+        }
+      });
+    },
+
     onBatchSetStageOpen() {
       this.setData({ showBatchStagePopup: true });
     },
@@ -489,7 +494,7 @@ Component({
         orderForm: {
           tbOrderId: '', queueNumber: '', customerName: '', roleName: '',
           orderTime: this.data.todayDate, deadline: '',
-          progressPercent: 10, progressStage: '订单确认', stage: 'confirm',
+          progressPercent: 10, progressStage: '已排单', stage: 'queued',
           isUrgent: false, previewImage: ''
         },
         tempImagePath: '', uploadProgress: 0, stageIndex: 0

@@ -42,14 +42,11 @@ Page({
     currentStepIndex: 0, // 当前步骤索引
     progressPercent: 0, // 进度百分比
     steps: [
-      { title: '订单确认', content: '确认订单信息和需求' },
-      { title: '设计图确认', content: '确认头壳设计图纸' },
-      { title: '模型制作', content: '根据设计图制作3D模型' },
-      { title: '打印', content: '3D打印头壳部件' },
-      { title: '打磨上色', content: '对打印件进行打磨和上色' },
-      { title: '组装', content: '组装头壳各部件' },
-      { title: '质检', content: '对成品进行质量检查' },
-      { title: '发货', content: '包装并发货' }
+      { title: '已排单', content: '订单确认，进入制作排队' },
+      { title: '建模', content: '3D 建模与打印' },
+      { title: '上妆', content: '打磨、喷漆与细节处理' },
+      { title: '假毛', content: '毛发种植与造型' },
+      { title: '已发货', content: '质检后包装并发出' }
     ] as Step[],
     isAdmin: false
   },
@@ -92,13 +89,11 @@ Page({
           
           // 将制作阶段转换为步骤索引
           const stageToIndex = {
-            'design': 1,
-            'model': 2,
-            'print': 3,
-            'polish': 4,
-            'assembly': 5,
-            'quality': 6,
-            'shipping': 7
+            'queued': 0,
+            'modeling': 1,
+            'painting': 2,
+            'hair': 3,
+            'shipped': 4
           };
           
           const currentStepIndex = stageToIndex[orderData.stage] || 0;
@@ -141,8 +136,8 @@ Page({
         orderTime: '2025-11-05',
         deadline: '2025-11-15',
         progressPercent: 30,
-        progressStage: '模型制作',
-        stage: 'model',
+        progressStage: '建模',
+        stage: 'modeling',
         status: 'normal',
         previewImage: ''
       };
@@ -156,13 +151,13 @@ Page({
         roleName: '兔子头壳',
         orderTime: '2025-09-20',
         deadline: '2025-10-20',
-        progressPercent: 90,
-        progressStage: '质检',
-        stage: 'quality',
+        progressPercent: 80,
+        progressStage: '假毛',
+        stage: 'hair',
         status: 'soon',
         previewImage: ''
       };
-      progressPercent = 90;
+      progressPercent = 80;
     } else if (tbOrderId === 'TB789123456') {
       mockData = {
         tbOrderId: 'TB789123456',
@@ -172,13 +167,13 @@ Page({
         roleName: '熊猫头壳',
         orderTime: '2025-11-20',
         deadline: '2025-02-10',
-        progressPercent: 20,
-        progressStage: '设计图确认',
-        stage: 'design',
+        progressPercent: 10,
+        progressStage: '已排单',
+        stage: 'queued',
         status: 'normal',
         previewImage: ''
       };
-      progressPercent = 20;
+      progressPercent = 10;
     } else if (tbOrderId === 'TB123456789') {
       mockData = {
         tbOrderId: 'TB123456789',
@@ -188,13 +183,13 @@ Page({
         roleName: '狐狸头壳',
         orderTime: '2025-10-15',
         deadline: '2025-12-30',
-        progressPercent: 50,
-        progressStage: '打印中',
-        stage: 'print',
+        progressPercent: 55,
+        progressStage: '上妆',
+        stage: 'painting',
         status: 'urgent',
         previewImage: ''
       };
-      progressPercent = 50;
+      progressPercent = 55;
     } else {
       // 默认数据
       mockData = {
@@ -206,8 +201,8 @@ Page({
         orderTime: '未知',
         deadline: '未定',
         progressPercent: 10,
-        progressStage: '订单确认',
-        stage: 'confirm',
+        progressStage: '已排单',
+        stage: 'queued',
         status: 'normal',
         previewImage: ''
       };
@@ -224,16 +219,13 @@ Page({
   // 根据阶段获取步骤索引
   getStepIndexFromStage(stage: string): number {
     const stageToIndex = {
-      'confirm': 0,
-      'design': 1,
-      'model': 2,
-      'print': 3,
-      'polish': 4,
-      'assembly': 5,
-      'quality': 6,
-      'shipping': 7
+      'queued': 0,
+      'modeling': 1,
+      'painting': 2,
+      'hair': 3,
+      'shipped': 4
     };
-    
+
     return stageToIndex[stage] || 0;
   },
   

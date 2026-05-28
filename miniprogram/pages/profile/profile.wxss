@@ -60,6 +60,49 @@
   width: 80%;
 }
 
+/* 新登录流程：头像按钮 + 昵称输入 */
+.login-avatar-btn {
+  padding: 0;
+  margin: 0 0 24rpx;
+  background: transparent;
+  line-height: normal;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login-avatar-btn::after { border: none; }
+
+.login-avatar-image {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  box-shadow: var(--shadow-md);
+  border: 6rpx solid #fff;
+}
+
+.login-avatar-hint {
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+  margin-top: 16rpx;
+}
+
+.login-nick-wrap {
+  width: 80%;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 28rpx;
+  margin-bottom: 40rpx;
+  box-shadow: var(--shadow-sm);
+}
+
+.login-nick-input {
+  font-size: 30rpx;
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
 /* 已登录头部 */
 .user-info-container {
   padding: 8rpx 4rpx 0;

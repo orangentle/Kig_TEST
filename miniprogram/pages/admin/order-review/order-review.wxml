@@ -29,8 +29,8 @@
             <text class="value">{{item.roleName}}</text>
           </view>
           <view class="info-row">
-            <text class="label">来源作品:</text>
-            <text class="value">{{item.sourceWork}}</text>
+            <text class="label">角色IP:</text>
+            <text class="value">{{item.ip || item.sourceWork}}</text>
           </view>
           <view class="info-row">
             <text class="label">用户昵称:</text>
@@ -47,11 +47,10 @@
         </view>
         
         <view class="order-options">
-          <t-tag size="small" variant="outline" wx:if="{{item.options.needReplaceFace}}">替换脸</t-tag>
-          <t-tag size="small" variant="outline" wx:if="{{item.options.needHeadwear}}">头饰</t-tag>
-          <t-tag size="small" variant="outline" wx:if="{{item.options.needAntiGravity}}">反重力</t-tag>
-          <t-tag size="small" variant="outline" wx:if="{{item.options.needCornsilkPerm}}">玉米须烫发</t-tag>
-          <t-tag size="small" theme="danger" wx:if="{{item.isUrgent || item.options.isUrgent}}">加急+1000</t-tag>
+          <t-tag size="small" variant="outline" wx:if="{{item.options.needAccessory || item.options.needHeadwear}}">配饰</t-tag>
+          <t-tag size="small" variant="outline" wx:if="{{item.options.needReplaceFace}}">替换脸×{{item.options.replaceFaceCount || 1}}</t-tag>
+          <t-tag size="small" theme="danger" wx:if="{{item.isUrgent || item.options.isUrgent}}">加急+1200</t-tag>
+          <t-tag size="small" theme="warning" variant="light" wx:if="{{item.isLocked}}">已锁定</t-tag>
         </view>
         
         <view class="order-time">
@@ -93,8 +92,8 @@
             <text class="value">{{currentOrder.roleName}}</text>
           </view>
           <view class="detail-row">
-            <text class="label">来源作品:</text>
-            <text class="value">{{currentOrder.sourceWork}}</text>
+            <text class="label">角色IP:</text>
+            <text class="value">{{currentOrder.ip || currentOrder.sourceWork}}</text>
           </view>
         </view>
         
@@ -134,10 +133,6 @@
               <text class="body-value">{{currentOrder.bodyMeasurements.headCircumference || '-'}} cm</text>
             </view>
             <view class="body-item">
-              <text class="body-label">颈围</text>
-              <text class="body-value">{{currentOrder.bodyMeasurements.neckCircumference || '-'}} cm</text>
-            </view>
-            <view class="body-item">
               <text class="body-label">肩宽</text>
               <text class="body-value">{{currentOrder.bodyMeasurements.shoulderWidth || '-'}} cm</text>
             </view>
@@ -147,22 +142,35 @@
         <view class="detail-section">
           <view class="section-title">定制选项</view>
           <view class="options-grid">
+            <view class="option-item {{currentOrder.options.needAccessory || currentOrder.options.needHeadwear ? 'active' : ''}}">
+              <t-icon name="{{currentOrder.options.needAccessory || currentOrder.options.needHeadwear ? 'check' : 'close'}}" size="32rpx" />
+              <text>配饰</text>
+            </view>
             <view class="option-item {{currentOrder.options.needReplaceFace ? 'active' : ''}}">
               <t-icon name="{{currentOrder.options.needReplaceFace ? 'check' : 'close'}}" size="32rpx" />
-              <text>替换脸</text>
+              <text>替换脸 {{currentOrder.options.needReplaceFace ? '×' + (currentOrder.options.replaceFaceCount || 1) : ''}}</text>
             </view>
-            <view class="option-item {{currentOrder.options.needHeadwear ? 'active' : ''}}">
-              <t-icon name="{{currentOrder.options.needHeadwear ? 'check' : 'close'}}" size="32rpx" />
-              <text>头饰</text>
+            <view class="option-item {{currentOrder.options.isUrgent ? 'active' : ''}}">
+              <t-icon name="{{currentOrder.options.isUrgent ? 'check' : 'close'}}" size="32rpx" />
+              <text>加急 (+1200)</text>
             </view>
-            <view class="option-item {{currentOrder.options.needAntiGravity ? 'active' : ''}}">
-              <t-icon name="{{currentOrder.options.needAntiGravity ? 'check' : 'close'}}" size="32rpx" />
-              <text>反重力</text>
-            </view>
-            <view class="option-item {{currentOrder.options.needCornsilkPerm ? 'active' : ''}}">
-              <t-icon name="{{currentOrder.options.needCornsilkPerm ? 'check' : 'close'}}" size="32rpx" />
-              <text>玉米须烫发</text>
-            </view>
+          </view>
+        </view>
+
+        <view class="detail-section" wx:if="{{currentOrder.replaceFaceImages && currentOrder.replaceFaceImages.length}}">
+          <view class="section-title">替换脸图片</view>
+          <view class="image-grid">
+            <t-image
+              wx:for="{{currentOrder.replaceFaceImages}}"
+              wx:key="index"
+              src="{{item}}"
+              mode="aspectFill"
+              width="200rpx"
+              height="200rpx"
+              bind:tap="previewImage"
+              data-url="{{item}}"
+              data-urls="{{currentOrder.replaceFaceImages}}"
+            />
           </view>
         </view>
         

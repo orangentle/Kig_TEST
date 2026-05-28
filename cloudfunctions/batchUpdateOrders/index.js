@@ -10,14 +10,11 @@ const ordersCollection = db.collection('orders');
 const usersCollection = db.collection('users');
 
 const STAGE_FLOW = [
-  { value: 'confirm',  label: '订单确认',     percent: 10 },
-  { value: 'design',   label: '设计图确认',   percent: 20 },
-  { value: 'model',    label: '模型制作',     percent: 30 },
-  { value: 'print',    label: '打印中',       percent: 50 },
-  { value: 'polish',   label: '打磨上色',     percent: 70 },
-  { value: 'assembly', label: '组装',         percent: 80 },
-  { value: 'quality',  label: '质检',         percent: 90 },
-  { value: 'shipping', label: '发货',         percent: 100 }
+  { value: 'queued',   label: '已排单', percent: 10 },
+  { value: 'modeling', label: '建模',   percent: 30 },
+  { value: 'painting', label: '上妆',   percent: 55 },
+  { value: 'hair',     label: '假毛',   percent: 80 },
+  { value: 'shipped',  label: '已发货', percent: 100 }
 ];
 
 async function assertAdmin(openid) {
@@ -34,6 +31,25 @@ function nextStage(current) {
 
 function findStage(value) {
   return STAGE_FLOW.find(s => s.value === value);
+}
+
+// 发货通知（简易版）。tmplId 需在小程序后台申请「发货通知」订阅消息模板后填入
+const SHIPPING_TMPL_ID = 'REPLACE_WITH_SHIPPING_TMPL_ID';
+async function sendShippingNotice(item) {
+  if (!item._openid || !SHIPPING_TMPL_ID || SHIPPING_TMPL_ID.startsWith('REPLACE_')) return;
+  try {
+    await cloud.openapi.subscribeMessage.send({
+      touser: item._openid,
+      templateId: SHIPPING_TMPL_ID,
+      page: `pages/order-detail/order-detail?id=${item.orderId || ''}`,
+      data: {
+        thing1: { value: (item.roleName || '您的头壳').slice(0, 20) },
+        thing2: { value: '已发货，请注意查收' }
+      }
+    });
+  } catch (err) {
+    console.warn('subscribeMessage.send failed', item._openid, err && err.errMsg);
+  }
 }
 
 exports.main = async (event, context) => {
@@ -61,18 +77,22 @@ exports.main = async (event, context) => {
         // 把每条订单往后推一格
         const items = await ordersCollection
           .where({ _id: _.in(orderIds) })
-          .field({ stage: true })
+          .field({ stage: true, _openid: true, orderId: true, roleName: true })
           .get();
         perItemUpdates = items.data.map(item => {
           const next = nextStage(item.stage);
           if (!next) return null;
           return {
             _id: item._id,
+            _openid: item._openid,
+            orderId: item.orderId,
+            roleName: item.roleName,
+            nextStage: next,
             data: {
               stage: next.value,
               progressStage: next.label,
               progressPercent: next.percent,
-              status: next.value === 'shipping' ? 'completed' : undefined,
+              status: next.value === 'shipped' ? 'completed' : undefined,
               updateTime: now
             }
           };
@@ -106,6 +126,14 @@ exports.main = async (event, context) => {
 
       case 'unarchive':
         updateData = { isArchived: false, updateTime: now };
+        break;
+
+      case 'lock':
+        updateData = { isLocked: true, lockedAt: now, updateTime: now };
+        break;
+
+      case 'unlock':
+        updateData = { isLocked: false, lockedAt: null, updateTime: now };
         break;
 
       case 'assign-queue': {
@@ -171,6 +199,12 @@ exports.main = async (event, context) => {
       );
       succeeded = results.filter(Boolean).length;
       failed = results.length - succeeded;
+
+      // 发货通知：对推进到 shipped 的订单发送订阅消息
+      if (action === 'advance-stage') {
+        const shipped = perItemUpdates.filter(u => u.nextStage && u.nextStage.value === 'shipped');
+        await Promise.all(shipped.map(u => sendShippingNotice(u))).catch(e => console.warn('发货通知发送失败', e));
+      }
     }
 
     return {

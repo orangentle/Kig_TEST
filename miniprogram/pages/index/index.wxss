@@ -1,206 +1,380 @@
 /**index.wxss**/
 .container {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-bg);
+  position: relative;
+  /* 北欧风：奶油米底，单一柔和的暖色调 */
+  background: #fdf8f0;
+  overflow: hidden;
 }
 
 /* 顶部Banner */
 .header-banner {
   position: relative;
-  padding: 80rpx 40rpx 120rpx;
-  padding-top: calc(60rpx + env(safe-area-inset-top));
-  background: linear-gradient(135deg, #ff8800 0%, #ffa733 55%, #ffc266 100%);
-  border-radius: 0 0 48rpx 48rpx;
-  overflow: hidden;
-}
-
-.banner-bg {
-  position: absolute;
-  top: -160rpx;
-  right: -160rpx;
-  width: 480rpx;
-  height: 480rpx;
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 50%;
-}
-
-.banner-bg::after {
-  content: "";
-  position: absolute;
-  bottom: -380rpx;
-  left: -180rpx;
-  width: 320rpx;
-  height: 320rpx;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-}
-
-.banner-content {
-  position: relative;
-  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 80rpx 40rpx 100rpx;
+  padding-top: calc(120rpx + env(safe-area-inset-top));
 }
 
-.logo-section {
-  display: flex;
-  align-items: center;
-  margin-bottom: 36rpx;
-  background: rgba(255, 255, 255, 0.18);
-  padding: 18rpx 36rpx 18rpx 18rpx;
-  border-radius: 100rpx;
-  backdrop-filter: blur(10rpx);
-}
-
+/* Logo */
 .logo {
-  width: 96rpx;
-  height: 96rpx;
+  width: 132rpx;
+  height: 132rpx;
   border-radius: 50%;
-  border: 4rpx solid rgba(255, 255, 255, 0.85);
-  margin-right: 20rpx;
-  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.15);
-  flex-shrink: 0;
+  border: 4rpx solid #fff;
+  /* 北欧风：极浅阴影 */
+  box-shadow: 0 8rpx 24rpx rgba(168, 90, 21, 0.12);
+  margin-bottom: 36rpx;
 }
 
-.logo-text {
-  display: flex;
-  flex-direction: column;
-}
-
+/* 标题：可爱手写感，每字微旋转 */
 .title {
-  font-size: 40rpx;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4rpx;
+  /* iOS: Hannotate / Yuanti；Android 回退楷体；最后兜底圆体 */
+  font-family: "Hannotate SC", "HYWenHei-85W", "Yuanti SC", "STHupo", "STKaiti", "KaiTi", "PingFang SC", sans-serif;
+}
+
+.title-char {
+  font-size: 72rpx;
   font-weight: 700;
-  color: #fff;
-  letter-spacing: 4rpx;
-  line-height: 1.2;
+  color: #4a2810;
+  line-height: 1;
+  display: inline-block;
+  /* 给每字一点不同的呼吸感 */
+  transition: transform 0.3s ease;
+}
+
+/* 微旋转 + 颜色微差，呼应"可爱"不浮夸 */
+.c1 { transform: rotate(-4deg) translateY(2rpx); color: #c25a1a; }
+.c2 { transform: rotate(3deg)  translateY(-2rpx); color: #c25a1a; }
+.c3 { transform: rotate(-2deg) translateY(2rpx); color: #4a2810; }
+.c4 { transform: rotate(4deg)  translateY(-2rpx); color: #4a2810; }
+
+/* 标题下方装饰：橙线 + 中间小星 */
+.title-divider {
+  position: relative;
+  width: 88rpx;
+  height: 4rpx;
+  background: linear-gradient(90deg, transparent, #ffaa33, transparent);
+  border-radius: 999rpx;
+  margin: 32rpx 0 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider-paw {
+  position: absolute;
+  font-size: 22rpx;
+  color: #ff9020;
+  background: #fdf8f0;
+  padding: 0 10rpx;
 }
 
 .subtitle {
   font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.9);
-  margin-top: 6rpx;
-  letter-spacing: 1rpx;
+  color: #a08060;
+  letter-spacing: 6rpx;
+  text-align: center;
 }
 
-.banner-slogan {
-  margin-bottom: 44rpx;
-}
-
-.slogan-main {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.92);
-  letter-spacing: 2rpx;
-}
-
+/* 主按钮 — 居中、克制、单一暖色 */
 .order-button {
-  width: 380rpx !important;
-  height: 92rpx !important;
+  margin-top: 64rpx;
+  width: 360rpx !important;
+  height: 88rpx !important;
   font-size: 30rpx !important;
-  font-weight: 600 !important;
-  background: #fff !important;
-  color: #ff8800 !important;
+  font-weight: 500 !important;
+  letter-spacing: 6rpx !important;
+  background: #ff9020 !important;
+  color: #fff !important;
   border: none !important;
   border-radius: 999rpx !important;
-  box-shadow: 0 12rpx 28rpx rgba(0, 0, 0, 0.18) !important;
+  box-shadow: 0 8rpx 20rpx rgba(255, 144, 32, 0.25) !important;
 }
 
-/* 服务区 */
+/* 服务卡 */
 .services-section {
-  flex: 1;
-  padding: 32rpx 28rpx 40rpx;
-  margin-top: -56rpx;
-  position: relative;
-  z-index: 2;
+  padding: 0 32rpx 40rpx;
 }
 
 .service-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24rpx;
 }
 
+/* 北欧风卡片：白底、细边、极淡阴影、内容居中 */
 .service-card {
-  display: flex;
-  align-items: center;
+  position: relative;
   background: #fff;
+  border: 1rpx solid #f0e6d6;
   border-radius: 24rpx;
-  padding: 28rpx 32rpx;
-  box-shadow: var(--shadow-md);
-  transition: all 0.25s ease;
+  padding: 44rpx 24rpx 36rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* 居中 */
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 2rpx 12rpx rgba(168, 90, 21, 0.04);
+  transition: all 0.2s ease;
+  overflow: hidden;
 }
 
 .service-card:active {
   transform: scale(0.98);
-  box-shadow: var(--shadow-sm);
+  background: #fdf8f0;
 }
 
 .service-icon-wrap {
-  width: 88rpx;
-  height: 88rpx;
-  border-radius: 22rpx;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;       /* 圆形图标底，更北欧 */
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 24rpx;
-  flex-shrink: 0;
-  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 24rpx;
 }
 
-.gradient-orange { background: linear-gradient(135deg, #ff9900, #ffcc00); }
-.gradient-pink   { background: linear-gradient(135deg, #ff6b9d, #ff9a8b); }
-.gradient-green  { background: linear-gradient(135deg, #36cfc9, #73d13d); }
-.gradient-purple { background: linear-gradient(135deg, #597ef7, #9254de); }
-.gradient-blue   { background: linear-gradient(135deg, #40a9ff, #1890ff); }
-.gradient-yellow { background: linear-gradient(135deg, #ffc53d, #faad14); }
-
-.service-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
+/* 两组暖色：琥珀 / 奶油 */
+.accent-amber { background: #ffe9c2; }
+.accent-cream { background: #fdf0d8; }
 
 .service-name {
   font-size: 30rpx;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #3a2410;
   margin-bottom: 6rpx;
+  letter-spacing: 2rpx;
 }
 
 .service-desc {
-  font-size: 24rpx;
-  color: #8a8a8a;
+  font-size: 22rpx;
+  color: #a08060;
+  line-height: 1.4;
+  letter-spacing: 1rpx;
 }
 
+/* 标签居中位置 */
 .dev-tag {
-  background: #f2f3f5;
-  color: #8a8a8a;
-  font-size: 20rpx;
-  padding: 6rpx 14rpx;
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  background: #f5efe4;
+  color: #b09070;
+  font-size: 18rpx;
+  padding: 4rpx 12rpx;
   border-radius: 999rpx;
   font-weight: 500;
+  letter-spacing: 1rpx;
 }
 
 .hot-tag {
-  background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  background: #ff9020;
   color: #fff;
-  font-size: 20rpx;
-  padding: 6rpx 14rpx;
+  font-size: 18rpx;
+  padding: 4rpx 14rpx;
   border-radius: 999rpx;
   font-weight: 500;
-  box-shadow: 0 4rpx 10rpx rgba(255, 107, 157, 0.3);
+  letter-spacing: 1rpx;
 }
 
 /* 底部 */
 .footer-info {
-  padding: 32rpx 40rpx 48rpx;
+  padding: 60rpx 40rpx 48rpx;
   text-align: center;
 }
 
 .footer-text {
   font-size: 22rpx;
-  color: #c0c0c0;
+  color: #c8b09a;
+  letter-spacing: 2rpx;
+}
+
+/* ============ 订单查询弹窗 ============ */
+.query-modal {
+  width: 600rpx;
+  background: #fff;
+  border-radius: 32rpx;
+  padding: 56rpx 40rpx 36rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 顶部 */
+.query-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 36rpx;
+}
+
+.query-icon-circle {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff9020 0%, #ffaa33 60%, #ffc266 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+  box-shadow:
+    0 12rpx 24rpx rgba(255, 144, 32, 0.3),
+    inset 0 2rpx 0 rgba(255, 255, 255, 0.4);
+}
+
+.query-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #3a2410;
+  letter-spacing: 4rpx;
+  margin-bottom: 8rpx;
+}
+
+.query-sub {
+  font-size: 22rpx;
+  color: #a08060;
   letter-spacing: 1rpx;
+}
+
+/* 输入框 */
+.query-input-wrap {
+  display: flex;
+  align-items: center;
+  background: #fdf8f0;
+  border: 2rpx solid #f0e6d6;
+  border-radius: 20rpx;
+  padding: 0 24rpx;
+  height: 96rpx;
+  transition: all 0.2s ease;
+}
+
+.query-input-wrap.has-error {
+  border-color: #ff9a8b;
+  background: #fff5f3;
+}
+
+.query-input-prefix {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #ff9020;
+  margin-right: 12rpx;
+  letter-spacing: 1rpx;
+}
+
+.query-input {
+  flex: 1;
+  height: 100%;
+  font-size: 30rpx;
+  color: #3a2410;
+  letter-spacing: 1rpx;
+}
+
+.query-placeholder {
+  color: #c8b09a;
+  font-size: 28rpx;
+}
+
+.query-clear {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.query-error {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 14rpx;
+  font-size: 22rpx;
+  color: #ff4d4f;
+  padding: 0 8rpx;
+}
+
+/* 演示订单 */
+.query-demo {
+  margin-top: 28rpx;
+  padding-top: 28rpx;
+  border-top: 1rpx dashed #f0e6d6;
+}
+
+.query-demo-label {
+  font-size: 22rpx;
+  color: #a08060;
+  letter-spacing: 1rpx;
+}
+
+.query-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.query-chip {
+  font-size: 22rpx;
+  color: #c25a1a;
+  background: #fff4e6;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid #ffd8a8;
+  letter-spacing: 0.5rpx;
+}
+
+.query-chip:active {
+  background: #ffe9c2;
+  transform: scale(0.96);
+}
+
+/* 操作按钮 */
+.query-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 40rpx;
+}
+
+.query-btn {
+  flex: 1;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  letter-spacing: 3rpx;
+  transition: all 0.2s ease;
+}
+
+.query-btn-cancel {
+  background: #fdf8f0;
+  color: #8a6a4a;
+  border: 1rpx solid #f0e6d6;
+}
+
+.query-btn-cancel:active {
+  background: #f5efe4;
+}
+
+.query-btn-confirm {
+  background: linear-gradient(135deg, #ff9020 0%, #ffaa33 100%);
+  color: #fff;
+  box-shadow:
+    0 8rpx 20rpx rgba(255, 144, 32, 0.35),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.3);
+}
+
+.query-btn-confirm:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 12rpx rgba(255, 144, 32, 0.3);
 }
