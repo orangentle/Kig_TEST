@@ -1,94 +1,156 @@
-/* order.wxss — 北欧极简 · 暖色克制 */
+/* order.wxss — 北欧极简 · 暖奶咖 · 鼠鼠手作 */
+page {
+  /* 统一手写字体族（决定本页所有装饰文字的字形） */
+  --font-deco: "Hannotate SC", "Yuanti SC", "STKaiti", "KaiTi", "PingFang SC", sans-serif;
+}
+
 .container {
   min-height: 100vh;
-  background: #fdf8f0;
+  background-color: #fbf4e7;
   display: flex;
   flex-direction: column;
+  position: relative;
+  /* 整页底层：浅色爪印散落（极低透明度，仅作纹理） */
+  background-image:
+    url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='%23c89968' fill-opacity='0.07'%3E%3Cg transform='translate(30 40) rotate(-20)'%3E%3Cellipse cx='30' cy='40' rx='14' ry='12'/%3E%3Cellipse cx='14' cy='22' rx='5' ry='7'/%3E%3Cellipse cx='25' cy='13' rx='5' ry='7'/%3E%3Cellipse cx='38' cy='13' rx='5' ry='7'/%3E%3Cellipse cx='49' cy='22' rx='5' ry='7'/%3E%3C/g%3E%3Cg transform='translate(160 140) rotate(18)'%3E%3Cellipse cx='30' cy='40' rx='14' ry='12'/%3E%3Cellipse cx='14' cy='22' rx='5' ry='7'/%3E%3Cellipse cx='25' cy='13' rx='5' ry='7'/%3E%3Cellipse cx='38' cy='13' rx='5' ry='7'/%3E%3Cellipse cx='49' cy='22' rx='5' ry='7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: 480rpx 480rpx;
+  background-repeat: repeat;
 }
 
-/* 页面头部 — 不再使用大块橙色渐变，回到米底+点缀 */
+/* 页面头部 — 品牌字标 */
 .page-header {
-  padding: 64rpx 40rpx 24rpx;
-  padding-top: calc(72rpx + env(safe-area-inset-top));
-  background: #fdf8f0;
+  padding: 70rpx 40rpx 36rpx;
+  padding-top: calc(80rpx + env(safe-area-inset-top));
+  background: linear-gradient(180deg, #fbf4e7 0%, #fbf4e7 70%, rgba(251, 244, 231, 0) 100%);
   text-align: center;
   position: relative;
+  z-index: 1;
 }
 
+/* 分隔：小星星 + 爪印 + 小星星 */
+.brand-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18rpx;
+}
+
+.divider-star {
+  font-size: 22rpx;
+  color: #ff9eb5;
+  margin: 0 14rpx;
+  line-height: 1;
+}
+
+.divider-paw {
+  width: 36rpx;
+  height: 36rpx;
+  background-image:
+    url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60' fill='%23c25a1a'%3E%3Cellipse cx='30' cy='42' rx='15' ry='13'/%3E%3Cellipse cx='13' cy='23' rx='5' ry='7'/%3E%3Cellipse cx='25' cy='13' rx='5' ry='8'/%3E%3Cellipse cx='38' cy='13' rx='5' ry='8'/%3E%3Cellipse cx='50' cy='23' rx='5' ry='7'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* 主标题 — 大号手写 */
 .page-title {
-  font-size: 48rpx;
-  font-weight: 700;
   display: block;
-  margin-bottom: 12rpx;
-  letter-spacing: 4rpx;
+  font-size: 56rpx;
+  font-weight: 700;
   color: #3a2410;
-  font-family: "Hannotate SC", "Yuanti SC", "STKaiti", "KaiTi", "PingFang SC", sans-serif;
+  letter-spacing: 8rpx;
+  line-height: 1.15;
+  margin-bottom: 16rpx;
+  text-indent: 8rpx;
+  font-family: var(--font-deco);
+  text-shadow: 0 2rpx 0 rgba(200, 153, 104, 0.15);
 }
 
 .page-subtitle {
-  font-size: 24rpx;
-  color: #a08060;
-  letter-spacing: 3rpx;
-}
-
-/* 标题下方装饰：橙线 + 中心爪印 */
-.page-header::after {
-  content: "✦";
   display: block;
-  margin: 20rpx auto 0;
-  font-size: 24rpx;
-  color: #ff9020;
-  width: 96rpx;
-  border-top: 2rpx solid transparent;
-  background: linear-gradient(90deg, transparent, #ffd8a8 30%, #ffd8a8 70%, transparent);
-  background-size: 100% 2rpx;
-  background-position: 0 50%;
-  background-repeat: no-repeat;
-  line-height: 1;
+  font-size: 26rpx;
+  color: #c25a1a;
+  letter-spacing: 2rpx;
+  font-weight: 500;
+  line-height: 1.4;
+  font-family: var(--font-deco);
 }
 
 /* 滚动表单 */
 .form-scroll {
   flex: 1;
   position: relative;
+  z-index: 1;
 }
 
 .form-content {
-  padding: 16rpx 24rpx 0;
+  padding: 8rpx 24rpx 0;
 }
 
-/* 区段卡片：白底 / 细描边 / 极淡阴影 */
+/* 区段卡片：白底 / 暖描边 / 金色顶线 */
 .section {
   background: #fff;
   border: 1rpx solid #f0e6d6;
-  border-radius: 24rpx;
+  border-radius: 28rpx;
   margin-bottom: 24rpx;
   overflow: hidden;
-  box-shadow: 0 2rpx 12rpx rgba(168, 90, 21, 0.04);
+  box-shadow: 0 4rpx 20rpx rgba(168, 90, 21, 0.06);
+  position: relative;
 }
 
+/* 卡片顶部金线点缀 */
+.section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 32rpx;
+  right: 32rpx;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, rgba(200, 153, 104, 0.5), transparent);
+}
+
+/* 区段标题 — icon 圆容器 + 文字 + 延伸线 */
 .section-title {
   display: flex;
   align-items: center;
-  padding: 26rpx 32rpx;
-  border-bottom: 1rpx solid #f5efe4;
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #3a2410;
-  letter-spacing: 2rpx;
+  padding: 30rpx 32rpx 20rpx;
+  gap: 16rpx;
 }
 
-.section-title t-icon {
-  margin-right: 14rpx;
+.section-icon {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #fdf3e3;
+  border: 1rpx solid #f0e0c4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.section-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #3a2410;
+  letter-spacing: 3rpx;
+  font-family: var(--font-deco);
+}
+
+.section-line {
+  flex: 1;
+  height: 1rpx;
+  background: linear-gradient(90deg, #f0e0c4, transparent);
+  margin-left: 8rpx;
 }
 
 .form-item {
-  padding: 4rpx 12rpx;
+  padding: 4rpx 16rpx;
 }
 
 /* 身材数据预览 */
 .body-data-preview {
-  padding: 20rpx 32rpx;
+  padding: 12rpx 32rpx 24rpx;
   display: flex;
   flex-wrap: wrap;
 }
@@ -104,22 +166,25 @@
   font-size: 24rpx;
   color: #a08060;
   margin-right: 10rpx;
-  letter-spacing: 1rpx;
+  letter-spacing: 0;
 }
 
 .body-data-item .value {
   font-size: 28rpx;
   color: #3a2410;
   font-weight: 600;
+  letter-spacing: 0;
 }
 
 .body-data-tip {
-  padding: 32rpx;
+  padding: 12rpx 32rpx 32rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #a08060;
   font-size: 24rpx;
+  letter-spacing: 0;
+  line-height: 1.6;
 }
 
 .body-data-tip text {
@@ -129,7 +194,7 @@
 
 /* 上传区 */
 .upload-area {
-  padding: 24rpx 32rpx;
+  padding: 12rpx 32rpx 28rpx;
 }
 
 .upload-tip {
@@ -137,7 +202,8 @@
   font-size: 22rpx;
   color: #a08060;
   margin-top: 14rpx;
-  letter-spacing: 1rpx;
+  letter-spacing: 0;
+  line-height: 1.6;
 }
 
 /* 加急提示 */
@@ -145,8 +211,8 @@
   display: flex;
   align-items: center;
   padding: 18rpx 22rpx;
-  background: #fff4e6;
-  margin: 0 24rpx 24rpx;
+  background: linear-gradient(135deg, #fff4e6, #ffeacc);
+  margin: 0 32rpx 28rpx;
   border-radius: 16rpx;
   border: 1rpx solid #ffd8a8;
 }
@@ -157,12 +223,12 @@
   margin-left: 12rpx;
   flex: 1;
   line-height: 1.5;
-  letter-spacing: 1rpx;
+  letter-spacing: 0;
 }
 
 /* 底部占位 + 提交栏 */
 .bottom-placeholder {
-  height: 220rpx;
+  height: 240rpx;
 }
 
 .submit-bar {
@@ -170,33 +236,36 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20rpx);
   border-top: 1rpx solid #f0e6d6;
-  padding: 14rpx 32rpx 18rpx;
+  padding: 18rpx 32rpx 18rpx;
   padding-bottom: calc(18rpx + env(safe-area-inset-bottom));
   z-index: 99;
+  box-shadow: 0 -4rpx 24rpx rgba(168, 90, 21, 0.06);
 }
 
 .submit-tip {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12rpx;
+  margin-bottom: 14rpx;
   font-size: 22rpx;
   color: #a08060;
-  letter-spacing: 1rpx;
+  letter-spacing: 0;
 }
 
 .submit-tip t-icon {
   margin-right: 8rpx;
 }
 
-/* 主按钮：单色暖橙，符合北欧风 */
+/* 主按钮：暖橙渐变 + 深色阴影，更显高端 */
 .t-button--primary {
-  background: #ff9020 !important;
+  background: linear-gradient(135deg, #ff9020 0%, #e87815 100%) !important;
   border-color: transparent !important;
   border-radius: 999rpx !important;
-  box-shadow: 0 8rpx 20rpx rgba(255, 144, 32, 0.25) !important;
+  box-shadow: 0 10rpx 24rpx rgba(232, 120, 21, 0.3) !important;
   letter-spacing: 6rpx !important;
   font-weight: 500 !important;
+  text-indent: 6rpx !important;
 }

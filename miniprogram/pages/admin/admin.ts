@@ -396,6 +396,32 @@ Component({
       });
     },
 
+    onBatchApprove() {
+      wx.showModal({
+        title: '审核通过',
+        content: `确认通过所选 ${this.data.selectedIds.length} 条订单的审核？通过后将进入"已排单"阶段。`,
+        confirmColor: '#52c41a',
+        success: (res) => {
+          if (res.confirm) this.runBatch('review-approve');
+        }
+      });
+    },
+
+    onBatchReject() {
+      wx.showModal({
+        title: '驳回订单',
+        content: `驳回所选 ${this.data.selectedIds.length} 条订单。请填写驳回原因（客户可在订单详情查看）：`,
+        editable: true,
+        placeholderText: '如：身材数据缺失、参考图模糊…',
+        confirmColor: '#ff4d4f',
+        success: (res) => {
+          if (!res.confirm) return;
+          const remark = (res.content || '').trim() || '信息有误，请联系客服';
+          this.runBatch('review-reject', { remark });
+        }
+      });
+    },
+
     onBatchMarkUrgent() {
       this.runBatch('mark-urgent');
     },
@@ -587,6 +613,51 @@ Component({
 
     onExport() {
       wx.showToast({ title: '导出功能开发中', icon: 'none' });
+    },
+
+    // ============ 危险操作：清理订单 ============
+    onClearMockOrders() {
+      wx.showModal({
+        title: '清理测试数据',
+        content: '将删除所有 queueNumber 以 RatStudio-2026- 开头的测试订单。确定继续？',
+        confirmText: '清理',
+        confirmColor: '#d04848',
+        success: async (res) => {
+          if (!res.confirm) return;
+          wx.showLoading({ title: '清理中...' });
+          try {
+            const r: any = await wx.cloud.callFunction({
+              name: 'clearOrders',
+              data: { mode: 'mock' }
+            });
+            wx.hideLoading();
+            const result = r.result || {};
+            if (result.success) {
+              wx.showToast({ title: `已清理 ${result.removed} 条`, icon: 'none' });
+              this.setData({ showFilterPopup: false });
+              this.refresh();
+            } else {
+              wx.showToast({ title: result.error || '清理失败', icon: 'none' });
+            }
+          } catch (err) {
+            wx.hideLoading();
+            wx.showToast({ title: '网络异常', icon: 'none' });
+          }
+        }
+      });
+    },
+
+    onBatchDelete() {
+      const count = this.data.selectedIds.length;
+      wx.showModal({
+        title: '删除订单',
+        content: `确认删除所选 ${count} 条订单？此操作不可恢复。`,
+        confirmText: '删除',
+        confirmColor: '#d04848',
+        success: (res) => {
+          if (res.confirm) this.runBatch('delete');
+        }
+      });
     }
   }
 });

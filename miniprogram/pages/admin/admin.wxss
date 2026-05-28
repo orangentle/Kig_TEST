@@ -365,6 +365,11 @@
 .batch-btn text { margin-top: 6rpx; }
 .batch-btn:active { background: #efeff2; }
 
+.batch-btn-primary { background: #f0faf2; color: #389e0d; }
+.batch-btn-primary:active { background: #d9f5dd; }
+.batch-btn-danger { background: #fff1f0; color: #cf1322; }
+.batch-btn-danger:active { background: #ffd6d3; }
+
 /* 弹窗面板 */
 .popup-panel {
   background: #fff;
@@ -585,3 +590,48 @@
 }
 
 .form-footer t-button { flex: 1; }
+
+/* 危险操作区 */
+.danger-zone {
+  margin-top: 40rpx;
+  padding: 24rpx;
+  border: 1rpx dashed #f5cccc;
+  border-radius: 16rpx;
+  background: #fdf5f5;
+}
+.danger-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #d04848;
+  margin-bottom: 12rpx;
+  letter-spacing: 1rpx;
+}
+.danger-desc {
+  font-size: 22rpx;
+  color: #a06060;
+  line-height: 1.5;
+  margin-bottom: 12rpx;
+  letter-spacing: 1rpx;
+}
+.danger-desc--all {
+  margin-top: 16rpx;
+  color: #d04848;
+  font-weight: 500;
+}
+.danger-btn {
+  text-align: center;
+  padding: 16rpx 0;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  letter-spacing: 2rpx;
+}
+.danger-btn--mock {
+  background: #fff;
+  color: #d04848;
+  border: 1rpx solid #f5cccc;
+}
+.danger-btn--all {
+  background: #d04848;
+  color: #fff;
+}
+.danger-btn:active { opacity: 0.85; }

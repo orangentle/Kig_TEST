@@ -53,10 +53,10 @@
   <block wx:else>
     <view class="header-gradient">
       <view class="user-info-container">
-        <view class="avatar-container" bindtap="chooseAvatar">
-          <image 
-            class="user-avatar" 
-            src="{{userInfo.avatarUrl || '/assets/images/icon.jpg'}}" 
+        <view class="avatar-container" bindtap="chooseAvatar" bindlongpress="onAdminLongPress">
+          <image
+            class="user-avatar"
+            src="{{userInfo.avatarUrl || '/assets/images/icon.jpg'}}"
             mode="aspectFill"
           ></image>
           <view class="avatar-edit-icon">
@@ -65,7 +65,7 @@
         </view>
         <view class="user-info">
           <text class="user-name">{{userInfo.nickName || '鼠鼠用户'}}</text>
-          <text class="user-id" bindtap="onAdminLoginTrigger">ID: {{userId || '12345678'}}</text>
+          <text class="user-id">ID: {{userId || '12345678'}}</text>
         </view>
         <view class="edit-profile-btn">
           <t-button icon="edit" size="small" shape="round" variant="outline" theme="primary" bind:tap="showEditProfileModal">编辑资料</t-button>
@@ -102,17 +102,17 @@
       
       <view class="order-list">
         <block wx:if="{{orders.length > 0}}">
-          <view 
-            class="order-item" 
-            wx:for="{{orders}}" 
+          <view
+            class="order-item"
+            wx:for="{{orders}}"
             wx:key="orderId"
             bindtap="onOrderClick"
-            data-order-id="{{item.orderId}}"
+            data-tb-order-id="{{item.tbOrderId}}"
           >
             <view class="order-item-header">
               <text class="order-id">订单号: {{item.orderId}}</text>
-              <view class="order-status {{item.status === 'pending' ? 'status-pending' : item.status === 'approved' ? 'status-approved' : item.status === 'processing' ? 'status-normal' : item.status === 'rejected' ? 'status-rejected' : 'status-completed'}}">
-                {{item.status === 'pending' ? '待审核' : item.status === 'approved' ? '已通过' : item.status === 'processing' ? '制作中' : item.status === 'rejected' ? '已拒绝' : '已完成'}}
+              <view class="order-status {{item.status === 'pending' ? 'status-pending' : item.status === 'completed' ? 'status-completed' : item.status === 'rejected' ? 'status-rejected' : 'status-normal'}}">
+                {{item.status === 'pending' ? '待审核' : item.status === 'rejected' ? '已驳回' : item.status === 'completed' ? '已完成' : '制作中'}}
               </view>
             </view>
             
@@ -147,12 +147,7 @@
             进入管理后台
           </t-button>
         </block>
-        
-        <!-- 管理员登录入口 - 连续点击用户ID 5 次触发 -->
-        <view class="admin-login-trigger" bindtap="onAdminLoginTrigger" wx:if="{{adminClickCount > 0}}">
-          <text class="admin-click-hint">再点击 {{5 - adminClickCount}} 次进入管理员模式</text>
-        </view>
-        
+
         <!-- 联系客服按钮 -->
         <t-button 
           theme="primary" 
@@ -212,18 +207,15 @@
             <t-input label="头围(cm)" value="{{tempBodyMeasurements.headCircumference || ''}}" placeholder="请输入头围" type="digit" bind:change="onHeadCircumferenceChange" />
           </view>
           <view class="edit-input-section">
-            <t-input label="颈围(cm)" value="{{tempBodyMeasurements.neckCircumference || ''}}" placeholder="请输入颈围" type="digit" bind:change="onNeckCircumferenceChange" />
-          </view>
-          <view class="edit-input-section">
             <t-input label="肩宽(cm)" value="{{tempBodyMeasurements.shoulderWidth || ''}}" placeholder="请输入肩宽" type="digit" bind:change="onShoulderWidthChange" />
           </view>
         </view>
+
+        <view class="edit-profile-save">
+          <t-button theme="primary" size="large" block bind:tap="saveUserProfile">保存</t-button>
+        </view>
         </view>
       </scroll-view>
-      
-      <view class="edit-profile-footer">
-        <t-button theme="primary" size="large" block bind:tap="saveUserProfile">保存</t-button>
-      </view>
     </view>
   </t-popup>
 </view> 

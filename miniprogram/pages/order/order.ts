@@ -4,6 +4,7 @@ import Message from 'tdesign-miniprogram/message/index';
 const app = getApp<IAppOption>();
 
 interface OrderFormData {
+  tbOrderId: string;
   roleName: string;
   ip: string;
   height?: number;
@@ -27,6 +28,7 @@ interface BodyMeasurements {
 Page({
   data: {
     formData: {
+      tbOrderId: '',
       roleName: '',
       ip: '',
       height: 0,
@@ -88,11 +90,15 @@ Page({
   },
 
   onRoleNameChange(e: any) {
-    this.setData({ 'formData.roleName': e.detail.value });
+    this.setData({ 'formData.roleName': (e?.detail?.value ?? '') as string });
+  },
+
+  onTbOrderIdChange(e: any) {
+    this.setData({ 'formData.tbOrderId': (e?.detail?.value ?? '') as string });
   },
 
   onIpChange(e: any) {
-    this.setData({ 'formData.ip': e.detail.value });
+    this.setData({ 'formData.ip': (e?.detail?.value ?? '') as string });
   },
 
   onUseProfileBodyDataChange(e: any) {
@@ -143,7 +149,7 @@ Page({
     if (value) {
       wx.showModal({
         title: '确认加急',
-        content: '加急服务将额外收取 1200 元费用，订单将优先制作。确认开启加急服务吗？',
+        content: '鼠鼠们会加班加点为你赶工，将额外收取 1200 元加急费。确认开启吗？',
         confirmText: '确认',
         cancelText: '取消',
         success: (res) => {
@@ -195,6 +201,10 @@ Page({
   validateForm(): boolean {
     const { formData, useProfileBodyData, profileBodyData, referenceImages, replaceFaceImages } = this.data;
 
+    if (!formData.tbOrderId.trim()) {
+      Message.error({ context: this, offset: [20, 32], content: '请填写淘宝定金订单号' });
+      return false;
+    }
     if (!formData.roleName.trim()) {
       Message.error({ context: this, offset: [20, 32], content: '请输入角色名称' });
       return false;
@@ -217,7 +227,7 @@ Page({
     }
 
     if (referenceImages.length === 0) {
-      Message.error({ context: this, offset: [20, 32], content: '请上传至少一张角色多视角图' });
+      Message.error({ context: this, offset: [20, 32], content: '请上传至少一张角色参考图' });
       return false;
     }
 
@@ -264,6 +274,10 @@ Page({
 
     if (!this.validateForm()) return;
 
+    const roleNameTrim = (this.data.formData.roleName || '').trim();
+    const ipTrim = (this.data.formData.ip || '').trim();
+    const tbOrderIdTrim = (this.data.formData.tbOrderId || '').trim();
+
     this.setData({ isSubmitting: true });
 
     // 请求订阅消息授权（发货通知）。tmplId 由小程序后台配置后替换
@@ -302,8 +316,9 @@ Page({
       const { result } = await wx.cloud.callFunction({
         name: 'submitOrder',
         data: {
-          roleName: this.data.formData.roleName,
-          ip: this.data.formData.ip,
+          tbOrderId: tbOrderIdTrim,
+          roleName: roleNameTrim,
+          ip: ipTrim,
           bodyMeasurements: bodyData,
           referenceImages: referenceImageUrls,
           replaceFaceImages: replaceFaceImageUrls,

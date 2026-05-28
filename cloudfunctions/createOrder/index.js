@@ -13,11 +13,20 @@ exports.main = async (event, context) => {
   try {
     // 获取用户的openId
     const wxContext = cloud.getWXContext();
-    
+
+    // 校验淘宝订单号唯一性
+    const tbOrderIdTrim = (event.tbOrderId || '').trim();
+    if (tbOrderIdTrim) {
+      const dup = await ordersCollection.where({ tbOrderId: tbOrderIdTrim }).limit(1).get();
+      if (dup.data.length > 0) {
+        return { success: false, error: '该淘宝订单号已存在' };
+      }
+    }
+
     // 构建订单数据
     const orderData = {
       // 基本信息
-      tbOrderId: event.tbOrderId || '', // 淘宝订单号
+      tbOrderId: tbOrderIdTrim, // 淘宝订单号
       queueNumber: event.queueNumber || '', // 排单号
       orderId: `KG${Date.now().toString().slice(-8)}`, // 生成系统订单号
       customerName: event.customerName || '', // 客户名称

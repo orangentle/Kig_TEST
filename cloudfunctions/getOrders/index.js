@@ -7,9 +7,21 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 const _ = db.command;
 const ordersCollection = db.collection('orders');
+const usersCollection = db.collection('users');
+
+async function isAdmin(openid) {
+  if (!openid) return false;
+  try {
+    const r = await usersCollection.where({ _openid: openid, isAdmin: true }).limit(1).get();
+    return r.data.length > 0;
+  } catch (_) { return false; }
+}
 
 exports.main = async (event) => {
   try {
+    const { OPENID } = cloud.getWXContext();
+    const admin = await isAdmin(OPENID);
+
     const {
       page = 1,
       pageSize = 20,
@@ -29,8 +41,14 @@ exports.main = async (event) => {
 
     // 单订单查询（兼容 order-detail 的旧用法）
     if (tbOrderId) {
-      const r = await ordersCollection.where({ tbOrderId }).get();
+      const where = admin ? { tbOrderId } : { tbOrderId, _openid: OPENID };
+      const r = await ordersCollection.where(where).get();
       return { success: true, data: r.data, total: r.data.length };
+    }
+
+    // 非管理员调用列表接口（除单订单外）一律拒绝，防止越权
+    if (!admin) {
+      return { success: false, error: '无管理员权限' };
     }
 
     // 构建查询条件

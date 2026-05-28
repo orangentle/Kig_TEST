@@ -24,8 +24,20 @@
         <text class="role-name">{{order.roleName}}</text>
         <text class="role-sub" wx:if="{{order.queueNumber}}">{{order.queueNumber}}</text>
       </view>
-      <view class="status-pill {{order.status === 'urgent' ? 'pill-urgent' : order.status === 'completed' ? 'pill-done' : 'pill-normal'}}">
-        {{order.status === 'urgent' ? '加急' : order.status === 'completed' ? '已完成' : order.status === 'pending' ? '待审核' : '进行中'}}
+      <view class="status-pill {{order.status === 'urgent' ? 'pill-urgent' : order.status === 'completed' ? 'pill-done' : order.status === 'rejected' ? 'pill-rejected' : order.status === 'pending' ? 'pill-pending' : 'pill-normal'}}">
+        {{order.status === 'urgent' ? '加急' : order.status === 'completed' ? '已完成' : order.status === 'rejected' ? '已驳回' : order.status === 'pending' ? '待审核' : '进行中'}}
+      </view>
+    </view>
+
+    <view class="review-banner banner-pending" wx:if="{{order.status === 'pending'}}">
+      <t-icon name="time" size="32rpx" color="#c25a1a" />
+      <text>客服正在审核您的订单信息，请耐心等待</text>
+    </view>
+    <view class="review-banner banner-rejected" wx:if="{{order.status === 'rejected'}}">
+      <t-icon name="error-circle" size="32rpx" color="#cf1322" />
+      <view class="banner-body">
+        <text class="banner-title">订单已被驳回</text>
+        <text class="banner-remark" wx:if="{{order.reviewInfo.reviewRemark}}">原因：{{order.reviewInfo.reviewRemark}}</text>
       </view>
     </view>
 
@@ -45,8 +57,74 @@
     </view>
   </view>
 
-  <!-- 制作进度 -->
-  <view class="progress-card" wx:if="{{!notFound}}">
+  <!-- 您提交的信息 -->
+  <view class="submitted-card" wx:if="{{!notFound}}">
+    <view class="card-title">
+      <text class="title-text">您提交的信息</text>
+    </view>
+
+    <view class="submitted-row"><text class="sub-label">角色名称</text><text class="sub-value">{{order.roleName || '-'}}</text></view>
+    <view class="submitted-row"><text class="sub-label">角色所属 IP</text><text class="sub-value">{{order.ip || '-'}}</text></view>
+
+    <view class="sub-section" wx:if="{{order.bodyMeasurements}}">
+      <text class="sub-section-title">身材数据</text>
+      <view class="sub-grid">
+        <view class="sub-grid-item"><text class="sub-label">身高</text><text class="sub-value">{{order.bodyMeasurements.height || '-'}} cm</text></view>
+        <view class="sub-grid-item"><text class="sub-label">体重</text><text class="sub-value">{{order.bodyMeasurements.weight || '-'}} kg</text></view>
+        <view class="sub-grid-item"><text class="sub-label">头围</text><text class="sub-value">{{order.bodyMeasurements.headCircumference || '-'}} cm</text></view>
+        <view class="sub-grid-item"><text class="sub-label">肩宽</text><text class="sub-value">{{order.bodyMeasurements.shoulderWidth || '-'}} cm</text></view>
+      </view>
+    </view>
+
+    <view class="sub-section" wx:if="{{order.referenceImages && order.referenceImages.length}}">
+      <text class="sub-section-title">角色参考图</text>
+      <view class="sub-image-list">
+        <image
+          wx:for="{{order.referenceImages}}"
+          wx:key="*this"
+          class="sub-thumb"
+          src="{{item}}"
+          mode="aspectFill"
+          bindtap="onPreviewImage"
+          data-urls="{{order.referenceImages}}"
+          data-current="{{item}}"
+        />
+      </view>
+    </view>
+
+    <view class="sub-section" wx:if="{{order.options && order.options.needReplaceFace && order.replaceFaceImages && order.replaceFaceImages.length}}">
+      <text class="sub-section-title">替换脸（{{order.replaceFaceImages.length}} 张）</text>
+      <view class="sub-image-list">
+        <image
+          wx:for="{{order.replaceFaceImages}}"
+          wx:key="*this"
+          class="sub-thumb"
+          src="{{item}}"
+          mode="aspectFill"
+          bindtap="onPreviewImage"
+          data-urls="{{order.replaceFaceImages}}"
+          data-current="{{item}}"
+        />
+      </view>
+    </view>
+
+    <view class="sub-section">
+      <text class="sub-section-title">定制选项</text>
+      <view class="sub-tag-list">
+        <view class="sub-tag {{order.options.needAccessory ? 'tag-on' : ''}}">配饰：{{order.options.needAccessory ? '需要' : '不需要'}}</view>
+        <view class="sub-tag {{order.options.needReplaceFace ? 'tag-on' : ''}}">替换脸：{{order.options.needReplaceFace ? order.options.replaceFaceCount + ' 张' : '不需要'}}</view>
+        <view class="sub-tag {{order.isUrgent ? 'tag-urgent' : ''}}">{{order.isUrgent ? '加急 (+¥1200)' : '常规工期'}}</view>
+      </view>
+    </view>
+
+    <view class="sub-section" wx:if="{{order.remark}}">
+      <text class="sub-section-title">备注</text>
+      <text class="sub-remark">{{order.remark}}</text>
+    </view>
+  </view>
+
+  <!-- 制作进度（审核通过后才显示） -->
+  <view class="progress-card" wx:if="{{!notFound && order.status !== 'pending' && order.status !== 'rejected'}}">
     <view class="card-title">
       <text class="title-text">制作进度</text>
       <text class="title-pct">{{progressPercent}}%</text>

@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: 'cloud1-9ga5mdp1028f94eb'
+  env: 'shushugongfang-d2gl1995c27f9730e'
 })
 
 const db = cloud.database()
@@ -21,6 +21,7 @@ exports.main = async (event, context) => {
   const openid = wxContext.OPENID
 
   const {
+    tbOrderId,
     roleName,
     ip,
     bodyMeasurements,
@@ -30,12 +31,26 @@ exports.main = async (event, context) => {
     remark
   } = event
 
+  const tbOrderIdTrim = (tbOrderId || '').toString().trim()
+  if (!tbOrderIdTrim) {
+    return { success: false, error: '请填写淘宝定金订单号' }
+  }
   if (!roleName || !ip) {
     return { success: false, error: '角色名称和角色所属 IP 不能为空' }
   }
 
   if (!referenceImages || referenceImages.length === 0) {
-    return { success: false, error: '请上传至少一张角色多视角图' }
+    return { success: false, error: '请上传至少一张角色参考图' }
+  }
+
+  // 同一个淘宝定金订单号只能提交一次定制表
+  try {
+    const dup = await db.collection('orders').where({ tbOrderId: tbOrderIdTrim }).limit(1).get()
+    if (dup.data && dup.data.length > 0) {
+      return { success: false, error: '该淘宝订单号已提交过定制表，如需修改请联系客服' }
+    }
+  } catch (e) {
+    console.error('校验订单号唯一性失败', e)
   }
 
   const needReplaceFace = !!(options && options.needReplaceFace)
@@ -65,8 +80,10 @@ exports.main = async (event, context) => {
 
     const orderData = {
       orderId,
+      tbOrderId: tbOrderIdTrim,
       _openid: openid,
       userInfo,
+      customerName: (userInfo && userInfo.nickName) || '',
       // 基本信息
       roleName,
       ip,
@@ -86,10 +103,15 @@ exports.main = async (event, context) => {
       remark: remark || '',
       // 审核状态
       status: 'pending',
-      // 锁定：提交后默认锁定，客户无法修改；管理员可解锁
+      // 进度阶段：待审核，审核通过后才进入 queued
+      stage: 'pending',
+      progressStage: '待审核',
+      progressPercent: 0,
+      // 归档 / 锁定
+      isArchived: false,
       isLocked: true,
       lockedAt: db.serverDate(),
-      // 淘宝订单号（审核通过后填写）
+      // 淘宝订单号（审核通过后填写真实号）
       taobaoOrderId: '',
       reviewInfo: {
         reviewTime: null,

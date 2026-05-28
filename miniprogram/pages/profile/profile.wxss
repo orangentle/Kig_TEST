@@ -424,7 +424,7 @@
 .edit-profile-popup {
   background: #fff;
   border-radius: 32rpx 32rpx 0 0;
-  width: 100%;
+  width: 100vw;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -432,6 +432,7 @@
 }
 
 .edit-profile-header {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -447,13 +448,19 @@
 }
 
 .edit-profile-content {
-  height: 1000rpx;
+  /* 视口高度 - 顶部空白(15vh) - header(约 100rpx) */
+  height: calc(85vh - 100rpx);
   padding: 24rpx 32rpx 0;
   box-sizing: border-box;
 }
 
 .edit-profile-scroll-inner {
-  padding-bottom: 40rpx;
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
+}
+
+.edit-profile-save {
+  margin-top: 16rpx;
+  padding-top: 8rpx;
 }
 
 .info-section {
@@ -495,11 +502,4 @@
 
 .edit-input-section {
   margin-bottom: 16rpx;
-}
-
-.edit-profile-footer {
-  padding: 24rpx 32rpx 36rpx;
-  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
-  background: #fff;
-  border-top: 1rpx solid #f5efe4;
 }

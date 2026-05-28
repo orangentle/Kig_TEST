@@ -1,0 +1,9 @@
+{
+  "name": "clearOrders",
+  "version": "1.0.0",
+  "description": "清理订单数据（假数据 / 全部）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

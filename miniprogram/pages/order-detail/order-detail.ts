@@ -96,6 +96,7 @@ Page({
   },
 
   getStepIndexFromStage(stage: string): number {
+    if (stage === 'pending') return -1;
     const map: Record<string, number> = {
       queued: 0, modeling: 1, painting: 2, hair: 3, shipped: 4
     };
@@ -116,5 +117,11 @@ Page({
         }
       }
     });
+  },
+
+  onPreviewImage(e: any) {
+    const { urls, current } = e.currentTarget.dataset;
+    if (!urls || !urls.length) return;
+    wx.previewImage({ urls, current });
   }
 })

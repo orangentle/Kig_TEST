@@ -14,6 +14,7 @@ interface UserInfo {
 
 interface OrderInfo {
   orderId: string;
+  tbOrderId: string;
   roleName: string;
   orderTime: string;
   status: 'pending' | 'approved' | 'rejected' | 'processing' | 'completed';
@@ -31,7 +32,6 @@ interface BodyMeasurements {
   height?: number;    // 身高(cm)
   weight?: number;    // 体重(kg)
   headCircumference?: number;  // 头围(cm)
-  neckCircumference?: number;  // 颈围(cm)
   shoulderWidth?: number;      // 肩宽(cm)
 }
 
@@ -83,7 +83,6 @@ Component({
       height: 0,
       weight: 0,
       headCircumference: 0,
-      neckCircumference: 0,
       shoulderWidth: 0
     }, // 临时存储编辑中的身材数据
     tempAvatarPath: '', // 临时存储选择的头像路径
@@ -300,6 +299,7 @@ Component({
           const orders = orderResult.data.map((order: any) => {
             return {
               orderId: order.orderId,
+              tbOrderId: order.tbOrderId || '',
               roleName: order.roleName,
               orderTime: this.formatDate(order.createTime),
               status: order.status
@@ -345,10 +345,13 @@ Component({
     
     // 点击订单项
     onOrderClick(e: any) {
-      const orderId = e.currentTarget.dataset.orderId;
-      
+      const tbOrderId = e.currentTarget.dataset.tbOrderId;
+      if (!tbOrderId) {
+        wx.showToast({ title: '订单缺少淘宝单号', icon: 'none' });
+        return;
+      }
       wx.navigateTo({
-        url: `/pages/order-detail/order-detail?id=${orderId}`
+        url: `/pages/order-detail/order-detail?id=${tbOrderId}`
       });
     },
     
@@ -403,13 +406,18 @@ Component({
       }
     },
 
-    // 用户ID点击触发器 - 隐藏的管理员入口
+    // 隐藏的管理员入口：长按头像触发密码弹窗（无可见提示）
+    onAdminLongPress() {
+      this.showAdminLoginDialog();
+    },
+
+    // 用户ID点击触发器 - 隐藏的管理员入口（保留兼容旧逻辑，未在页面绑定）
     onAdminLoginTrigger() {
       let { adminClickCount } = this.data;
       adminClickCount++;
-      
+
       this.setData({ adminClickCount });
-      
+
       // 如果点击达到5次，弹出管理员登录对话框
       if (adminClickCount >= 5) {
         this.showAdminLoginDialog();
@@ -567,7 +575,6 @@ Component({
             height: userProfile?.bodyMeasurements?.height || 0,
             weight: userProfile?.bodyMeasurements?.weight || 0,
             headCircumference: userProfile?.bodyMeasurements?.headCircumference || 0,
-            neckCircumference: userProfile?.bodyMeasurements?.neckCircumference || 0,
             shoulderWidth: userProfile?.bodyMeasurements?.shoulderWidth || 0
           },
           tempAvatarPath: ''
@@ -589,7 +596,6 @@ Component({
             height: 0,
             weight: 0,
             headCircumference: 0,
-            neckCircumference: 0,
             shoulderWidth: 0
           },
           tempAvatarPath: ''
@@ -672,13 +678,6 @@ Component({
     onHeadCircumferenceChange(e: any) {
       this.setData({
         'tempBodyMeasurements.headCircumference': parseFloat(e.detail.value) || 0
-      });
-    },
-
-    // 颈围输入变更
-    onNeckCircumferenceChange(e: any) {
-      this.setData({
-        'tempBodyMeasurements.neckCircumference': parseFloat(e.detail.value) || 0
       });
     },
 

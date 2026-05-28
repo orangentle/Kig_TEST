@@ -1,8 +1,13 @@
 <!--order.wxml-->
 <view class="container">
   <view class="page-header">
-    <text class="page-title">头壳定制下单</text>
-    <text class="page-subtitle">请填写以下信息，我们将为您打造专属头壳</text>
+    <view class="brand-divider">
+      <text class="divider-star">✦</text>
+      <view class="divider-paw"></view>
+      <text class="divider-star">✦</text>
+    </view>
+    <text class="page-title">头壳定制</text>
+    <text class="page-subtitle">捏一只独一无二的小可爱 ♡</text>
   </view>
 
   <scroll-view scroll-y class="form-scroll">
@@ -10,8 +15,19 @@
       <!-- 基本信息 -->
       <view class="section">
         <view class="section-title">
-          <t-icon name="user" size="36rpx" color="#ff8800" />
-          <text>基本信息</text>
+          <view class="section-icon"><t-icon name="user" size="32rpx" color="#c25a1a" /></view>
+          <text class="section-text">基本信息</text>
+          <view class="section-line"></view>
+        </view>
+
+        <view class="form-item">
+          <t-input
+            label="淘宝订单号"
+            placeholder="请填写淘宝定金订单号"
+            value="{{formData.tbOrderId}}"
+            bind:change="onTbOrderIdChange"
+            required
+          />
         </view>
 
         <view class="form-item">
@@ -27,7 +43,7 @@
         <view class="form-item">
           <t-input
             label="角色所属IP"
-            placeholder="如：原神 / 崩坏:星穹铁道 / 原创"
+            placeholder="如：原神、星铁、原创"
             value="{{formData.ip}}"
             bind:change="onIpChange"
             required
@@ -38,8 +54,9 @@
       <!-- 身材数据 -->
       <view class="section">
         <view class="section-title">
-          <t-icon name="measurement" size="36rpx" color="#ff8800" />
-          <text>身材数据</text>
+          <view class="section-icon"><t-icon name="measurement" size="32rpx" color="#c25a1a" /></view>
+          <text class="section-text">身材数据</text>
+          <view class="section-line"></view>
         </view>
 
         <t-cell
@@ -95,11 +112,12 @@
         </block>
       </view>
 
-      <!-- 角色多视角图 -->
+      <!-- 角色参考图 -->
       <view class="section">
         <view class="section-title">
-          <t-icon name="image" size="36rpx" color="#ff8800" />
-          <text>角色多视角图</text>
+          <view class="section-icon"><t-icon name="image" size="32rpx" color="#c25a1a" /></view>
+          <text class="section-text">角色参考图</text>
+          <view class="section-line"></view>
         </view>
 
         <view class="upload-area">
@@ -110,18 +128,19 @@
             bind:add="onUploadAdd"
             bind:remove="onUploadRemove"
           />
-          <text class="upload-tip">请上传角色正面 / 侧面 / 背面图，最多 3 张</text>
+          <text class="upload-tip">最多 3 张 · 推荐正面 / 侧面 / 背面，若只有一张也可提交</text>
         </view>
       </view>
 
       <!-- 定制选项 -->
       <view class="section">
         <view class="section-title">
-          <t-icon name="setting" size="36rpx" color="#ff8800" />
-          <text>定制选项</text>
+          <view class="section-icon"><t-icon name="setting" size="32rpx" color="#c25a1a" /></view>
+          <text class="section-text">定制选项</text>
+          <view class="section-line"></view>
         </view>
 
-        <t-cell title="需要配饰" description="角色专属头饰 / 耳朵 / 角等配件" hover>
+        <t-cell title="需要配饰" description="发饰 / 帽子 / 角 等角色专属道具" hover>
           <t-switch slot="note" value="{{formData.needAccessory}}" bind:change="onAccessoryChange" />
         </t-cell>
 
@@ -146,29 +165,30 @@
           </view>
         </block>
 
-        <t-cell title="加急处理" description="加急费用 +1200 元，优先制作" hover>
+        <t-cell title="加急处理" description="鼠鼠们加班加点为你赶工，加急费 +1200 元" hover>
           <t-switch slot="note" value="{{formData.isUrgent}}" bind:change="onUrgentChange" />
         </t-cell>
 
         <view class="urgent-notice" wx:if="{{formData.isUrgent}}">
           <t-icon name="error-circle-filled" size="32rpx" color="#ff8800" />
-          <text class="urgent-text">您已选择加急服务，将额外收取 1200 元加急费用</text>
+          <text class="urgent-text">鼠鼠们会加班加点为你赶工，将额外收取 1200 元加急费</text>
         </view>
       </view>
 
       <!-- 备注 -->
       <view class="section">
         <view class="section-title">
-          <t-icon name="edit" size="36rpx" color="#ff8800" />
-          <text>备注说明</text>
+          <view class="section-icon"><t-icon name="edit" size="32rpx" color="#c25a1a" /></view>
+          <text class="section-text">备注说明</text>
+          <view class="section-line"></view>
         </view>
 
         <view class="form-item">
           <t-textarea
-            placeholder="请输入其他特殊要求或备注信息"
+            placeholder="如有特殊要求请简要说明"
             value="{{formData.remark}}"
             bind:change="onRemarkChange"
-            maxlength="500"
+            maxlength="150"
             indicator
           />
         </view>

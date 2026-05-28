@@ -370,3 +370,117 @@
   color: #a08060;
   letter-spacing: 1rpx;
 }
+
+/* ====== 状态 pill 扩展 + 审核横幅 ====== */
+.pill-pending { background: #fff4e6; color: #c25a1a; }
+.pill-rejected { background: #fff1f0; color: #cf1322; }
+
+.review-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14rpx;
+  margin: 20rpx 28rpx 0;
+  padding: 18rpx 22rpx;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+.banner-pending { background: #fff4e6; color: #c25a1a; border: 1rpx solid #ffd8a8; }
+.banner-rejected { background: #fff1f0; color: #cf1322; border: 1rpx solid #ffccc7; }
+.banner-body { display: flex; flex-direction: column; flex: 1; }
+.banner-title { font-weight: 600; margin-bottom: 4rpx; }
+.banner-remark { font-size: 22rpx; opacity: 0.85; }
+
+/* ====== 您提交的信息 卡片 ====== */
+.submitted-card {
+  background: #fff;
+  margin: 24rpx 24rpx 0;
+  border-radius: 24rpx;
+  padding: 28rpx 28rpx 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(168, 90, 21, 0.06);
+  border: 1rpx solid #f0e6d6;
+}
+
+.submitted-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10rpx 0;
+}
+
+.sub-label {
+  font-size: 24rpx;
+  color: #a08060;
+  flex-shrink: 0;
+  margin-right: 14rpx;
+}
+
+.sub-value {
+  font-size: 26rpx;
+  color: #3a2410;
+  font-weight: 500;
+  text-align: right;
+  word-break: break-all;
+}
+
+.sub-section { margin-top: 22rpx; }
+.sub-section-title {
+  display: block;
+  font-size: 24rpx;
+  color: #a08060;
+  margin-bottom: 12rpx;
+}
+
+.sub-grid {
+  display: flex;
+  flex-wrap: wrap;
+  background: #fdf8f0;
+  border-radius: 14rpx;
+  padding: 12rpx 16rpx;
+}
+.sub-grid-item {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  padding: 8rpx 4rpx;
+}
+.sub-grid-item .sub-value { font-size: 24rpx; }
+
+.sub-image-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+}
+.sub-thumb {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 14rpx;
+  background: #fdf3e3;
+  border: 1rpx solid #f0e0c4;
+}
+
+.sub-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+.sub-tag {
+  font-size: 22rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #f7f3eb;
+  color: #6b5840;
+  border: 1rpx solid #f0e6d6;
+}
+.sub-tag.tag-on { background: #fdf3e3; color: #c25a1a; border-color: #f0d6a8; }
+.sub-tag.tag-urgent { background: #fff1f0; color: #cf1322; border-color: #ffccc7; }
+
+.sub-remark {
+  display: block;
+  font-size: 26rpx;
+  color: #3a2410;
+  line-height: 1.6;
+  background: #fdf8f0;
+  border-radius: 14rpx;
+  padding: 16rpx 20rpx;
+}

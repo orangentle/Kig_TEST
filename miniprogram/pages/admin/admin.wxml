@@ -173,6 +173,14 @@
     </view>
     <scroll-view scroll-x class="batch-actions" enhanced show-scrollbar="{{false}}">
       <view class="batch-row">
+        <block wx:if="{{currentTab === 'pending'}}">
+          <view class="batch-btn batch-btn-primary" bindtap="onBatchApprove">
+            <t-icon name="check-circle" size="32rpx" color="#52c41a" /><text>审核通过</text>
+          </view>
+          <view class="batch-btn batch-btn-danger" bindtap="onBatchReject">
+            <t-icon name="close-circle" size="32rpx" color="#ff4d4f" /><text>驳回</text>
+          </view>
+        </block>
         <view class="batch-btn" bindtap="onBatchAdvance">
           <t-icon name="arrow-right" size="32rpx" color="#ff8800" /><text>推进阶段</text>
         </view>
@@ -190,6 +198,9 @@
         </view>
         <view class="batch-btn" bindtap="onBatchArchive">
           <t-icon name="folder" size="32rpx" color="#52c41a" /><text>归档</text>
+        </view>
+        <view class="batch-btn batch-btn-danger" bindtap="onBatchDelete">
+          <t-icon name="delete" size="32rpx" color="#cf1322" /><text>删除</text>
         </view>
       </view>
     </scroll-view>
@@ -252,6 +263,12 @@
         <view class="filter-group filter-toggle" bindtap="onToggleIncludeArchived">
           <text>包含已归档</text>
           <switch checked="{{includeArchived}}" color="#ff8800" disabled />
+        </view>
+
+        <view class="danger-zone">
+          <view class="danger-title">危险操作</view>
+          <view class="danger-desc">仅清理测试数据：删除 queueNumber 以 RatStudio-2026- 开头的订单</view>
+          <view class="danger-btn danger-btn--mock" bindtap="onClearMockOrders">清理测试数据</view>
         </view>
       </view>
       <view class="filter-footer">

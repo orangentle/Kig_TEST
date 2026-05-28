@@ -15,8 +15,8 @@ App<IAppOption>({
     hasLogin: false,
     logoUrl: '/assets/images/icon.jpg',
     emptyImageUrl: 'https://cdn-icons-png.flaticon.com/512/5445/5445197.png',
-    cloudEnv: 'cloud1-9ga5mdp1028f94eb',
-    cloudStorageBase: 'cloud://cloud1-9ga5mdp1028f94eb.636c-cloud1-9ga5mdp1028f94eb-1330924565'
+    cloudEnv: 'shushugongfang-d2gl1995c27f9730e',
+    cloudStorageBase: 'cloud://shushugongfang-d2gl1995c27f9730e.636c-shushugongfang-d2gl1995c27f9730e-1330924565'
   },
   onLaunch() {
     // 展示本地存储能力

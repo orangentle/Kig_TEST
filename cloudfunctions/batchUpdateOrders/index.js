@@ -116,6 +116,38 @@ exports.main = async (event, context) => {
         updateData = { isUrgent: true, status: 'urgent', updateTime: now };
         break;
 
+      case 'review-approve':
+        // 审核通过：进入"已排单"，可正常生产
+        updateData = {
+          status: 'normal',
+          stage: 'queued',
+          progressStage: '已排单',
+          progressPercent: 10,
+          reviewInfo: {
+            reviewTime: now,
+            reviewBy: OPENID,
+            reviewRemark: (payload && payload.remark) || '审核通过'
+          },
+          updateTime: now
+        };
+        break;
+
+      case 'review-reject':
+        // 驳回：标记 rejected，仍锁定，需要客户改单后由客服重新提交
+        updateData = {
+          status: 'rejected',
+          stage: 'pending',
+          progressStage: '已驳回',
+          progressPercent: 0,
+          reviewInfo: {
+            reviewTime: now,
+            reviewBy: OPENID,
+            reviewRemark: (payload && payload.remark) || '信息有误，请联系客服'
+          },
+          updateTime: now
+        };
+        break;
+
       case 'unmark-urgent':
         updateData = { isUrgent: false, status: 'normal', updateTime: now };
         break;
@@ -172,6 +204,25 @@ exports.main = async (event, context) => {
         }
         updateData = { ...payload.fields, updateTime: now };
         break;
+
+      case 'delete': {
+        // 删除选中订单（单条或批量）
+        const results = await Promise.all(
+          orderIds.map(id =>
+            ordersCollection.doc(id).remove()
+              .then(() => true)
+              .catch(err => { console.error('delete fail', id, err); return false; })
+          )
+        );
+        const ok = results.filter(Boolean).length;
+        return {
+          success: true,
+          action,
+          requested: orderIds.length,
+          succeeded: ok,
+          failed: orderIds.length - ok
+        };
+      }
 
       default:
         return { success: false, error: '未知操作: ' + action };
