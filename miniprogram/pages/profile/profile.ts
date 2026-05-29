@@ -165,16 +165,16 @@ Component({
     async onLoginSubmit() {
       const { avatarUrl, nickName } = this.data.loginForm;
       if (!avatarUrl) {
-        wx.showToast({ title: '请先选择头像', icon: 'none' });
+        wx.showToast({ title: '头像选一个吧~', icon: 'none' });
         return;
       }
       if (!nickName) {
-        wx.showToast({ title: '请输入昵称', icon: 'none' });
+        wx.showToast({ title: '昵称还没填哦~', icon: 'none' });
         return;
       }
 
       this.setData({ isLoading: true });
-      wx.showLoading({ title: '登录中...' });
+      wx.showLoading({ title: '正在带你进窝~' });
 
       try {
         const { result } = await wx.cloud.callFunction({ name: 'login' }) as any;
@@ -229,10 +229,10 @@ Component({
         });
 
         this.loadOrders();
-        wx.showToast({ title: '登录成功', icon: 'success' });
+        wx.showToast({ title: '欢迎回来呀~ ✨', icon: 'success' });
       } catch (err) {
         console.error('登录失败', err);
-        wx.showToast({ title: '登录失败，请重试', icon: 'none' });
+        wx.showToast({ title: '登录出小差啦,再试试?', icon: 'none' });
       } finally {
         wx.hideLoading();
         this.setData({ isLoading: false });
@@ -324,25 +324,14 @@ Component({
     // 查看全部订单
     viewAllOrders() {
       wx.showToast({
-        title: '查看全部订单功能开发中',
+        title: '这个被你看到啦~ 还在赶工中',
         icon: 'none'
       });
     },
     
-    // 联系客服
-    contactService() {
-      wx.showModal({
-        title: '联系客服',
-        content: '即将打开客服会话',
-        success: (res) => {
-          if (res.confirm) {
-                wx.showToast({
-              title: '客服功能开发中',
-                  icon: 'none'
-                });
-          }
-        }
-      });
+    // 打开工期计算器
+    onOpenWorkDayCalc() {
+      wx.navigateTo({ url: '/pages/work-day-calc/work-day-calc' });
     },
 
     // 检查管理员状态
@@ -790,7 +779,7 @@ Component({
           });
           
           wx.showToast({
-            title: '资料更新成功',
+            title: '资料保存好啦~ ✨',
             icon: 'success'
           });
         }

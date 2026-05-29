@@ -84,7 +84,7 @@ Component({
     onQuerySubmit() {
       const tbOrderId = (this.data.queryValue || '').trim();
       if (!tbOrderId) {
-        this.setData({ queryError: '请输入订单号' });
+        this.setData({ queryError: '订单号不能空着哦~' });
         return;
       }
       if (this.data.isQuerying) return;
@@ -98,7 +98,7 @@ Component({
           if (!found) {
             this.setData({
               isQuerying: false,
-              queryError: `未查询到订单号 ${tbOrderId}`
+              queryError: `咦,没找到订单 ${tbOrderId}`
             });
             return;
           }
@@ -108,7 +108,7 @@ Component({
           });
         },
         fail: () => {
-          this.setData({ isQuerying: false, queryError: '查询失败，请重试' });
+          this.setData({ isQuerying: false, queryError: '信号迷路了,再试一次?' });
         }
       });
     },
@@ -123,7 +123,7 @@ Component({
     // 显示开发中提示
     showDeveloping() {
       wx.showToast({
-        title: '功能开发中，敬请期待',
+        title: '这个被你看到啦~ 还在赶工中',
         icon: 'none',
         duration: 2000
       });

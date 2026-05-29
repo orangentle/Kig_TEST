@@ -433,7 +433,7 @@
           <view class="form-item">
             <text class="form-label">角色参考图（最多 3 张）</text>
             <view class="img-grid">
-              <view wx:for="{{referenceImages}}" wx:key="*this" class="img-item">
+              <view wx:for="{{referenceImages}}" wx:key="index" class="img-item">
                 <image class="img-thumb" src="{{item}}" mode="aspectFill" />
                 <view class="img-remove" data-index="{{index}}" catchtap="onRemoveReferenceImage">
                   <t-icon name="close" size="24rpx" color="#fff" />
@@ -448,7 +448,7 @@
           <view wx:if="{{orderForm.needReplaceFace}}" class="form-item">
             <text class="form-label">替换脸图片（{{replaceFaceImages.length}}/{{orderForm.replaceFaceCount}}）</text>
             <view class="img-grid">
-              <view wx:for="{{replaceFaceImages}}" wx:key="*this" class="img-item">
+              <view wx:for="{{replaceFaceImages}}" wx:key="index" class="img-item">
                 <image class="img-thumb" src="{{item}}" mode="aspectFill" />
                 <view class="img-remove" data-index="{{index}}" catchtap="onRemoveFaceImage">
                   <t-icon name="close" size="24rpx" color="#fff" />
@@ -456,17 +456,6 @@
               </view>
               <view wx:if="{{replaceFaceImages.length < orderForm.replaceFaceCount}}" class="img-add" bindtap="onChooseFaceImages">
                 <text class="upload-icon">+</text>
-              </view>
-            </view>
-          </view>
-
-          <view class="form-item">
-            <text class="form-label">预期成品图</text>
-            <view class="image-uploader" bindtap="onChooseImage">
-              <image wx:if="{{tempImagePath}}" class="preview-img" src="{{tempImagePath}}" mode="aspectFit" />
-              <view wx:else class="upload-placeholder">
-                <text class="upload-icon">+</text>
-                <text class="upload-text">选择图片</text>
               </view>
             </view>
           </view>

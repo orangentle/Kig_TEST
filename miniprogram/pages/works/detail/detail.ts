@@ -59,7 +59,7 @@ Page({
       });
     } catch (error) {
       console.error('加载作品详情失败', error);
-      wx.showToast({ title: '加载失败', icon: 'none' });
+      wx.showToast({ title: '加载迷路了 (´·ω·`)', icon: 'none' });
     } finally {
       this.setData({ isLoading: false });
     }

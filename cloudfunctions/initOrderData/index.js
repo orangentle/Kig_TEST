@@ -62,7 +62,6 @@ function genOrder(i) {
     status,
     isUrgent,
     isArchived: false,
-    previewImage: '',
     details: { color: '默认', size: '标准', notes: '' },
     createTime: new Date(orderDate.getTime() + randInt(0, 86400000)),
     updateTime: new Date()

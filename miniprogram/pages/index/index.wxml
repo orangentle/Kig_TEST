@@ -1,5 +1,17 @@
 <!--index.wxml-->
 <view class="container">
+  <!-- 背景装饰 -->
+  <view class="bg-deco">
+    <view class="deco-circle dc1"></view>
+    <view class="deco-circle dc2"></view>
+    <view class="deco-circle dc3"></view>
+    <text class="deco-paw p1">🐾</text>
+    <text class="deco-paw p2">🐾</text>
+    <text class="deco-paw p3">✦</text>
+    <text class="deco-paw p4">✧</text>
+    <text class="deco-paw p5">✦</text>
+  </view>
+
   <!-- 顶部Banner -->
   <view class="header-banner">
     <image class="logo" src="/assets/images/icon.jpg" mode="aspectFill"></image>
@@ -13,6 +25,8 @@
       <text class="divider-paw">✦</text>
     </view>
     <text class="subtitle">Kigurumi 头壳定制</text>
+
+    <text class="greeting">欢迎来到鼠鼠的小窝~ 🐭✨</text>
 
     <t-button
       theme="primary"

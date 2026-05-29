@@ -84,7 +84,6 @@ export interface Order {
   referenceImages?: string[];
   replaceFaceImages?: string[];
   remark?: string;
-  previewImage?: string;
   reviewInfo?: ReviewInfo;
 }
 

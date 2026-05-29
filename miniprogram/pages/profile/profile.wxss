@@ -384,6 +384,48 @@
   letter-spacing: 1rpx;
 }
 
+/* 工具卡（工期计算器入口等） */
+.tool-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: 24rpx;
+  padding: 24rpx 28rpx;
+  background: #fff;
+  border: 1rpx solid #f0e6d6;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(168, 90, 21, 0.04);
+}
+.tool-card:active { background: #fffaf2; }
+.tool-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 16rpx;
+  background: #fff4e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tool-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+  min-width: 0;
+}
+.tool-title {
+  font-size: 28rpx;
+  color: #3a2410;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+}
+.tool-desc {
+  font-size: 22rpx;
+  color: #a08060;
+  line-height: 1.4;
+}
+
 /* 服务按钮 */
 .service-container {
   margin-top: 24rpx;

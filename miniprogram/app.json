@@ -14,6 +14,7 @@
     "pages/gathering/schedule/schedule",
     "pages/gathering/merch/merch",
     "pages/gathering/album/album",
+    "pages/work-day-calc/work-day-calc",
     "pages/logs/logs",
     "pages/webview/webview"
   ],

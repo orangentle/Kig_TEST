@@ -13,8 +13,8 @@
 
   <!-- 订单不存在 -->
   <view class="not-found" wx:if="{{notFound}}">
-    <text class="not-found-title">订单不存在</text>
-    <text class="not-found-tip">请检查订单号是否正确</text>
+    <text class="not-found-title">咦,这只订单跑掉啦~</text>
+    <text class="not-found-tip">订单号要再核对一下哦</text>
   </view>
 
   <!-- 订单信息卡 -->
@@ -153,19 +153,66 @@
     </view>
   </view>
 
-  <!-- 预期成品 -->
-  <view class="preview-card" wx:if="{{order.previewImage}}">
+  <!-- 客户信息（仅管理员可见） -->
+  <view class="admin-info-card" wx:if="{{isAdmin && !notFound}}">
     <view class="card-title">
-      <text class="title-text">预期成品</text>
+      <text class="title-text">客户信息</text>
+      <text class="admin-badge">管理员可见</text>
     </view>
-    <image class="preview-image" src="{{order.previewImage}}" mode="widthFix"></image>
+
+    <view class="admin-row">
+      <text class="admin-row-label">客户称呼</text>
+      <view class="admin-row-actions">
+        <text class="admin-row-value {{!order.customerName ? 'empty' : ''}}">{{order.customerName || '未填'}}</text>
+      </view>
+    </view>
+
+    <view class="admin-row">
+      <text class="admin-row-label">微信昵称</text>
+      <view class="admin-row-actions">
+        <text class="admin-row-value {{!order.userInfo.nickName ? 'empty' : ''}}">{{order.userInfo.nickName || '未授权'}}</text>
+      </view>
+    </view>
+
+    <view class="admin-row">
+      <text class="admin-row-label">淘宝旺旺</text>
+      <view class="admin-row-actions">
+        <text class="admin-row-value {{!order.userInfo.taobaoName ? 'empty' : ''}}">{{order.userInfo.taobaoName || '未填'}}</text>
+        <view wx:if="{{order.userInfo.taobaoName}}" class="admin-copy-btn" data-text="{{order.userInfo.taobaoName}}" catchtap="onAdminCopy">复制</view>
+      </view>
+    </view>
+
+    <view class="admin-row">
+      <text class="admin-row-label">QQ</text>
+      <view class="admin-row-actions">
+        <text class="admin-row-value {{!order.userInfo.qq ? 'empty' : ''}}">{{order.userInfo.qq || '未填'}}</text>
+        <view wx:if="{{order.userInfo.qq}}" class="admin-copy-btn" data-text="{{order.userInfo.qq}}" catchtap="onAdminCopy">复制</view>
+      </view>
+    </view>
+
+    <view class="admin-row">
+      <text class="admin-row-label">手机号</text>
+      <view class="admin-row-actions">
+        <text class="admin-row-value {{!order.userInfo.phone ? 'empty' : ''}}">{{order.userInfo.phone || '未填'}}</text>
+        <view wx:if="{{order.userInfo.phone}}" class="admin-copy-btn" data-text="{{order.userInfo.phone}}" catchtap="onAdminCall">拨打</view>
+        <view wx:if="{{order.userInfo.phone}}" class="admin-copy-btn" data-text="{{order.userInfo.phone}}" catchtap="onAdminCopy">复制</view>
+      </view>
+    </view>
+
+    <view class="admin-row">
+      <text class="admin-row-label">淘宝订单号</text>
+      <view class="admin-row-actions">
+        <text class="admin-row-value">{{order.tbOrderId}}</text>
+        <view class="admin-copy-btn" data-text="{{order.tbOrderId}}" catchtap="onAdminCopy">复制</view>
+      </view>
+    </view>
+
+    <view class="admin-row" wx:if="{{order.reviewInfo && order.reviewInfo.reviewTime}}">
+      <text class="admin-row-label">审核备注</text>
+      <view class="admin-row-actions">
+        <text class="admin-row-value {{!order.reviewInfo.reviewRemark ? 'empty' : ''}}">{{order.reviewInfo.reviewRemark || '无'}}</text>
+      </view>
+    </view>
   </view>
 
-  <!-- 联系客服 -->
-  <view class="contact-button-container" wx:if="{{!notFound}}">
-    <view class="contact-btn" bindtap="onContactService">
-      <t-icon name="chat" size="32rpx" color="#fff" />
-      <text>联系客服</text>
-    </view>
-  </view>
 </view>

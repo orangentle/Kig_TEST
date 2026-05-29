@@ -2,19 +2,64 @@
 .container {
   min-height: 100vh;
   position: relative;
-  /* 北欧风：奶油米底，单一柔和的暖色调 */
-  background: #fdf8f0;
+  /* 多层径向渐变 + 主底色,让背景柔和不空 */
+  background:
+    radial-gradient(circle at 15% 10%, #ffe9c2 0%, transparent 28%),
+    radial-gradient(circle at 88% 22%, #fdecd0 0%, transparent 30%),
+    radial-gradient(circle at 78% 78%, #fff0d8 0%, transparent 32%),
+    radial-gradient(circle at 10% 92%, #ffe2b8 0%, transparent 28%),
+    #fdf8f0;
   overflow: hidden;
 }
+
+/* 背景装饰：飘浮圆形 + 爪印/星星 */
+.bg-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.deco-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.55;
+  filter: blur(2rpx);
+}
+.dc1 {
+  width: 180rpx; height: 180rpx;
+  background: radial-gradient(circle, #ffd8a8 0%, transparent 70%);
+  top: 60rpx; left: -40rpx;
+}
+.dc2 {
+  width: 140rpx; height: 140rpx;
+  background: radial-gradient(circle, #ffe9c2 0%, transparent 70%);
+  top: 200rpx; right: -30rpx;
+}
+.dc3 {
+  width: 220rpx; height: 220rpx;
+  background: radial-gradient(circle, #fdecd0 0%, transparent 70%);
+  bottom: 100rpx; left: 30%;
+}
+.deco-paw {
+  position: absolute;
+  opacity: 0.5;
+  color: #ff9020;
+}
+.p1 { top: 140rpx; right: 80rpx; font-size: 32rpx; transform: rotate(15deg); }
+.p2 { top: 360rpx; left: 50rpx;  font-size: 28rpx; transform: rotate(-20deg); opacity: 0.4; }
+.p3 { top: 100rpx; left: 50%;    font-size: 24rpx; }
+.p4 { top: 280rpx; right: 30rpx; font-size: 20rpx; }
+.p5 { top: 480rpx; left: 20%;    font-size: 22rpx; opacity: 0.45; }
 
 /* 顶部Banner */
 .header-banner {
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 80rpx 40rpx 100rpx;
-  padding-top: calc(120rpx + env(safe-area-inset-top));
+  padding: 40rpx 40rpx 60rpx;
+  padding-top: calc(60rpx + env(safe-area-inset-top));
 }
 
 /* Logo */
@@ -23,9 +68,8 @@
   height: 132rpx;
   border-radius: 50%;
   border: 4rpx solid #fff;
-  /* 北欧风：极浅阴影 */
-  box-shadow: 0 8rpx 24rpx rgba(168, 90, 21, 0.12);
-  margin-bottom: 36rpx;
+  box-shadow: 0 8rpx 24rpx rgba(168, 90, 21, 0.15);
+  margin-bottom: 28rpx;
 }
 
 /* 标题：可爱手写感，每字微旋转 */
@@ -34,7 +78,6 @@
   align-items: flex-end;
   justify-content: center;
   gap: 4rpx;
-  /* iOS: Hannotate / Yuanti；Android 回退楷体；最后兜底圆体 */
   font-family: "Hannotate SC", "HYWenHei-85W", "Yuanti SC", "STHupo", "STKaiti", "KaiTi", "PingFang SC", sans-serif;
 }
 
@@ -44,11 +87,9 @@
   color: #4a2810;
   line-height: 1;
   display: inline-block;
-  /* 给每字一点不同的呼吸感 */
   transition: transform 0.3s ease;
 }
 
-/* 微旋转 + 颜色微差，呼应"可爱"不浮夸 */
 .c1 { transform: rotate(-4deg) translateY(2rpx); color: #c25a1a; }
 .c2 { transform: rotate(3deg)  translateY(-2rpx); color: #c25a1a; }
 .c3 { transform: rotate(-2deg) translateY(2rpx); color: #4a2810; }
@@ -61,7 +102,7 @@
   height: 4rpx;
   background: linear-gradient(90deg, transparent, #ffaa33, transparent);
   border-radius: 999rpx;
-  margin: 32rpx 0 18rpx;
+  margin: 24rpx 0 14rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,7 +112,7 @@
   position: absolute;
   font-size: 22rpx;
   color: #ff9020;
-  background: #fdf8f0;
+  background: transparent;
   padding: 0 10rpx;
 }
 
@@ -82,9 +123,21 @@
   text-align: center;
 }
 
-/* 主按钮 — 居中、克制、单一暖色 */
+/* 招呼语 */
+.greeting {
+  margin-top: 24rpx;
+  font-size: 24rpx;
+  color: #c25a1a;
+  letter-spacing: 2rpx;
+  background: #fff4e6;
+  padding: 10rpx 24rpx;
+  border-radius: 999rpx;
+  border: 1rpx dashed #ffd8a8;
+}
+
+/* 主按钮 */
 .order-button {
-  margin-top: 64rpx;
+  margin-top: 36rpx;
   width: 360rpx !important;
   height: 88rpx !important;
   font-size: 30rpx !important;
@@ -99,6 +152,8 @@
 
 /* 服务卡 */
 .services-section {
+  position: relative;
+  z-index: 1;
   padding: 0 32rpx 40rpx;
 }
 

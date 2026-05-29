@@ -61,7 +61,6 @@ exports.main = async (event, context) => {
       options: event.options || {},
 
       // 图片
-      previewImage: event.previewImage || '',
       referenceImages: Array.isArray(event.referenceImages) ? event.referenceImages : [],
       replaceFaceImages: Array.isArray(event.replaceFaceImages) ? event.replaceFaceImages : [],
 

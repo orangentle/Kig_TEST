@@ -128,36 +128,37 @@
         <block wx:else>
           <view class="empty-state">
             <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
-            <text class="empty-text">暂无订单信息</text>
+            <text class="empty-text">还没有订单呢~ 快去定制一只吧 ✨</text>
           </view>
         </block>
       </view>
       
+      <!-- 工具卡 -->
+      <view class="tool-card" bindtap="onOpenWorkDayCalc">
+        <view class="tool-icon">
+          <t-icon name="calendar" size="44rpx" color="#ff9020" />
+        </view>
+        <view class="tool-body">
+          <text class="tool-title">工期计算器</text>
+          <text class="tool-desc">按工作日估算预计完成日(自动跳过周末+法定节假日)</text>
+        </view>
+        <t-icon name="chevron-right" size="32rpx" color="#c8b89a" />
+      </view>
+
       <!-- 功能按钮区域 -->
       <view class="service-container">
         <!-- 管理员入口 - 只对管理员显示 -->
         <block wx:if="{{isAdmin}}">
-          <t-button 
-            theme="primary" 
-            size="large" 
-            shape="round" 
+          <t-button
+            theme="primary"
+            size="large"
+            shape="round"
             bind:tap="enterAdminPanel"
             class="admin-button mb-medium primary-button"
           >
             进入管理后台
           </t-button>
         </block>
-
-        <!-- 联系客服按钮 -->
-        <t-button 
-          theme="primary" 
-          size="large" 
-          shape="round" 
-          bind:tap="contactService"
-          class="service-button primary-button"
-        >
-          联系客服
-        </t-button>
       </view>
     </view>
   </block>

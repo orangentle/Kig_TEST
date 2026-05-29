@@ -89,17 +89,13 @@ Component({
       // 选项
       needAccessory: false, needReplaceFace: false, replaceFaceCount: 1,
       // 备注
-      remark: '',
-      // 图片
-      previewImage: ''
+      remark: ''
     },
     todayDate: '',
-    tempImagePath: '',        // 预期成品图（单）
     referenceImages: [] as string[],   // 角色参考图本地路径（最多 3）
     replaceFaceImages: [] as string[], // 替换脸图片本地路径
     faceCountOptions: [1, 2, 3],
     faceCountIndex: 0,
-    uploadProgress: 0,
     isSubmitting: false,
 
     // 排序选项
@@ -507,14 +503,11 @@ Component({
           taobaoName: '', qq: '', phone: '',
           height: 0, weight: 0, headCircumference: 0, shoulderWidth: 0,
           needAccessory: false, needReplaceFace: false, replaceFaceCount: 1,
-          remark: '',
-          previewImage: ''
+          remark: ''
         },
-        tempImagePath: '',
         referenceImages: [],
         replaceFaceImages: [],
         faceCountIndex: 0,
-        uploadProgress: 0,
         stageIndex: 0
       });
     },
@@ -626,26 +619,6 @@ Component({
       });
     },
 
-    onChooseImage() {
-      wx.chooseMedia({
-        count: 1,
-        mediaType: ['image'],
-        sizeType: ['compressed'],
-        success: (res) => {
-          this.setData({ tempImagePath: res.tempFiles[0].tempFilePath });
-        }
-      });
-    },
-
-    uploadImage(filePath: string): Promise<any> {
-      return new Promise((resolve, reject) => {
-        const ext = filePath.match(/\.(\w+)$/)?.[1] || 'png';
-        const cloudPath = `images/orders/${Date.now()}_${Math.random().toString(36).slice(-6)}.${ext}`;
-        const task = wx.cloud.uploadFile({ cloudPath, filePath, success: resolve, fail: reject });
-        task.onProgressUpdate((res) => this.setData({ uploadProgress: res.progress }));
-      });
-    },
-
     async uploadBatch(paths: string[], prefix: string): Promise<string[]> {
       const urls: string[] = [];
       for (let i = 0; i < paths.length; i++) {
@@ -660,7 +633,7 @@ Component({
     },
 
     async onSubmitOrderForm() {
-      const { orderForm, tempImagePath, referenceImages, replaceFaceImages } = this.data;
+      const { orderForm, referenceImages, replaceFaceImages } = this.data;
       const required = ['tbOrderId', 'customerName', 'roleName', 'orderTime', 'deadline'];
       const labels: any = {
         tbOrderId: '淘宝订单号', customerName: '客户名称', roleName: '角色名称',
@@ -683,11 +656,6 @@ Component({
 
       this.setData({ isSubmitting: true });
       try {
-        let previewImage = '';
-        if (tempImagePath) {
-          const r = await this.uploadImage(tempImagePath);
-          previewImage = r.fileID;
-        }
         const referenceImageUrls = await this.uploadBatch(referenceImages, 'reference');
         const replaceFaceImageUrls = orderForm.needReplaceFace
           ? await this.uploadBatch(replaceFaceImages, 'replace-face')
@@ -733,7 +701,6 @@ Component({
               isUrgent: orderForm.isUrgent
             },
             // 图片
-            previewImage,
             referenceImages: referenceImageUrls,
             replaceFaceImages: replaceFaceImageUrls,
             // 备注

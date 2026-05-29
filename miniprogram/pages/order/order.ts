@@ -330,8 +330,8 @@ Page({
 
       if (result && result.success) {
         wx.showModal({
-          title: '提交成功',
-          content: '您的订单已提交并锁定，请等待管理员审核。如需修改请联系客服解锁。',
+          title: '提交成功啦~ ✨',
+          content: '订单已交给鼠鼠~ 已锁定等待管理员审核哦,需要改动的话联系客服解锁就好啦~',
           showCancel: false,
           success: () => { wx.switchTab({ url: '/pages/profile/profile' }); }
         });

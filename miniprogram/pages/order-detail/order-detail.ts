@@ -22,8 +22,7 @@ Page({
       progressPercent: 0,
       progressStage: '',
       stage: '',
-      status: '',
-      previewImage: ''
+      status: ''
     } as unknown as OrderDetail,
     currentStepIndex: 0,
     progressPercent: 0,
@@ -53,7 +52,7 @@ Page({
   },
 
   loadOrderDetail(tbOrderId: string) {
-    wx.showLoading({ title: '加载中...' });
+    wx.showLoading({ title: '鼠鼠在搬数据~' });
 
     wx.cloud.callFunction({
       name: 'getOrders',
@@ -66,6 +65,13 @@ Page({
           return;
         }
         const orderData = orderList.find((o: any) => o.tbOrderId === tbOrderId) || orderList[0];
+        // 兼容老订单没有 orderTime 字段: 用 createTime 兜底
+        if (!orderData.orderTime && orderData.createTime) {
+          const d = new Date(orderData.createTime);
+          if (!isNaN(d.getTime())) {
+            orderData.orderTime = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+          }
+        }
         this.setData({
           order: orderData,
           currentStepIndex: this.getStepIndexFromStage(orderData.stage),
@@ -78,7 +84,7 @@ Page({
         wx.hideLoading();
         console.error('获取订单详情失败', err);
         this.setData({ loadError: true });
-        wx.showToast({ title: '加载失败，请重试', icon: 'none' });
+        wx.showToast({ title: '咦,加载迷路了,再试一次?', icon: 'none' });
       }
     });
   },
@@ -95,21 +101,27 @@ Page({
     wx.navigateBack();
   },
 
-  onContactService() {
-    wx.showModal({
-      title: '联系客服',
-      content: '即将打开客服会话',
-      success: (res) => {
-        if (res.confirm) {
-          wx.showToast({ title: '客服功能开发中', icon: 'none' });
-        }
-      }
-    });
-  },
-
   onPreviewImage(e: any) {
     const { urls, current } = e.currentTarget.dataset;
     if (!urls || !urls.length) return;
     wx.previewImage({ urls, current });
+  },
+
+  onAdminCopy(e: any) {
+    const text = e.currentTarget.dataset.text;
+    if (!text) return;
+    wx.setClipboardData({
+      data: String(text),
+      success: () => wx.showToast({ title: '复制好啦~', icon: 'success' })
+    });
+  },
+
+  onAdminCall(e: any) {
+    const text = e.currentTarget.dataset.text;
+    if (!text) return;
+    wx.makePhoneCall({
+      phoneNumber: String(text),
+      fail: () => wx.showToast({ title: '拨打失败 (´;ω;`)', icon: 'none' })
+    });
   }
 })

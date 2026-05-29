@@ -1,0 +1,100 @@
+<!--work-day-calc.wxml-->
+<view class="container">
+  <view class="page-header">
+    <view class="nav-bar">
+      <view class="back-button" bindtap="onBack">
+        <t-icon name="chevron-left" size="40rpx" color="#c25a1a" />
+      </view>
+      <text class="page-title">工期计算器</text>
+      <view class="nav-placeholder"></view>
+    </view>
+  </view>
+
+  <!-- 装饰主视觉 -->
+  <view class="hero">
+    <view class="hero-icon">
+      <text class="hero-emoji">📅</text>
+      <view class="hero-sparkle s1">✦</view>
+      <view class="hero-sparkle s2">✧</view>
+    </view>
+    <text class="hero-title">小鼠鼠帮你算工期~</text>
+    <text class="hero-sub">自动跳过周末 / 法定节假日 · 仅供参考哦</text>
+  </view>
+
+  <view class="form-card">
+    <view class="form-row">
+      <text class="form-label">从哪天开始</text>
+      <picker mode="date" value="{{startDate}}" start="2024-01-01" end="2030-12-31" bindchange="onStartDateChange">
+        <view class="picker-value">
+          <text>{{startDate || '点这里 →'}}</text>
+          <t-icon name="chevron-right" size="28rpx" color="#c25a1a" />
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">需要几个工作日</text>
+      <view class="num-input-wrap">
+        <input
+          class="num-input"
+          type="number"
+          value="{{workDays}}"
+          bindinput="onWorkDaysChange"
+        />
+        <text class="num-unit">天</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="calc-btn-wrap">
+    <view class="calc-btn {{isCalculating ? 'disabled' : ''}}" bindtap="onCalculate">
+      <text class="calc-btn-emoji">✨</text>
+      <text>{{isCalculating ? '鼠鼠正在算...' : '开始计算'}}</text>
+    </view>
+  </view>
+
+  <view class="api-hint" wx:if="{{apiHint}}">{{apiHint}}</view>
+
+  <view class="result-card" wx:if="{{result}}">
+    <view class="result-head">
+      <text class="result-label-small">预计完成日是 ✨</text>
+      <text class="result-date">{{result.endDate}}</text>
+    </view>
+
+    <view class="result-grid">
+      <view class="result-item">
+        <text class="result-num">{{result.totalDays}}</text>
+        <text class="result-label">自然日</text>
+      </view>
+      <view class="result-item">
+        <text class="result-num">{{workDays}}</text>
+        <text class="result-label">工作日</text>
+      </view>
+      <view class="result-item">
+        <text class="result-num">{{result.weekendCount}}</text>
+        <text class="result-label">周末</text>
+      </view>
+      <view class="result-item">
+        <text class="result-num">{{result.holidayCount}}</text>
+        <text class="result-label">节假日</text>
+      </view>
+    </view>
+
+    <view class="holiday-list" wx:if="{{result.holidayList.length}}">
+      <text class="holiday-list-title">🎉 期间会路过这些节日</text>
+      <view class="holiday-item" wx:for="{{result.holidayList}}" wx:key="date">
+        <text class="holiday-date">{{item.date}}</text>
+        <text class="holiday-name">{{item.name}}</text>
+      </view>
+    </view>
+
+    <view class="makeup-tip" wx:if="{{result.makeupCount > 0}}">
+      含 {{result.makeupCount}} 天调休补班(已算作工作日啦~)
+    </view>
+
+    <view class="copy-btn" bindtap="onCopyResult">
+      <t-icon name="file-copy" size="28rpx" color="#ff9020" />
+      <text>复制结果</text>
+    </view>
+  </view>
+</view>

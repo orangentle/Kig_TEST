@@ -1,0 +1,263 @@
+/* work-day-calc.wxss — 工期计算器(俏皮版) */
+.container {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 8%, #ffe9c2 0%, transparent 22%),
+    radial-gradient(circle at 92% 18%, #fdecd0 0%, transparent 25%),
+    radial-gradient(circle at 78% 92%, #fff0d8 0%, transparent 30%),
+    #fdf8f0;
+  padding-bottom: 80rpx;
+}
+
+.page-header {
+  padding: 0 24rpx;
+  padding-top: env(safe-area-inset-top);
+}
+.nav-bar {
+  display: flex;
+  align-items: center;
+  height: 96rpx;
+  position: relative;
+}
+.back-button {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #fff;
+  border: 1rpx solid #f0e6d6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.page-title {
+  position: absolute;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #3a2410;
+  letter-spacing: 4rpx;
+  pointer-events: none;
+}
+.nav-placeholder { margin-left: auto; width: 64rpx; }
+
+/* 主视觉 */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 40rpx 40rpx;
+}
+.hero-icon {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff4e6, #ffe2b8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 12rpx 30rpx rgba(255, 144, 32, 0.18);
+  margin-bottom: 24rpx;
+}
+.hero-emoji { font-size: 70rpx; }
+.hero-sparkle {
+  position: absolute;
+  font-size: 26rpx;
+  color: #ff9020;
+}
+.s1 { top: -4rpx; right: 4rpx; }
+.s2 { bottom: 8rpx; left: -4rpx; font-size: 22rpx; }
+.hero-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #3a2410;
+  letter-spacing: 3rpx;
+  font-family: "Hannotate SC", "Yuanti SC", "PingFang SC", sans-serif;
+}
+.hero-sub {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #a08060;
+  letter-spacing: 1rpx;
+}
+
+/* 表单卡 */
+.form-card {
+  margin: 0 24rpx;
+  padding: 12rpx 32rpx;
+  background: #fff;
+  border: 1rpx solid #f0e6d6;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(168, 90, 21, 0.05);
+}
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 0;
+  border-bottom: 1rpx dashed #f5ebd9;
+}
+.form-row:last-child { border-bottom: none; }
+.form-label {
+  font-size: 30rpx;
+  color: #3a2410;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+}
+.picker-value {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  font-size: 30rpx;
+  color: #c25a1a;
+  font-weight: 600;
+  padding: 12rpx 20rpx;
+  background: #fff4e6;
+  border-radius: 14rpx;
+  border: 1rpx solid #ffd8a8;
+}
+.num-input-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  padding: 12rpx 20rpx;
+  background: #fff4e6;
+  border-radius: 14rpx;
+  border: 1rpx solid #ffd8a8;
+}
+.num-input {
+  width: 100rpx;
+  text-align: right;
+  font-size: 36rpx;
+  color: #c25a1a;
+  font-weight: 700;
+}
+.num-unit {
+  font-size: 24rpx;
+  color: #c25a1a;
+}
+
+/* 计算按钮 */
+.calc-btn-wrap {
+  margin: 40rpx 48rpx 0;
+}
+.calc-btn {
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  background: linear-gradient(135deg, #ff9020 0%, #ffaa33 100%);
+  color: #fff;
+  border-radius: 999rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  letter-spacing: 6rpx;
+  box-shadow:
+    0 10rpx 24rpx rgba(255, 144, 32, 0.3),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.3);
+}
+.calc-btn:active { transform: scale(0.98); }
+.calc-btn.disabled { opacity: 0.6; }
+.calc-btn-emoji { font-size: 32rpx; letter-spacing: 0; }
+
+.api-hint {
+  margin: 16rpx 24rpx 0;
+  font-size: 22rpx;
+  color: #cf1322;
+  text-align: center;
+}
+
+/* 结果卡 */
+.result-card {
+  margin: 32rpx 24rpx 0;
+  padding: 36rpx 28rpx 28rpx;
+  background: linear-gradient(180deg, #fff7eb 0%, #fff 70%);
+  border: 1rpx solid #ffd8a8;
+  border-radius: 28rpx;
+  box-shadow: 0 6rpx 24rpx rgba(255, 144, 32, 0.1);
+}
+.result-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 28rpx;
+  border-bottom: 1rpx dashed #ffd8a8;
+}
+.result-label-small {
+  font-size: 24rpx;
+  color: #a08060;
+  letter-spacing: 2rpx;
+  margin-bottom: 12rpx;
+}
+.result-date {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #c25a1a;
+  letter-spacing: 4rpx;
+  font-family: "Hannotate SC", "Yuanti SC", "PingFang SC", sans-serif;
+}
+
+.result-grid {
+  display: flex;
+  margin-top: 28rpx;
+}
+.result-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+.result-num {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #3a2410;
+}
+.result-label {
+  font-size: 22rpx;
+  color: #a08060;
+}
+
+.holiday-list {
+  margin-top: 28rpx;
+  padding-top: 22rpx;
+  border-top: 1rpx dashed #ffd8a8;
+}
+.holiday-list-title {
+  display: block;
+  font-size: 24rpx;
+  color: #a08060;
+  margin-bottom: 12rpx;
+}
+.holiday-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10rpx 0;
+  font-size: 26rpx;
+}
+.holiday-date { color: #6b5840; }
+.holiday-name { color: #c25a1a; font-weight: 500; }
+
+.makeup-tip {
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: #6b5840;
+  text-align: center;
+}
+
+.copy-btn {
+  margin-top: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  padding: 18rpx 0;
+  background: #fff4e6;
+  color: #c25a1a;
+  border-radius: 14rpx;
+  font-size: 26rpx;
+  border: 1rpx solid #ffd8a8;
+}
+.copy-btn:active { opacity: 0.7; }

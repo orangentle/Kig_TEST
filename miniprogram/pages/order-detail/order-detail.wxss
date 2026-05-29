@@ -57,7 +57,8 @@
 /* 通用卡片样式 */
 .order-info-card,
 .progress-card,
-.preview-card {
+.admin-info-card,
+.submitted-card {
   margin: 16rpx 24rpx 24rpx;
   padding: 32rpx;
   background: #fff;
@@ -65,6 +66,49 @@
   border-radius: 24rpx;
   box-shadow: 0 2rpx 12rpx rgba(168, 90, 21, 0.04);
 }
+
+/* 管理员可见的客户信息卡 */
+.admin-info-card { border-left: 6rpx solid #ff8800; }
+.admin-badge {
+  display: inline-block;
+  background: #fff7e6;
+  color: #ff8800;
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  margin-left: 12rpx;
+  letter-spacing: 1rpx;
+}
+.admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-bottom: 1rpx dashed #f5ebd9;
+}
+.admin-row:last-child { border-bottom: none; }
+.admin-row-label { font-size: 26rpx; color: #998878; }
+.admin-row-value {
+  font-size: 28rpx;
+  color: #4a3520;
+  font-weight: 500;
+  user-select: text;
+}
+.admin-row-value.empty { color: #c8b89a; font-weight: 400; }
+.admin-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.admin-copy-btn {
+  background: #fff7e6;
+  color: #ff8800;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  letter-spacing: 1rpx;
+}
+.admin-copy-btn:active { opacity: 0.7; }
 
 /* 订单信息卡 */
 .card-head {
@@ -312,39 +356,6 @@
   align-self: flex-start;
   margin-top: 6rpx;
   letter-spacing: 1rpx;
-}
-
-/* 预期成品 */
-.preview-image {
-  width: 100%;
-  border-radius: 16rpx;
-  overflow: hidden;
-}
-
-/* 联系客服按钮 */
-.contact-button-container {
-  margin: 16rpx 24rpx;
-  margin-top: auto;
-}
-
-.contact-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12rpx;
-  height: 88rpx;
-  background: #ff9020;
-  color: #fff;
-  border-radius: 999rpx;
-  font-size: 28rpx;
-  font-weight: 500;
-  letter-spacing: 6rpx;
-  box-shadow: 0 8rpx 20rpx rgba(255, 144, 32, 0.25);
-}
-
-.contact-btn:active {
-  transform: scale(0.98);
-  box-shadow: 0 4rpx 12rpx rgba(255, 144, 32, 0.2);
 }
 
 /* 订单不存在 */
