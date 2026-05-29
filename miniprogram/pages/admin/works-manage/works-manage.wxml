@@ -1,52 +1,82 @@
 <view class="container">
-  <view class="section-card">
-    <view class="section-title">新增作品</view>
-    <view class="form-item">
-      <view class="label">角色名称</view>
-      <input class="input" placeholder="请输入角色名称" value="{{form.roleName}}" bindinput="onInputChange" data-field="roleName" />
-    </view>
-    <view class="form-item">
-      <view class="label">来源</view>
-      <input class="input" placeholder="填写作品来源/系列" value="{{form.source}}" bindinput="onInputChange" data-field="source" />
-    </view>
-    <view class="form-item">
-      <view class="label">参考价格</view>
-      <input class="input" type="number" placeholder="示例：999 或 999.00" value="{{form.price}}" bindinput="onInputChange" data-field="price" />
-    </view>
-    <view class="form-item">
-      <view class="label">分类</view>
-      <picker mode="selector" range="{{categories}}" range-key="label" value="{{form.categoryIndex}}" bindchange="onCategoryChange">
-        <view class="picker">{{categories[form.categoryIndex].label}}</view>
-      </picker>
-    </view>
-    <view class="form-item">
-      <view class="label">是否上架</view>
-      <switch checked="{{form.isPublished}}" bindchange="onPublishSwitch" color="#ff8800" />
-    </view>
-    <view class="form-item">
-      <view class="label">封面图</view>
-      <view class="uploader" bindtap="onChooseImage">
-        <image wx:if="{{form.coverPreview || form.coverFileId}}" class="preview" src="{{form.coverPreview || form.coverFileId}}" mode="aspectFill" />
-        <view class="upload-placeholder" wx:else>点击上传</view>
-      </view>
-    </view>
-    <t-button theme="primary" block loading="{{isSubmitting}}" bindtap="onSubmit">保存作品</t-button>
+  <view class="page-head">
+    <text class="page-head-title">作品管理</text>
+    <text class="page-head-sub">维护客户端"作品橱窗"展示</text>
   </view>
 
   <view class="section-card">
-    <view class="section-title">作品列表</view>
-    <view wx:if="{{works.length === 0}}" class="empty">暂无作品</view>
+    <view class="section-title">
+      <view class="section-title-bar"></view>
+      <text>新增作品</text>
+    </view>
+    <view class="form-item">
+      <view class="label">角色名称 <text class="required">*</text></view>
+      <input class="input" placeholder="请输入角色名称" value="{{form.roleName}}" bindinput="onInputChange" data-field="roleName" />
+    </view>
+    <view class="form-item">
+      <view class="label">来源 <text class="required">*</text></view>
+      <input class="input" placeholder="如:原神 / 崩坏3 / 自设..." value="{{form.source}}" bindinput="onInputChange" data-field="source" />
+    </view>
+    <view class="form-row-2">
+      <view class="form-item form-col">
+        <view class="label">参考价格</view>
+        <input class="input" type="digit" placeholder="选填" value="{{form.price}}" bindinput="onInputChange" data-field="price" />
+      </view>
+      <view class="form-item form-col">
+        <view class="label">分类</view>
+        <picker mode="selector" range="{{categories}}" range-key="label" value="{{form.categoryIndex}}" bindchange="onCategoryChange">
+          <view class="picker">{{categories[form.categoryIndex].label}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="form-item form-row-toggle">
+      <text class="label-inline">立即上架</text>
+      <switch checked="{{form.isPublished}}" bindchange="onPublishSwitch" color="#ff8800" />
+    </view>
+    <view class="form-item">
+      <view class="label">封面图 <text class="required">*</text></view>
+      <view class="uploader {{form.coverPreview || form.coverFileId ? 'uploader-has-img' : ''}}" bindtap="onChooseImage">
+        <block wx:if="{{form.coverPreview || form.coverFileId}}">
+          <image class="preview" src="{{form.coverPreview || form.coverFileId}}" mode="aspectFill" />
+          <view class="upload-mask" wx:if="{{isUploading}}">上传中...</view>
+          <view class="cover-remove" catchtap="onRemoveCover" wx:if="{{!isUploading}}">×</view>
+        </block>
+        <view class="upload-placeholder" wx:else>
+          <view class="upload-plus">+</view>
+          <text class="upload-hint">点击上传封面图</text>
+        </view>
+      </view>
+    </view>
+    <t-button theme="primary" block size="large" loading="{{isSubmitting}}" bindtap="onSubmit">保存作品</t-button>
+  </view>
+
+  <view class="section-card">
+    <view class="section-title">
+      <view class="section-title-bar"></view>
+      <text>作品列表</text>
+      <text class="title-count">共 {{works.length}} 件</text>
+    </view>
+
+    <view wx:if="{{isLoading && works.length === 0}}" class="empty">加载中...</view>
+    <view wx:elif="{{works.length === 0}}" class="empty">还没有作品 ✨ 上面新增一只吧</view>
+
     <block wx:for="{{works}}" wx:key="_id">
       <view class="work-item">
-        <image class="work-cover" src="{{item.coverFileId || '/assets/images/icon.jpg'}}" mode="aspectFill" />
+        <view class="work-cover-wrap">
+          <image class="work-cover" src="{{item.coverUrl || '/assets/images/icon.jpg'}}" mode="aspectFill" />
+          <view class="cat-badge cat-{{item.category}}">{{item.categoryLabel}}</view>
+        </view>
         <view class="work-meta">
           <view class="title-row">
             <text class="title">{{item.roleName}}</text>
             <text class="status {{item.isPublished ? 'on' : 'off'}}">{{item.isPublished ? '已上架' : '未上架'}}</text>
           </view>
-          <text class="desc">来源：{{item.source || '未填写'}}</text>
-          <text class="meta">参考价格：{{item.price !== undefined && item.price !== null ? item.price : '未填写'}}</text>
-          <text class="meta">分类：{{item.category}} ｜ 时间：{{item.displayDate}}</text>
+          <text class="desc">来源: {{item.source || '未填写'}}</text>
+          <view class="meta-row">
+            <text class="meta">¥ {{item.price !== undefined && item.price !== null ? item.price : '-'}}</text>
+            <text class="meta">·</text>
+            <text class="meta">{{item.displayDate}}</text>
+          </view>
           <view class="actions">
             <view class="switch-wrap">
               <text class="switch-label">上架</text>

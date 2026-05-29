@@ -6,9 +6,16 @@ interface WorkItem {
   date: string;
   imageUrl?: string;
   category: 'original' | 'game' | 'anime';
+  categoryLabel?: string;
   createTime?: number;
   coverFileId?: string;
 }
+
+const CATEGORY_LABEL: Record<string, string> = {
+  original: '自设',
+  game: '游戏',
+  anime: '动漫'
+};
 
 Page({
   data: {
@@ -19,7 +26,10 @@ Page({
     displayedWorks: [] as WorkItem[],
     hasMore: true,
     pageSize: 6,
-    currentPage: 1
+    currentPage: 1,
+    isLoading: true,
+    loadFailed: false,
+    skeletonItems: [1, 2, 3, 4]
   },
 
   onLoad() {
@@ -28,6 +38,7 @@ Page({
 
   // 加载作品数据（优先云端，失败回落本地模拟）
   async loadWorks() {
+    this.setData({ isLoading: true, loadFailed: false });
     try {
       const db = wx.cloud.database();
       const res = await db.collection('works')
@@ -58,6 +69,7 @@ Page({
 
         const works: WorkItem[] = res.data.map((item: any) => {
           const fileId = item.coverFileId || item.imageFileId || '';
+          const category = item.category || 'original';
           return {
             id: item._id,
             roleName: item.roleName || item.title || '未命名角色',
@@ -65,21 +77,27 @@ Page({
             date: this.formatDate(item.createTime || Date.now()),
             imageUrl: fileURLMap[fileId] || '',
             coverFileId: fileId,
-            category: item.category || 'original',
+            category,
+            categoryLabel: CATEGORY_LABEL[category] || '作品',
             createTime: item.createTime || Date.now()
-          };
+          } as any;
         });
-        this.setData({ works });
+        this.setData({ works, isLoading: false });
         this.applyFilters(true);
         return;
       }
+      this.setData({ works: [], isLoading: false });
+      this.applyFilters(true);
+      return;
     } catch (error) {
-      console.error('加载作品失败，使用本地数据', error);
+      console.error('加载作品失败', error);
+      this.setData({ works: [], isLoading: false, loadFailed: true });
+      this.applyFilters(true);
     }
+  },
 
-    // 无数据则保持空列表
-    this.setData({ works: [] });
-    this.applyFilters(true);
+  onRetryLoad() {
+    this.loadWorks();
   },
 
   // 搜索框内容变化

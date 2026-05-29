@@ -1,7 +1,9 @@
 {
   "usingComponents": {
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-image": "tdesign-miniprogram/image/image"
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-button": "tdesign-miniprogram/button/button"
   },
   "navigationBarTitleText": "订单详情"
 }

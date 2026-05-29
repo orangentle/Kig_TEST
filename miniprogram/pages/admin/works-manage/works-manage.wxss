@@ -1,104 +1,210 @@
 .container {
   background: #f5f7fa;
   min-height: 100vh;
-  padding: 24rpx;
+  padding: 0 0 32rpx;
+}
+
+.page-head {
+  background: linear-gradient(135deg, #ff8800, #ffaa33);
+  padding: 32rpx 28rpx 36rpx;
+  padding-top: calc(28rpx + env(safe-area-inset-top));
+  color: #fff;
+  border-radius: 0 0 24rpx 24rpx;
+  margin-bottom: 20rpx;
+}
+.page-head-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  display: block;
+}
+.page-head-sub {
+  font-size: 22rpx;
+  opacity: 0.85;
+  display: block;
+  margin-top: 6rpx;
+  letter-spacing: 1rpx;
 }
 
 .section-card {
   background: #fff;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  margin-bottom: 24rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
+  border-radius: 20rpx;
+  padding: 28rpx 24rpx;
+  margin: 0 24rpx 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
 }
 
 .section-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  margin-bottom: 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  margin-bottom: 24rpx;
   color: #333;
 }
+.section-title-bar {
+  width: 6rpx;
+  height: 26rpx;
+  border-radius: 4rpx;
+  background: #ff8800;
+}
+.title-count {
+  margin-left: auto;
+  font-size: 22rpx;
+  color: #999;
+  font-weight: 400;
+}
 
-.form-item {
-  margin-bottom: 20rpx;
+.form-item { margin-bottom: 20rpx; }
+.form-row-2 { display: flex; gap: 16rpx; }
+.form-col { flex: 1; }
+.form-row-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .label {
-  font-size: 28rpx;
-  color: #555;
-  margin-bottom: 8rpx;
+  font-size: 26rpx;
+  color: #6a6a6a;
+  margin-bottom: 10rpx;
 }
+.label-inline {
+  font-size: 28rpx;
+  color: #333;
+}
+.required { color: #ff4d4f; margin-left: 4rpx; }
 
 .input, .picker {
   width: 100%;
   height: 80rpx;
-  border: 2rpx solid #e0e0e0;
-  border-radius: 8rpx;
-  padding: 0 16rpx;
+  border: 2rpx solid #eef0f4;
+  border-radius: 12rpx;
+  padding: 0 18rpx;
   box-sizing: border-box;
   font-size: 28rpx;
-  background: #fafafa;
+  background: #fafbfc;
+  line-height: 80rpx;
+  color: #333;
 }
 
-.textarea {
-  width: 100%;
-  min-height: 140rpx;
-  border: 2rpx solid #e0e0e0;
-  border-radius: 8rpx;
-  padding: 12rpx 16rpx;
-  box-sizing: border-box;
-  font-size: 28rpx;
-  background: #fafafa;
-}
-
+/* 上传区 */
 .uploader {
   width: 100%;
-  height: 220rpx;
-  border: 2rpx dashed #e0e0e0;
-  border-radius: 12rpx;
+  height: 280rpx;
+  border: 2rpx dashed #d8dce4;
+  border-radius: 16rpx;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #fafafa;
+  background: #fafbfc;
+  position: relative;
+  transition: border-color 0.2s;
 }
-
-.preview {
-  width: 100%;
-  height: 100%;
+.uploader:active { border-color: #ff8800; }
+.uploader-has-img {
+  border-style: solid;
+  border-color: #f0e6d6;
+  background: #000;
 }
-
+.preview { width: 100%; height: 100%; display: block; }
+.upload-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 2rpx;
+}
+.cover-remove {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 36rpx;
+  line-height: 44rpx;
+  text-align: center;
+}
 .upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+.upload-plus {
+  font-size: 64rpx;
+  line-height: 1;
+  color: #c0c4cc;
+}
+.upload-hint {
+  font-size: 24rpx;
   color: #999;
-  font-size: 28rpx;
+  letter-spacing: 1rpx;
 }
 
 .empty {
-  color: #999;
+  color: #aaa;
   font-size: 26rpx;
-  padding: 24rpx 0;
+  padding: 60rpx 0;
+  text-align: center;
+  letter-spacing: 1rpx;
 }
 
+/* 作品列表 item */
 .work-item {
   display: flex;
   margin-bottom: 20rpx;
-  border: 2rpx solid #f0f0f0;
-  border-radius: 12rpx;
+  border: 1rpx solid #eef0f4;
+  border-radius: 16rpx;
   overflow: hidden;
+  background: #fff;
 }
+.work-item:last-child { margin-bottom: 0; }
 
-.work-cover {
-  width: 200rpx;
-  height: 200rpx;
+.work-cover-wrap {
+  width: 220rpx;
+  height: 220rpx;
+  flex-shrink: 0;
+  position: relative;
   background: #f5f5f5;
 }
+.work-cover {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.cat-badge {
+  position: absolute;
+  top: 10rpx;
+  left: 10rpx;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  color: #fff;
+  letter-spacing: 1rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.18);
+}
+.cat-original { background: rgba(255, 136, 0, 0.92); }
+.cat-game     { background: rgba(82, 130, 224, 0.92); }
+.cat-anime    { background: rgba(214, 75, 130, 0.92); }
 
 .work-meta {
   flex: 1;
-  padding: 16rpx;
+  padding: 16rpx 18rpx;
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
+  gap: 6rpx;
+  min-width: 0;
 }
 
 .title-row {
@@ -111,40 +217,47 @@
   font-size: 30rpx;
   font-weight: 600;
   color: #333;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 12rpx;
 }
 
 .status {
-  font-size: 24rpx;
-  padding: 4rpx 10rpx;
-  border-radius: 12rpx;
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  flex-shrink: 0;
 }
-
-.status.on {
-  background: rgba(82, 196, 26, 0.15);
-  color: #52c41a;
-}
-
-.status.off {
-  background: rgba(255, 77, 79, 0.15);
-  color: #ff4d4f;
-}
-
+.status.on { background: rgba(82, 196, 26, 0.15); color: #52c41a; }
+.status.off { background: rgba(150, 150, 150, 0.15); color: #999; }
 
 .desc {
   color: #666;
-  font-size: 26rpx;
+  font-size: 24rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
 .meta {
   color: #999;
-  font-size: 24rpx;
+  font-size: 22rpx;
 }
 
 .actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8rpx;
+  margin-top: auto;
+  padding-top: 8rpx;
+  border-top: 1rpx dashed #f0f0f0;
 }
 
 .switch-wrap {
@@ -154,6 +267,6 @@
 }
 
 .switch-label {
-  font-size: 26rpx;
-  color: #555;
+  font-size: 24rpx;
+  color: #999;
 }

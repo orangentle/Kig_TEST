@@ -160,6 +160,13 @@
       <text class="admin-badge">管理员可见</text>
     </view>
 
+    <view class="admin-edit-row">
+      <view class="admin-edit-btn" bindtap="openEditForm">
+        <t-icon name="edit-1" size="28rpx" color="#fff" />
+        <text>编辑订单</text>
+      </view>
+    </view>
+
     <view class="admin-row">
       <text class="admin-row-label">客户称呼</text>
       <view class="admin-row-actions">
@@ -214,5 +221,181 @@
       </view>
     </view>
   </view>
+
+  <!-- 编辑订单弹窗（仅管理员可见） -->
+  <t-popup visible="{{showEditForm}}" placement="bottom" bind:visible-change="closeEditForm">
+    <view class="form-popup">
+      <view class="form-header">
+        <text class="form-title">编辑订单</text>
+        <t-icon name="close" size="48rpx" color="#999" bindtap="closeEditForm" />
+      </view>
+      <scroll-view scroll-y class="form-body">
+
+        <view class="form-section">
+          <view class="form-section-title">基本信息</view>
+          <view class="form-item">
+            <text class="form-label">淘宝订单号</text>
+            <input class="form-input" placeholder="请输入" value="{{editForm.tbOrderId}}" data-field="tbOrderId" bindinput="onEditInput" />
+          </view>
+          <view class="form-item">
+            <text class="form-label">排单号</text>
+            <input class="form-input" placeholder="可后续批量分配" value="{{editForm.queueNumber}}" data-field="queueNumber" bindinput="onEditInput" />
+          </view>
+          <view class="form-item">
+            <text class="form-label">客户名称</text>
+            <input class="form-input" placeholder="请输入" value="{{editForm.customerName}}" data-field="customerName" bindinput="onEditInput" />
+          </view>
+          <view class="form-item">
+            <text class="form-label">角色名称</text>
+            <input class="form-input" placeholder="请输入" value="{{editForm.roleName}}" data-field="roleName" bindinput="onEditInput" />
+          </view>
+          <view class="form-item">
+            <text class="form-label">角色出处 IP</text>
+            <input class="form-input" placeholder="如：原神、崩坏3..." value="{{editForm.ip}}" data-field="ip" bindinput="onEditInput" />
+          </view>
+        </view>
+
+        <view class="form-section">
+          <view class="form-section-title">联系方式</view>
+          <view class="form-item">
+            <text class="form-label">淘宝旺旺</text>
+            <input class="form-input" placeholder="选填" value="{{editForm.taobaoName}}" data-field="taobaoName" bindinput="onEditInput" />
+          </view>
+          <view class="form-row-2">
+            <view class="form-item form-col">
+              <text class="form-label">QQ</text>
+              <input class="form-input" placeholder="选填" value="{{editForm.qq}}" data-field="qq" bindinput="onEditInput" />
+            </view>
+            <view class="form-item form-col">
+              <text class="form-label">手机号</text>
+              <input class="form-input" type="number" placeholder="选填" value="{{editForm.phone}}" data-field="phone" bindinput="onEditInput" />
+            </view>
+          </view>
+        </view>
+
+        <view class="form-section">
+          <view class="form-section-title">身材数据</view>
+          <view class="form-row-2">
+            <view class="form-item form-col">
+              <text class="form-label">身高 cm</text>
+              <input class="form-input" type="digit" placeholder="0" value="{{editForm.height}}" data-field="height" bindinput="onEditNumber" />
+            </view>
+            <view class="form-item form-col">
+              <text class="form-label">头围 cm</text>
+              <input class="form-input" type="digit" placeholder="0" value="{{editForm.headCircumference}}" data-field="headCircumference" bindinput="onEditNumber" />
+            </view>
+          </view>
+          <view class="form-row-2">
+            <view class="form-item form-col">
+              <text class="form-label">体重 kg</text>
+              <input class="form-input" type="digit" placeholder="0" value="{{editForm.weight}}" data-field="weight" bindinput="onEditNumber" />
+            </view>
+            <view class="form-item form-col">
+              <text class="form-label">肩宽 cm</text>
+              <input class="form-input" type="digit" placeholder="0" value="{{editForm.shoulderWidth}}" data-field="shoulderWidth" bindinput="onEditNumber" />
+            </view>
+          </view>
+        </view>
+
+        <view class="form-section">
+          <view class="form-section-title">定制选项</view>
+          <view class="form-item form-row-toggle">
+            <text class="form-label-inline">需要配饰</text>
+            <switch checked="{{editForm.needAccessory}}" color="#ff8800" data-field="needAccessory" bindchange="onEditToggle" />
+          </view>
+          <view class="form-item form-row-toggle">
+            <text class="form-label-inline">需要替换脸</text>
+            <switch checked="{{editForm.needReplaceFace}}" color="#ff8800" data-field="needReplaceFace" bindchange="onEditToggle" />
+          </view>
+          <view wx:if="{{editForm.needReplaceFace}}" class="form-item">
+            <text class="form-label">替换脸数量</text>
+            <picker mode="selector" range="{{faceCountOptions}}" value="{{faceCountIndex}}" bindchange="onEditFaceCountChange">
+              <view class="form-picker">{{editForm.replaceFaceCount}} 张</view>
+            </picker>
+          </view>
+          <view class="form-item form-row-toggle">
+            <text class="form-label-inline">加急</text>
+            <switch checked="{{editForm.isUrgent}}" color="#ff4d4f" data-field="isUrgent" bindchange="onEditToggle" />
+          </view>
+        </view>
+
+        <view class="form-section">
+          <view class="form-section-title">排期与阶段</view>
+          <view class="form-row-2">
+            <view class="form-item form-col">
+              <text class="form-label">下单日期</text>
+              <picker mode="date" value="{{editForm.orderTime}}" data-field="orderTime" bindchange="onEditDate">
+                <view class="form-picker">{{editForm.orderTime || '请选择'}}</view>
+              </picker>
+            </view>
+            <view class="form-item form-col">
+              <text class="form-label">预期完成</text>
+              <picker mode="date" value="{{editForm.deadline}}" data-field="deadline" bindchange="onEditDate">
+                <view class="form-picker">{{editForm.deadline || '请选择'}}</view>
+              </picker>
+            </view>
+          </view>
+          <view class="form-item">
+            <text class="form-label">制作阶段</text>
+            <picker mode="selector" range="{{stageOptions}}" range-key="label" value="{{stageIndex}}" bindchange="onEditStageChange">
+              <view class="form-picker">{{editForm.progressStage}} · {{editForm.progressPercent}}%</view>
+            </picker>
+          </view>
+        </view>
+
+        <view class="form-section">
+          <view class="form-section-title">图片资料</view>
+          <view class="form-item">
+            <text class="form-label">角色参考图（最多 3 张）</text>
+            <view class="img-grid">
+              <view wx:for="{{editReferenceImages}}" wx:key="index" class="img-item">
+                <image class="img-thumb" src="{{item}}" mode="aspectFill" />
+                <view class="img-remove" data-index="{{index}}" catchtap="onRemoveEditRefImage">
+                  <t-icon name="close" size="24rpx" color="#fff" />
+                </view>
+              </view>
+              <view wx:if="{{editReferenceImages.length < 3}}" class="img-add" bindtap="onChooseEditRefImages">
+                <text class="upload-icon">+</text>
+              </view>
+            </view>
+          </view>
+
+          <view wx:if="{{editForm.needReplaceFace}}" class="form-item">
+            <text class="form-label">替换脸图片（{{editFaceImages.length}}/{{editForm.replaceFaceCount}}）</text>
+            <view class="img-grid">
+              <view wx:for="{{editFaceImages}}" wx:key="index" class="img-item">
+                <image class="img-thumb" src="{{item}}" mode="aspectFill" />
+                <view class="img-remove" data-index="{{index}}" catchtap="onRemoveEditFaceImage">
+                  <t-icon name="close" size="24rpx" color="#fff" />
+                </view>
+              </view>
+              <view wx:if="{{editFaceImages.length < editForm.replaceFaceCount}}" class="img-add" bindtap="onChooseEditFaceImages">
+                <text class="upload-icon">+</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="form-section">
+          <view class="form-section-title">备注</view>
+          <view class="form-item">
+            <textarea
+              class="form-textarea"
+              placeholder="特殊要求 / 客户备注..."
+              maxlength="500"
+              value="{{editForm.remark}}"
+              data-field="remark"
+              bindinput="onEditInput"
+            />
+          </view>
+        </view>
+
+      </scroll-view>
+      <view class="form-footer">
+        <t-button variant="outline" size="large" bind:tap="closeEditForm">取消</t-button>
+        <t-button theme="primary" size="large" loading="{{isSaving}}" bind:tap="onSaveEdit">保存</t-button>
+      </view>
+    </view>
+  </t-popup>
 
 </view>

@@ -5,10 +5,18 @@ interface WorkItem {
   price?: number;
   category: 'original' | 'game' | 'anime';
   coverFileId: string;
+  coverUrl?: string;
   isPublished: boolean;
   createTime: number;
   displayDate?: string;
+  categoryLabel?: string;
 }
+
+const CATEGORY_LABEL: Record<string, string> = {
+  original: '自设',
+  game: '游戏',
+  anime: '动漫'
+};
 
 Page({
   data: {
@@ -28,7 +36,8 @@ Page({
     ],
     works: [] as WorkItem[],
     isLoading: false,
-    isSubmitting: false
+    isSubmitting: false,
+    isUploading: false
   },
 
   onLoad() {
@@ -40,17 +49,43 @@ Page({
     try {
       const db = wx.cloud.database();
       const res = await db.collection('works').orderBy('createTime', 'desc').get();
-      const works = (res.data || []).map((item: any) => ({
-        _id: item._id,
-        roleName: item.roleName || item.title || '未命名角色',
-        source: item.source || item.description || '作品',
-        price: item.price,
-        category: item.category || 'original',
-        coverFileId: item.coverFileId || item.imageFileId || '',
-        isPublished: item.isPublished !== false,
-        createTime: item.createTime || Date.now(),
-        displayDate: this.formatDate(item.createTime || Date.now())
+      const rawWorks = (res.data || []).map((item: any) => {
+        const category = item.category || 'original';
+        return {
+          _id: item._id,
+          roleName: item.roleName || item.title || '未命名角色',
+          source: item.source || item.description || '作品',
+          price: item.price,
+          category,
+          categoryLabel: CATEGORY_LABEL[category] || '作品',
+          coverFileId: item.coverFileId || item.imageFileId || '',
+          coverUrl: '',
+          isPublished: item.isPublished !== false,
+          createTime: item.createTime || Date.now(),
+          displayDate: this.formatDate(item.createTime || Date.now())
+        } as WorkItem;
+      });
+
+      // 把 cloud:// fileID 解析成临时 URL,否则 image 标签显示不了
+      const fileIDs = rawWorks
+        .map(w => w.coverFileId)
+        .filter(id => !!id && id.startsWith('cloud://'));
+      const urlMap: Record<string, string> = {};
+      if (fileIDs.length > 0) {
+        try {
+          const urlRes = await wx.cloud.getTempFileURL({ fileList: fileIDs });
+          urlRes.fileList.forEach((f: any) => {
+            if (f.tempFileURL) urlMap[f.fileID] = f.tempFileURL;
+          });
+        } catch (e) {
+          console.warn('封面临时链接获取失败', e);
+        }
+      }
+      const works = rawWorks.map(w => ({
+        ...w,
+        coverUrl: urlMap[w.coverFileId] || (w.coverFileId && !w.coverFileId.startsWith('cloud://') ? w.coverFileId : '')
       }));
+
       this.setData({ works });
     } catch (error) {
       console.error('加载作品失败', error);
@@ -76,29 +111,35 @@ Page({
   },
 
   async onChooseImage() {
+    if (this.data.isUploading) return;
     try {
       const filePath = await new Promise<string>((resolve, reject) => {
-        wx.chooseImage({
+        wx.chooseMedia({
           count: 1,
+          mediaType: ['image'],
           sizeType: ['compressed'],
-          success: (res) => resolve(res.tempFilePaths[0]),
+          success: (res) => resolve(res.tempFiles[0].tempFilePath),
           fail: reject
         });
       });
+      // 立刻显示本地预览,再后台上传
+      this.setData({ 'form.coverPreview': filePath, isUploading: true });
       const cloudPath = `images/works/${Date.now()}-${Math.floor(Math.random() * 1000)}.jpg`;
-      wx.showLoading({ title: '上传中...' });
       const uploadRes = await wx.cloud.uploadFile({ cloudPath, filePath });
-      wx.hideLoading();
       this.setData({
         'form.coverFileId': uploadRes.fileID,
-        'form.coverPreview': filePath
+        isUploading: false
       });
       wx.showToast({ title: '上传成功', icon: 'success' });
     } catch (error) {
-      wx.hideLoading();
+      this.setData({ isUploading: false });
       console.error('上传图片失败', error);
       wx.showToast({ title: '上传失败', icon: 'none' });
     }
+  },
+
+  onRemoveCover() {
+    this.setData({ 'form.coverFileId': '', 'form.coverPreview': '' });
   },
 
   async onSubmit() {
@@ -114,6 +155,10 @@ Page({
     }
     if (!form.coverFileId) {
       wx.showToast({ title: '请上传封面图', icon: 'none' });
+      return;
+    }
+    if (this.data.isUploading) {
+      wx.showToast({ title: '封面还在上传中', icon: 'none' });
       return;
     }
 
@@ -185,7 +230,8 @@ Page({
     const confirmRes = await new Promise<{ confirm: boolean }>((resolve) => {
       wx.showModal({
         title: '删除确认',
-        content: '确定删除该作品吗？',
+        content: '确定删除该作品吗？此操作不可撤销',
+        confirmColor: '#ff4d4f',
         success: (res) => resolve({ confirm: res.confirm })
       });
     });
