@@ -72,15 +72,33 @@ Component({
     stageIndex: 0,
     batchStageIndex: 0,
 
-    // 新增订单表单
+    // 新增订单表单（与 Order 数据结构对齐）
     orderForm: {
-      tbOrderId: '', queueNumber: '', customerName: '', roleName: '',
+      // 基本
+      tbOrderId: '', queueNumber: '', customerName: '', roleName: '', ip: '',
+      // 时间
       orderTime: '', deadline: '',
+      // 进度
       progressPercent: 10, progressStage: '已排单', stage: 'queued',
-      isUrgent: false, previewImage: ''
+      // 状态
+      isUrgent: false,
+      // 联系
+      taobaoName: '', qq: '', phone: '',
+      // 身材
+      height: 0, weight: 0, headCircumference: 0, shoulderWidth: 0,
+      // 选项
+      needAccessory: false, needReplaceFace: false, replaceFaceCount: 1,
+      // 备注
+      remark: '',
+      // 图片
+      previewImage: ''
     },
     todayDate: '',
-    tempImagePath: '',
+    tempImagePath: '',        // 预期成品图（单）
+    referenceImages: [] as string[],   // 角色参考图本地路径（最多 3）
+    replaceFaceImages: [] as string[], // 替换脸图片本地路径
+    faceCountOptions: [1, 2, 3],
+    faceCountIndex: 0,
     uploadProgress: 0,
     isSubmitting: false,
 
@@ -482,12 +500,22 @@ Component({
         showOrderForm: true,
         showAddSheet: false,
         orderForm: {
-          tbOrderId: '', queueNumber: '', customerName: '', roleName: '',
+          tbOrderId: '', queueNumber: '', customerName: '', roleName: '', ip: '',
           orderTime: this.data.todayDate, deadline: '',
           progressPercent: 10, progressStage: '已排单', stage: 'queued',
-          isUrgent: false, previewImage: ''
+          isUrgent: false,
+          taobaoName: '', qq: '', phone: '',
+          height: 0, weight: 0, headCircumference: 0, shoulderWidth: 0,
+          needAccessory: false, needReplaceFace: false, replaceFaceCount: 1,
+          remark: '',
+          previewImage: ''
         },
-        tempImagePath: '', uploadProgress: 0, stageIndex: 0
+        tempImagePath: '',
+        referenceImages: [],
+        replaceFaceImages: [],
+        faceCountIndex: 0,
+        uploadProgress: 0,
+        stageIndex: 0
       });
     },
 
@@ -498,6 +526,84 @@ Component({
     onFormInputChange(e: any) {
       const { field } = e.currentTarget.dataset;
       this.setData({ [`orderForm.${field}`]: e.detail.value });
+    },
+
+    onFormNumberChange(e: any) {
+      const { field } = e.currentTarget.dataset;
+      const v = parseFloat(e.detail.value);
+      this.setData({ [`orderForm.${field}`]: isNaN(v) ? 0 : v });
+    },
+
+    onToggleField(e: any) {
+      const { field } = e.currentTarget.dataset;
+      const cur = (this.data.orderForm as any)[field];
+      this.setData({ [`orderForm.${field}`]: !cur });
+    },
+
+    onFaceCountChange(e: any) {
+      const idx = parseInt(e.detail.value);
+      const count = this.data.faceCountOptions[idx];
+      const trimmed = this.data.replaceFaceImages.slice(0, count);
+      this.setData({
+        faceCountIndex: idx,
+        'orderForm.replaceFaceCount': count,
+        replaceFaceImages: trimmed
+      });
+    },
+
+    onChooseReferenceImages() {
+      const remain = 3 - this.data.referenceImages.length;
+      if (remain <= 0) {
+        wx.showToast({ title: '最多 3 张', icon: 'none' });
+        return;
+      }
+      wx.chooseMedia({
+        count: remain,
+        mediaType: ['image'],
+        sizeType: ['compressed'],
+        success: (res) => {
+          const next = [
+            ...this.data.referenceImages,
+            ...res.tempFiles.map(f => f.tempFilePath)
+          ].slice(0, 3);
+          this.setData({ referenceImages: next });
+        }
+      });
+    },
+
+    onRemoveReferenceImage(e: any) {
+      const idx = e.currentTarget.dataset.index;
+      const arr = [...this.data.referenceImages];
+      arr.splice(idx, 1);
+      this.setData({ referenceImages: arr });
+    },
+
+    onChooseFaceImages() {
+      const limit = this.data.orderForm.replaceFaceCount;
+      const remain = limit - this.data.replaceFaceImages.length;
+      if (remain <= 0) {
+        wx.showToast({ title: `最多 ${limit} 张`, icon: 'none' });
+        return;
+      }
+      wx.chooseMedia({
+        count: remain,
+        mediaType: ['image'],
+        sizeType: ['compressed'],
+        success: (res) => {
+          const next = [
+            ...this.data.replaceFaceImages,
+            ...res.tempFiles.map(f => f.tempFilePath)
+          ].slice(0, limit);
+          this.setData({ replaceFaceImages: next });
+        }
+      });
+    },
+
+    onRemoveFaceImage(e: any) {
+      const idx = e.currentTarget.dataset.index;
+      const arr = [...this.data.replaceFaceImages];
+      arr.splice(idx, 1);
+      this.setData({ replaceFaceImages: arr });
     },
 
     onToggleUrgent() {
@@ -540,15 +646,39 @@ Component({
       });
     },
 
+    async uploadBatch(paths: string[], prefix: string): Promise<string[]> {
+      const urls: string[] = [];
+      for (let i = 0; i < paths.length; i++) {
+        const p = paths[i];
+        if (p.startsWith('cloud://')) { urls.push(p); continue; }
+        const ext = p.match(/\.(\w+)$/)?.[1] || 'jpg';
+        const cloudPath = `orders/${prefix}/${Date.now()}_${i}.${ext}`;
+        const r: any = await wx.cloud.uploadFile({ cloudPath, filePath: p });
+        urls.push(r.fileID);
+      }
+      return urls;
+    },
+
     async onSubmitOrderForm() {
-      const { orderForm, tempImagePath } = this.data;
+      const { orderForm, tempImagePath, referenceImages, replaceFaceImages } = this.data;
       const required = ['tbOrderId', 'customerName', 'roleName', 'orderTime', 'deadline'];
-      const labels: any = { tbOrderId: '淘宝订单号', customerName: '客户名称', roleName: '角色名称', orderTime: '下单时间', deadline: '预期完成时间' };
+      const labels: any = {
+        tbOrderId: '淘宝订单号', customerName: '客户名称', roleName: '角色名称',
+        orderTime: '下单时间', deadline: '预期完成时间'
+      };
       for (const f of required) {
         if (!(orderForm as any)[f]) {
           wx.showToast({ title: `请填写${labels[f]}`, icon: 'none' });
           return;
         }
+      }
+      if (!orderForm.height || !orderForm.headCircumference) {
+        wx.showToast({ title: '请填写身高和头围', icon: 'none' });
+        return;
+      }
+      if (orderForm.needReplaceFace && replaceFaceImages.length < orderForm.replaceFaceCount) {
+        wx.showToast({ title: `请上传 ${orderForm.replaceFaceCount} 张替换脸图`, icon: 'none' });
+        return;
       }
 
       this.setData({ isSubmitting: true });
@@ -558,19 +688,63 @@ Component({
           const r = await this.uploadImage(tempImagePath);
           previewImage = r.fileID;
         }
+        const referenceImageUrls = await this.uploadBatch(referenceImages, 'reference');
+        const replaceFaceImageUrls = orderForm.needReplaceFace
+          ? await this.uploadBatch(replaceFaceImages, 'replace-face')
+          : [];
+
         await wx.cloud.callFunction({
           name: 'createOrder',
           data: {
-            ...orderForm,
-            previewImage,
+            // 基本
+            tbOrderId: orderForm.tbOrderId,
+            queueNumber: orderForm.queueNumber,
+            customerName: orderForm.customerName,
+            roleName: orderForm.roleName,
+            ip: orderForm.ip,
+            // 时间
+            orderTime: orderForm.orderTime,
+            deadline: orderForm.deadline,
+            // 进度
+            stage: orderForm.stage,
+            progressStage: orderForm.progressStage,
+            progressPercent: orderForm.progressPercent,
+            // 状态
+            isUrgent: orderForm.isUrgent,
             status: orderForm.isUrgent ? 'urgent' : 'normal',
-            createTime: new Date()
+            // 联系
+            userInfo: {
+              taobaoName: orderForm.taobaoName,
+              qq: orderForm.qq,
+              phone: orderForm.phone
+            },
+            // 身材
+            bodyMeasurements: {
+              height: orderForm.height,
+              weight: orderForm.weight,
+              headCircumference: orderForm.headCircumference,
+              shoulderWidth: orderForm.shoulderWidth
+            },
+            // 选项
+            options: {
+              needAccessory: orderForm.needAccessory,
+              needReplaceFace: orderForm.needReplaceFace,
+              replaceFaceCount: orderForm.needReplaceFace ? orderForm.replaceFaceCount : 0,
+              isUrgent: orderForm.isUrgent
+            },
+            // 图片
+            previewImage,
+            referenceImages: referenceImageUrls,
+            replaceFaceImages: replaceFaceImageUrls,
+            // 备注
+            remark: orderForm.remark
           }
         });
         wx.showToast({ title: '创建成功', icon: 'success' });
         this.setData({ showOrderForm: false, isSubmitting: false });
         this.refresh();
       } catch (err) {
+        console.error('创建订单失败', err);
         wx.showToast({ title: '创建失败', icon: 'none' });
         this.setData({ isSubmitting: false });
       }
