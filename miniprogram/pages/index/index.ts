@@ -16,7 +16,7 @@ Component({
     showQueryPopup: false,
     queryValue: '',
     queryError: '',
-    demoOrderIds: ['TB123456789', 'TB987654321', 'TB456789123', 'TB789123456'],
+    isQuerying: false,
   },
 
   lifetimes: {
@@ -81,24 +81,35 @@ Component({
       this.setData({ queryValue: '', queryError: '' });
     },
 
-    onQuickPick(e: any) {
-      const id = e.currentTarget.dataset.id;
-      this.setData({ queryValue: id, queryError: '' });
-    },
-
     onQuerySubmit() {
       const tbOrderId = (this.data.queryValue || '').trim();
       if (!tbOrderId) {
         this.setData({ queryError: '请输入订单号' });
         return;
       }
-      if (!this.data.demoOrderIds.includes(tbOrderId)) {
-        this.setData({ queryError: `未查询到订单号 ${tbOrderId}` });
-        return;
-      }
-      this.setData({ showQueryPopup: false });
-      wx.navigateTo({
-        url: `/pages/order-detail/order-detail?id=${tbOrderId}`
+      if (this.data.isQuerying) return;
+      this.setData({ isQuerying: true, queryError: '' });
+      wx.cloud.callFunction({
+        name: 'getOrders',
+        data: { tbOrderId },
+        success: (res: any) => {
+          const list = (res.result && res.result.data) || [];
+          const found = list.find((o: any) => o.tbOrderId === tbOrderId);
+          if (!found) {
+            this.setData({
+              isQuerying: false,
+              queryError: `未查询到订单号 ${tbOrderId}`
+            });
+            return;
+          }
+          this.setData({ isQuerying: false, showQueryPopup: false });
+          wx.navigateTo({
+            url: `/pages/order-detail/order-detail?id=${tbOrderId}`
+          });
+        },
+        fail: () => {
+          this.setData({ isQuerying: false, queryError: '查询失败，请重试' });
+        }
       });
     },
 

@@ -105,26 +105,12 @@
         <text>{{queryError}}</text>
       </view>
 
-      <!-- 演示订单号 -->
-      <view class="query-demo">
-        <text class="query-demo-label">演示订单号 · 点击填入</text>
-        <view class="query-chips">
-          <view
-            wx:for="{{demoOrderIds}}"
-            wx:key="*this"
-            class="query-chip"
-            data-id="{{item}}"
-            bindtap="onQuickPick"
-          >{{item}}</view>
-        </view>
-      </view>
-
       <!-- 操作按钮 -->
       <view class="query-actions">
         <view class="query-btn query-btn-cancel" bindtap="onQueryPopupClose">取消</view>
-        <view class="query-btn query-btn-confirm" bindtap="onQuerySubmit">
-          <t-icon name="search" size="32rpx" color="#fff" />
-          <text>立即查询</text>
+        <view class="query-btn query-btn-confirm {{isQuerying ? 'is-loading' : ''}}" bindtap="onQuerySubmit">
+          <t-icon wx:if="{{!isQuerying}}" name="search" size="32rpx" color="#fff" />
+          <text>{{isQuerying ? '查询中...' : '立即查询'}}</text>
         </view>
       </view>
     </view>
