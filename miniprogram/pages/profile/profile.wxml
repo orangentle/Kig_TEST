@@ -166,8 +166,8 @@
             size="large"
             shape="round"
             bind:tap="enterAdminPanel"
-            class="admin-button mb-medium primary-button"
-            hover-class="primary-button-hover"
+            class="admin-button mb-medium"
+            hover-class="admin-button-hover"
             hover-stay-time="80"
           >
             进入管理后台

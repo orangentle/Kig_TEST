@@ -120,15 +120,6 @@ Component({
       wx.navigateTo({
         url: '/pages/gathering/gathering'
       });
-    },
-
-    // 显示开发中提示
-    showDeveloping() {
-      wx.showToast({
-        title: '这个被你看到啦~ 还在赶工中',
-        icon: 'none',
-        duration: 2000
-      });
     }
   },
 })

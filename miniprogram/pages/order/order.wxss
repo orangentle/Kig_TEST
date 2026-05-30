@@ -1,7 +1,7 @@
 /* order.wxss — 北欧极简 · 暖奶咖 · 鼠鼠手作 */
 page {
-  /* 统一手写字体族（决定本页所有装饰文字的字形） */
-  --font-deco: "Hannotate SC", "Yuanti SC", "STKaiti", "KaiTi", "PingFang SC", sans-serif;
+  /* 装饰文字字体族（黑体风格，跨端统一） */
+  --font-deco: "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
 }
 
 .container {
@@ -57,22 +57,37 @@ page {
   font-size: 56rpx;
   font-weight: 700;
   color: var(--color-text);
-  letter-spacing: 8rpx;
+  letter-spacing: 4rpx;
   line-height: 1.15;
   margin-bottom: 16rpx;
-  text-indent: 8rpx;
+  text-indent: 4rpx;
   font-family: var(--font-deco);
   text-shadow: 0 2rpx 0 rgba(200, 153, 104, 0.15);
 }
 
 .page-subtitle {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14rpx;
   font-size: 26rpx;
   color: var(--color-deco-warm);
   letter-spacing: 2rpx;
   font-weight: 500;
   line-height: 1.4;
   font-family: var(--font-deco);
+}
+
+.subtitle-text {
+  /* 主文字本体，承接父级字号/颜色 */
+}
+
+.subtitle-heart {
+  font-size: 24rpx;
+  color: #e8a48b;
+  line-height: 1;
+  transform: translateY(-1rpx);
+  letter-spacing: 0;
 }
 
 /* 滚动表单 */

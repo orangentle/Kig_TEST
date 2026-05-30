@@ -1,12 +1,10 @@
 <!--index.wxml-->
 <view class="container">
-  <!-- 背景装饰（精简：保留两枚爪印 + 一颗星）-->
+  <!-- 背景装饰（精简：1 个爪印 + 1 颗星）-->
   <view class="bg-deco">
     <view class="deco-circle dc1"></view>
     <view class="deco-circle dc2"></view>
-    <view class="deco-circle dc3"></view>
     <text class="deco-paw p1">🐾</text>
-    <text class="deco-paw p2">🐾</text>
     <text class="deco-paw p3">✦</text>
   </view>
 
@@ -26,8 +24,6 @@
       <text class="divider-paw">✦</text>
     </view>
     <text class="subtitle">Kigurumi 头壳定制</text>
-
-    <text class="greeting">欢迎来到鼠鼠的小窝~ 🐭✨</text>
 
     <t-button
       theme="primary"
@@ -51,25 +47,7 @@
           <t-icon name="search" size="48rpx" color="#a85a15" />
         </view>
         <text class="service-name">订单查询</text>
-        <text class="service-desc">凭单号查看进度</text>
-      </view>
-
-      <view class="service-card" bindtap="showDeveloping">
-        <view class="service-icon-wrap accent-cream">
-          <t-icon name="help-circle" size="48rpx" color="#c87a1a" />
-        </view>
-        <text class="service-name">常见问题</text>
-        <text class="service-desc">FAQ 帮助中心</text>
-        <view class="dev-tag">开发中</view>
-      </view>
-
-      <view class="service-card" bindtap="showDeveloping">
-        <view class="service-icon-wrap accent-cream">
-          <t-icon name="calculation" size="48rpx" color="#c87a1a" />
-        </view>
-        <text class="service-name">价格估算</text>
-        <text class="service-desc">在线估算费用</text>
-        <view class="dev-tag">开发中</view>
+        <text class="service-desc">看看我家娃到哪了</text>
       </view>
 
       <view class="service-card" bindtap="goToGathering">
@@ -77,14 +55,26 @@
           <t-icon name="heart" size="48rpx" color="#a85a15" />
         </view>
         <text class="service-name">偶壳娃聚</text>
-        <text class="service-desc">社区活动聚会</text>
+        <text class="service-desc">找搭子 · 约线下</text>
         <view class="hot-tag">热门</view>
       </view>
     </view>
   </view>
 
-  <!-- 信息模块：定制流程 / 排单状态 / FAQ -->
+  <!-- 信息模块：排单状态 / 定制流程 / FAQ -->
   <view class="info-section">
+    <view class="info-block">
+      <view class="info-title">当前排单</view>
+      <view class="queue-row">
+        <text class="queue-label"><text class="queue-status-dot dot-busy"></text>U 类常规</text>
+        <text class="queue-value">约 150 个工作日</text>
+      </view>
+      <view class="queue-row">
+        <text class="queue-label"><text class="queue-status-dot dot-open"></text>U 类加急</text>
+        <text class="queue-value">约 60 个工作日</text>
+      </view>
+    </view>
+
     <view class="info-block">
       <view class="info-title">定制流程</view>
       <view class="flow-list">
@@ -117,30 +107,18 @@
     </view>
 
     <view class="info-block">
-      <view class="info-title">当前排单</view>
-      <view class="queue-row">
-        <text class="queue-label"><text class="queue-status-dot dot-busy"></text>U 类常规</text>
-        <text class="queue-value">约 150 个工作日</text>
-      </view>
-      <view class="queue-row">
-        <text class="queue-label"><text class="queue-status-dot dot-open"></text>U 类加急</text>
-        <text class="queue-value">约 60 个工作日</text>
-      </view>
-    </view>
-
-    <view class="info-block">
       <view class="info-title">常见问题</view>
       <view class="faq-item">
         <view class="faq-q">如何下单？</view>
-        <view class="faq-a">点击「立即定制」填写需求，我们会在 24 小时内联系确认。</view>
+        <view class="faq-a">点上面那颗大橘按钮，把心仪角色、身材数据填好，24h 内我们会私信你确认细节～</view>
       </view>
       <view class="faq-item">
         <view class="faq-q">价格如何核算？</view>
-        <view class="faq-a">根据尺寸、材质、工艺复杂度报价，沟通后会给出明细。</view>
+        <view class="faq-a">主要看角色复杂程度（脸型、配色、配饰、特殊工艺），加急另算；付定金后我们会直接告诉你尾款多少，不绕弯。</view>
       </view>
       <view class="faq-item">
         <view class="faq-q">能否售后维修？</view>
-        <view class="faq-a">支持基础维修和清洁，发货 30 天内非人为损坏免费返修。</view>
+        <view class="faq-a">发货 30 天内非人为损坏全包返修；之后的小磕小碰也可以寄回，工坊管修一辈子 ♡</view>
       </view>
     </view>
   </view>

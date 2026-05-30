@@ -251,8 +251,8 @@
   font-size: 26rpx;
   color: var(--color-deco-warm);
   font-weight: 600;
-  letter-spacing: 4rpx;
-  font-family: "Hannotate SC", "Yuanti SC", "STKaiti", "KaiTi", "PingFang SC", sans-serif;
+  letter-spacing: 2rpx;
+  font-family: "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
 }
 
 .empty-state {

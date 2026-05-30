@@ -76,8 +76,7 @@
     <!-- 加载更多按钮 -->
     <view class="load-more" wx:if="{{!isLoading && hasMore}}">
       <view class="load-more-btn" hover-class="load-more-btn-hover" bind:tap="loadMore">
-        <text class="load-more-paw">🐾</text>
-        <text class="load-more-text">再来一打~</text>
+        <text class="load-more-text">多来点 求求了 ↓</text>
       </view>
     </view>
 

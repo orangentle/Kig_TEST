@@ -456,8 +456,24 @@
   width: 100%;
 }
 
+/* 进入管理后台：次级风格——白底橘描边橘字，与主 CTA 拉开层级 */
 .admin-button {
   margin-bottom: 24rpx;
+  background: var(--color-card) !important;
+  color: var(--color-primary) !important;
+  border: 2rpx solid var(--color-primary) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2rpx 8rpx rgba(232, 114, 42, 0.10) !important;
+}
+
+.admin-button::after {
+  border: none !important;
+}
+
+.admin-button-hover {
+  background: var(--color-primary-bg) !important;
+  box-shadow: 0 1rpx 4rpx rgba(232, 114, 42, 0.15) !important;
+  transform: scale(0.98);
 }
 
 .admin-login-trigger {

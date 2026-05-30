@@ -7,7 +7,11 @@
       <text class="divider-star">✦</text>
     </view>
     <text class="page-title">头壳定制</text>
-    <text class="page-subtitle">捏一只独一无二的小可爱 ♡</text>
+    <view class="page-subtitle">
+      <text class="subtitle-heart">♡</text>
+      <text class="subtitle-text">搓一只独一无二的小可爱</text>
+      <text class="subtitle-heart">♡</text>
+    </view>
   </view>
 
   <scroll-view scroll-y class="form-scroll">

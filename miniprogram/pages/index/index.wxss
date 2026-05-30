@@ -34,21 +34,13 @@
   background: radial-gradient(circle, var(--color-deco-soft) 0%, transparent 70%);
   top: 200rpx; right: -30rpx;
 }
-.dc3 {
-  width: 220rpx; height: 220rpx;
-  background: radial-gradient(circle, #FDECD0 0%, transparent 70%);
-  bottom: 100rpx; left: 30%;
-}
 .deco-paw {
   position: absolute;
   opacity: 0.5;
   color: var(--color-primary);
 }
 .p1 { top: 140rpx; right: 80rpx; font-size: 32rpx; transform: rotate(15deg); }
-.p2 { top: 360rpx; left: 50rpx;  font-size: 28rpx; transform: rotate(-20deg); opacity: 0.4; }
 .p3 { top: 100rpx; left: 50%;    font-size: 24rpx; }
-.p4 { top: 280rpx; right: 30rpx; font-size: 22rpx; }
-.p5 { top: 480rpx; left: 20%;    font-size: 22rpx; opacity: 0.45; }
 
 /* 顶部Banner */
 .header-banner {
@@ -57,8 +49,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40rpx 40rpx 60rpx;
-  padding-top: calc(60rpx + env(safe-area-inset-top));
+  padding: 32rpx 40rpx 40rpx;
+  padding-top: calc(40rpx + env(safe-area-inset-top));
 }
 
 /* Logo */
@@ -68,7 +60,7 @@
   border-radius: 50%;
   border: 4rpx solid #fff;
   box-shadow: 0 8rpx 24rpx rgba(168, 90, 21, 0.15);
-  margin-bottom: 28rpx;
+  margin-bottom: 20rpx;
 }
 
 .logo-placeholder {
@@ -109,7 +101,7 @@
   height: 4rpx;
   background: linear-gradient(90deg, transparent, var(--color-primary-light), transparent);
   border-radius: 999rpx;
-  margin: 24rpx 0 14rpx;
+  margin: 18rpx 0 10rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -130,21 +122,9 @@
   text-align: center;
 }
 
-/* 招呼语 */
-.greeting {
-  margin-top: 24rpx;
-  font-size: 24rpx;
-  color: var(--color-deco-warm);
-  letter-spacing: 2rpx;
-  background: var(--color-primary-bg);
-  padding: 10rpx 24rpx;
-  border-radius: 999rpx;
-  border: 1rpx dashed #FFD8A8;
-}
-
-/* 主按钮 — 奶油糖果质感（果冻光 + 枕形阴影，圆润可爱） */
+/* 主按钮 — 对角渐变 + 轻 inset 高光 + 暖色阴影（与立即查询统一风格） */
 .order-button {
-  margin-top: 36rpx;
+  margin-top: 28rpx;
   width: 360rpx !important;
   height: 92rpx !important;
   font-size: 30rpx !important;
@@ -153,16 +133,10 @@
   color: #fff !important;
   border: none !important;
   border-radius: 999rpx !important;
-  /* 暖橘奶油渐变：顶部偏淡桃，底部回到品牌橘 */
-  background:
-    linear-gradient(180deg, #ffc592 0%, #ff9a52 45%, #ee7a2a 100%) !important;
-  /* 顶部果冻高光 + 底部一道奶白反光 + 柔软枕形阴影 */
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%) !important;
   box-shadow:
-    inset 0 4rpx 8rpx rgba(255, 255, 255, 0.55),
-    inset 0 -6rpx 12rpx rgba(168, 90, 21, 0.18),
-    0 8rpx 0 rgba(232, 114, 42, 0.18),
-    0 16rpx 32rpx rgba(232, 114, 42, 0.28) !important;
-  text-shadow: 0 1rpx 0 rgba(168, 90, 21, 0.35);
+    0 8rpx 20rpx rgba(232, 114, 42, 0.35),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.3) !important;
 }
 
 /* 抹掉微信原生 button 默认的蓝色边框（::after 1px border） */
@@ -170,15 +144,10 @@
   border: none !important;
 }
 
-/* 按下：稍微压暗，阴影收紧，几何不动避免卡顿 */
+/* 按下：阴影收紧，轻微缩放 */
 .order-button-hover {
-  background:
-    linear-gradient(180deg, #ffb47a 0%, #f08c40 45%, #d56a1a 100%) !important;
-  box-shadow:
-    inset 0 4rpx 8rpx rgba(255, 255, 255, 0.4),
-    inset 0 -6rpx 12rpx rgba(168, 90, 21, 0.25),
-    0 4rpx 0 rgba(232, 114, 42, 0.18),
-    0 8rpx 18rpx rgba(232, 114, 42, 0.24) !important;
+  box-shadow: 0 4rpx 12rpx rgba(232, 114, 42, 0.30) !important;
+  transform: scale(0.98);
 }
 
 /* 服务卡 */
@@ -325,6 +294,18 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  position: relative;
+}
+/* 步骤之间的连接箭头（除第一个外都画一条左侧细线） */
+.flow-step + .flow-step::before {
+  content: "›";
+  position: absolute;
+  left: -10rpx;
+  top: 6rpx;
+  font-size: 28rpx;
+  color: var(--color-primary-light);
+  opacity: 0.7;
+  line-height: 1;
 }
 .flow-num {
   width: 48rpx;
