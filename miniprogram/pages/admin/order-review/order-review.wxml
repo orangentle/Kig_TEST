@@ -56,7 +56,7 @@
         data-order="{{item}}"
       >
         <!-- 左侧色条 -->
-        <view class="card-stripe stripe-{{item.isUrgent ? 'urgent' : item.status === 'pending' ? 'pending' : item.status === 'rejected' ? 'rejected' : 'normal'}}"></view>
+        <view class="card-stripe stripe-{{item.isUrgent ? 'urgent' : item.status === 'pending' ? 'pending' : 'normal'}}"></view>
 
         <view class="card-body">
           <!-- 第一行：淘宝单号 + 状态 -->
@@ -67,8 +67,8 @@
             </view>
             <view class="pill-group">
               <view wx:if="{{item.isUrgent}}" class="status-pill pill-urgent">加急</view>
-              <view class="status-pill {{item.status === 'pending' ? 'pill-pending' : item.status === 'rejected' ? 'pill-rejected' : 'pill-normal'}}">
-                {{item.status === 'pending' ? '待审核' : item.status === 'rejected' ? '已驳回' : item.progressStage || '已通过'}}
+              <view class="status-pill {{item.status === 'pending' ? 'pill-pending' : 'pill-normal'}}">
+                {{item.status === 'pending' ? '待审核' : item.progressStage || '已通过'}}
               </view>
             </view>
           </view>
@@ -121,8 +121,8 @@
         <view class="detail-title-wrap">
           <text class="detail-title">订单详情</text>
           <view wx:if="{{currentOrder.isUrgent}}" class="detail-status-pill pill-urgent">加急</view>
-          <view class="detail-status-pill {{currentOrder.status === 'pending' ? 'pill-pending' : currentOrder.status === 'rejected' ? 'pill-rejected' : 'pill-normal'}}">
-            {{currentOrder.status === 'pending' ? '待审核' : currentOrder.status === 'rejected' ? '已驳回' : currentOrder.progressStage || '已通过'}}
+          <view class="detail-status-pill {{currentOrder.status === 'pending' ? 'pill-pending' : 'pill-normal'}}">
+            {{currentOrder.status === 'pending' ? '待审核' : currentOrder.progressStage || '已通过'}}
           </view>
         </view>
         <t-icon name="close" size="48rpx" color="#999" bind:tap="onCloseDetailPopup" />
@@ -132,8 +132,8 @@
         <!-- 审核历史 -->
         <view class="review-banner" wx:if="{{currentOrder.reviewInfo && currentOrder.reviewInfo.reviewRemark}}">
           <view class="review-banner-title">
-            <t-icon name="info-circle" size="32rpx" color="{{currentOrder.status === 'rejected' ? '#cf1322' : '#389e0d'}}" />
-            <text>{{currentOrder.status === 'rejected' ? '驳回原因' : '审核备注'}}</text>
+            <t-icon name="info-circle" size="32rpx" color="#389e0d" />
+            <text>审核备注</text>
           </view>
           <text class="review-banner-text">{{currentOrder.reviewInfo.reviewRemark}}</text>
         </view>

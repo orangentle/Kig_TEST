@@ -30,6 +30,7 @@ Component({
     taobaoName: '',
     orders: [] as OrderInfo[],
     orderStats: {
+      pending: 0,
       processing: 0,
       completed: 0,
       total: 0
@@ -305,15 +306,24 @@ Component({
         }) as any;
         
         const openid = wxContext.result.openid;
-        
-        const orderResult = await db.collection('orders')
-          .where({
-            _openid: openid
-          })
-          .orderBy('createTime', 'desc')
-          .limit(5)
-          .get();
-        
+
+        // 云数据库单次查询最多 20 条，循环分页取全部订单
+        const PAGE_SIZE = 20;
+        const allData: any[] = [];
+        let skip = 0;
+        while (true) {
+          const page = await db.collection('orders')
+            .where({ _openid: openid })
+            .orderBy('createTime', 'desc')
+            .skip(skip)
+            .limit(PAGE_SIZE)
+            .get();
+          allData.push(...page.data);
+          if (page.data.length < PAGE_SIZE) break;
+          skip += PAGE_SIZE;
+        }
+        const orderResult = { data: allData };
+
         if (orderResult.data && orderResult.data.length > 0) {
           // 转换数据格式
           const orders = orderResult.data.map((order: any) => {
@@ -329,9 +339,9 @@ Component({
           // 计算订单统计数据
           const stats = {
             pending: orders.filter(order => order.status === 'pending').length,
-            processing: orders.filter(order => order.status === 'processing').length,
+            processing: orders.filter(order => order.status === 'normal' || order.status === 'urgent').length,
             completed: orders.filter(order => order.status === 'completed').length,
-            total: orders.length
+            total: orders.filter(order => order.status !== 'canceled').length
           };
           
           this.setData({
@@ -358,8 +368,10 @@ Component({
     },
     
     // 格式化日期
-    formatDate(timestamp: number) {
-      const date = new Date(timestamp);
+    formatDate(timestamp: number | string | Date | undefined | null) {
+      if (!timestamp) return '';
+      const date = new Date(timestamp as any);
+      if (isNaN(date.getTime())) return '';
       return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     },
     

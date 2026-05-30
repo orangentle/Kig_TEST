@@ -157,10 +157,10 @@ exports.main = async (event, context) => {
         break;
 
       case 'review-approve': {
-        // 审核通过：进入"已排单"，可正常生产
+        // 审核通过：进入"已排单"，可正常生产；加急单保留 urgent 状态
         const items = await ordersCollection
           .where({ _id: _.in(orderIds) })
-          .field({ stage: true, _openid: true, orderId: true, roleName: true })
+          .field({ stage: true, _openid: true, orderId: true, roleName: true, isUrgent: true })
           .get();
         perItemUpdates = items.data.map(item => ({
           _id: item._id,
@@ -169,7 +169,7 @@ exports.main = async (event, context) => {
           roleName: item.roleName,
           enteredQueued: item.stage !== 'queued',
           data: {
-            status: 'normal',
+            status: item.isUrgent ? 'urgent' : 'normal',
             stage: 'queued',
             progressStage: '已排单',
             progressPercent: 10,
