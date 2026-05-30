@@ -129,6 +129,7 @@
             files="{{referenceImages}}"
             bind:add="onUploadAdd"
             bind:remove="onUploadRemove"
+            bind:fail="onUploadFail"
           />
           <text class="upload-tip">最多 3 张 · 推荐正面 / 侧面 / 背面，若只有一张也可提交</text>
         </view>

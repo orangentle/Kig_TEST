@@ -198,6 +198,13 @@ Page({
     this.setData({ referenceImages: newImages });
   },
 
+  onUploadFail(e: any) {
+    const msg = (e.detail && e.detail.errMsg) || '';
+    if (msg.indexOf('cancel') !== -1) return;
+    console.error('t-upload fail', e.detail);
+    wx.showModal({ title: '上传失败', content: msg || JSON.stringify(e.detail), showCancel: false });
+  },
+
   onFaceUploadAdd(e: any) {
     const { files } = e.detail;
     const limit = this.data.formData.replaceFaceCount;

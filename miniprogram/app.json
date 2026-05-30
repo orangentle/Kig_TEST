@@ -98,7 +98,7 @@
     "wx9f4e7b73adbd8f38"
   ],
   "sitemapLocation": "sitemap.json",
-  "__usePrivacyCheck__": true,
+  "__usePrivacyCheck__": false,
   "networkTimeout": {
     "request": 30000,
     "downloadFile": 30000,

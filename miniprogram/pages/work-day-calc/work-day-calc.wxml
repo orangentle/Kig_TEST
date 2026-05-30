@@ -22,15 +22,15 @@
   </view>
 
   <view class="form-card">
-    <view class="form-row">
-      <text class="form-label">从哪天开始</text>
-      <picker mode="date" value="{{startDate}}" start="2024-01-01" end="2030-12-31" bindchange="onStartDateChange">
+    <picker mode="date" value="{{startDate}}" start="2024-01-01" end="2030-12-31" bindchange="onStartDateChange">
+      <view class="form-row form-row-tap" hover-class="form-row-hover" hover-stay-time="80">
+        <text class="form-label">从哪天开始</text>
         <view class="picker-value">
           <text>{{startDate || '点这里 →'}}</text>
           <t-icon name="chevron-right" size="28rpx" color="#c25a1a" />
         </view>
-      </picker>
-    </view>
+      </view>
+    </picker>
 
     <view class="form-row">
       <text class="form-label">需要几个工作日</text>

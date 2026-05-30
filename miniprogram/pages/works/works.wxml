@@ -75,12 +75,10 @@
 
     <!-- 加载更多按钮 -->
     <view class="load-more" wx:if="{{!isLoading && hasMore}}">
-      <t-button
-        variant="outline"
-        theme="primary"
-        size="medium"
-        bind:tap="loadMore"
-      >再来一打~</t-button>
+      <view class="load-more-btn" hover-class="load-more-btn-hover" bind:tap="loadMore">
+        <text class="load-more-paw">🐾</text>
+        <text class="load-more-text">再来一打~</text>
+      </view>
     </view>
 
     <!-- 加载失败 -->

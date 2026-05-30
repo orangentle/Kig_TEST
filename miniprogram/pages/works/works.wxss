@@ -220,7 +220,39 @@
 
 .load-more {
   text-align: center;
-  margin: 24rpx 0 8rpx;
+  margin: 32rpx 0 16rpx;
+}
+
+.load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10rpx;
+  padding: 18rpx 44rpx;
+  background: var(--color-card);
+  border: 1rpx solid var(--color-divider);
+  border-radius: 999rpx;
+  box-shadow: 0 4rpx 14rpx rgba(200, 153, 104, 0.12);
+  transition: all 0.18s ease;
+}
+
+.load-more-btn-hover {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary-light);
+  transform: translateY(2rpx);
+  box-shadow: 0 2rpx 8rpx rgba(200, 153, 104, 0.18);
+}
+
+.load-more-paw {
+  font-size: 26rpx;
+  line-height: 1;
+}
+
+.load-more-text {
+  font-size: 26rpx;
+  color: var(--color-deco-warm);
+  font-weight: 600;
+  letter-spacing: 4rpx;
+  font-family: "Hannotate SC", "Yuanti SC", "STKaiti", "KaiTi", "PingFang SC", sans-serif;
 }
 
 .empty-state {

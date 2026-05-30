@@ -99,6 +99,8 @@
   border-bottom: 1rpx dashed #f5ebd9;
 }
 .form-row:last-child { border-bottom: none; }
+.form-row-tap { transition: background 0.15s ease; }
+.form-row-hover { background: rgba(255, 244, 230, 0.5); }
 .form-label {
   font-size: 30rpx;
   color: #3a2410;
