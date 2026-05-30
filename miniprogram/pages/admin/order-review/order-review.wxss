@@ -1,14 +1,14 @@
 /* order-review.wxss - 订单审核优化版 */
 .review-page {
   min-height: 100vh;
-  background: #f5f6f8;
+  background: var(--color-bg-admin);
   display: flex;
   flex-direction: column;
 }
 
 /* 顶部标题 */
 .top-bar {
-  background: linear-gradient(135deg, #ff8800 0%, #ff6a00 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
   padding: 32rpx 32rpx 36rpx;
   padding-top: calc(32rpx + env(safe-area-inset-top));
   color: #fff;
@@ -20,7 +20,7 @@
 /* Tab Chips */
 .tabs-scroll {
   background: #fff;
-  border-bottom: 1rpx solid #eee;
+  border-bottom: 1rpx solid var(--color-divider);
   white-space: nowrap;
 }
 .tabs-row {
@@ -34,21 +34,21 @@
   align-items: center;
   gap: 8rpx;
   padding: 12rpx 24rpx;
-  background: #f3f4f6;
-  color: #555;
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
   border-radius: 999rpx;
   font-size: 26rpx;
   white-space: nowrap;
   transition: all 0.2s ease;
 }
 .tab-chip-active {
-  background: #ff8800;
+  background: var(--color-primary);
   color: #fff;
-  box-shadow: 0 4rpx 12rpx rgba(255, 136, 0, 0.28);
+  box-shadow: 0 4rpx 12rpx rgba(255, 140, 58, 0.28);
 }
 .tab-chip-warn:not(.tab-chip-active) {
-  background: #fff4e0;
-  color: #d4720d;
+  background: var(--color-primary-bg);
+  color: var(--color-deco-warm);
 }
 .tab-count {
   font-size: 22rpx;
@@ -64,7 +64,7 @@
 .search-wrap {
   padding: 16rpx 24rpx;
   background: #fff;
-  border-bottom: 1rpx solid #eee;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 /* 列表 */
@@ -82,18 +82,18 @@
   border-radius: 18rpx;
   margin-bottom: 20rpx;
   overflow: hidden;
-  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-sm);
 }
-.order-card.card-urgent { box-shadow: 0 2rpx 14rpx rgba(255, 77, 79, 0.18); }
+.order-card.card-urgent { box-shadow: 0 2rpx 14rpx rgba(224, 116, 88, 0.18); }
 
 .card-stripe {
   width: 6rpx;
-  background: #d1d5db;
+  background: var(--color-divider);
 }
-.stripe-pending  { background: #faad14; }
-.stripe-urgent   { background: #ff4d4f; }
-.stripe-rejected { background: #cf1322; }
-.stripe-normal   { background: #52c41a; }
+.stripe-pending  { background: var(--color-warning); }
+.stripe-urgent   { background: var(--color-danger); }
+.stripe-rejected { background: var(--color-danger); }
+.stripe-normal   { background: var(--color-success); }
 
 .card-body {
   flex: 1;
@@ -118,13 +118,13 @@
 }
 .tb-id-label {
   font-size: 22rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   line-height: 1;
 }
 .tb-id {
   font-size: 30rpx;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text);
   margin-top: 6rpx;
   word-break: break-all;
 }
@@ -136,31 +136,37 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
-.pill-pending  { background: #fff4e0; color: #d4720d; }
-.pill-urgent   { background: #fff1f0; color: #cf1322; }
-.pill-rejected { background: #f5f5f5; color: #888;  }
-.pill-normal   { background: #f0faf2; color: #389e0d; }
+.pill-group {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  flex-shrink: 0;
+}
+.pill-pending  { background: var(--color-primary-bg); color: var(--color-deco-warm); }
+.pill-urgent   { background: #fff1f0; color: var(--color-danger); }
+.pill-rejected { background: var(--color-bg); color: var(--color-text-tertiary);  }
+.pill-normal   { background: #f0faf2; color: var(--color-success); }
 
 .card-row-2 {
   display: flex;
   align-items: center;
   gap: 10rpx;
   font-size: 26rpx;
-  color: #374151;
+  color: var(--color-text);
 }
-.role-name { font-weight: 500; color: #1f2937; }
-.dot-sep { color: #d1d5db; }
-.ip-name { color: #6b7280; }
+.role-name { font-weight: 500; color: var(--color-text); }
+.dot-sep { color: var(--color-divider); }
+.ip-name { color: var(--color-text-secondary); }
 
 .card-row-3 {
   display: flex;
   align-items: center;
   gap: 8rpx;
   font-size: 24rpx;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
-.meta-text { font-size: 24rpx; color: #6b7280; }
-.meta-text-light { color: #9ca3af; }
+.meta-text { font-size: 24rpx; color: var(--color-text-secondary); }
+.meta-text-light { color: var(--color-text-tertiary); }
 
 .card-tags {
   display: flex;
@@ -171,10 +177,10 @@
   padding: 4rpx 14rpx;
   border-radius: 6rpx;
   font-size: 22rpx;
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
 }
-.mini-tag-danger { background: #fff1f0; color: #cf1322; }
+.mini-tag-danger { background: #fff1f0; color: var(--color-danger); }
 
 .card-row-4 {
   display: flex;
@@ -182,7 +188,7 @@
   justify-content: space-between;
   margin-top: 4rpx;
   padding-top: 12rpx;
-  border-top: 1rpx dashed #f0f0f0;
+  border-top: 1rpx dashed var(--color-divider);
 }
 .card-actions {
   display: flex;
@@ -192,19 +198,19 @@
   padding: 8rpx 22rpx;
   border-radius: 8rpx;
   font-size: 24rpx;
-  border: 1rpx solid #e5e7eb;
-  color: #555;
+  border: 1rpx solid var(--color-divider);
+  color: var(--color-text-secondary);
   line-height: 1.4;
 }
 .btn-reject {
   border-color: #ffd1d1;
-  color: #cf1322;
+  color: var(--color-danger);
   background: #fff;
 }
 .btn-approve {
-  border-color: #ff8800;
+  border-color: var(--color-primary);
   color: #fff;
-  background: #ff8800;
+  background: var(--color-primary);
 }
 
 /* 加载状态 */
@@ -212,7 +218,7 @@
   text-align: center;
   padding: 24rpx;
   font-size: 24rpx;
-  color: #9ca3af;
+  color: var(--color-text-tertiary);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -226,7 +232,7 @@
 
 /* ===== 详情弹窗 ===== */
 .detail-popup {
-  background: #f5f6f8;
+  background: var(--color-bg-admin);
   border-radius: 24rpx 24rpx 0 0;
   width: 100%;
   height: 90vh;
@@ -240,14 +246,14 @@
   padding: 28rpx 32rpx;
   background: #fff;
   border-radius: 24rpx 24rpx 0 0;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 .detail-title-wrap {
   display: flex;
   align-items: center;
   gap: 16rpx;
 }
-.detail-title { font-size: 32rpx; font-weight: 600; color: #1f2937; }
+.detail-title { font-size: 32rpx; font-weight: 600; color: var(--color-text); }
 .detail-status-pill {
   padding: 6rpx 16rpx;
   border-radius: 999rpx;
@@ -263,8 +269,8 @@
 .review-banner {
   margin-top: 20rpx;
   padding: 20rpx 24rpx;
-  background: #fff7e6;
-  border-left: 6rpx solid #faad14;
+  background: var(--color-primary-bg);
+  border-left: 6rpx solid var(--color-warning);
   border-radius: 12rpx;
 }
 .review-banner-title {
@@ -273,13 +279,13 @@
   gap: 8rpx;
   font-size: 26rpx;
   font-weight: 500;
-  color: #1f2937;
+  color: var(--color-text);
   margin-bottom: 8rpx;
 }
 .review-banner-text {
   display: block;
   font-size: 26rpx;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   line-height: 1.6;
 }
 
@@ -292,31 +298,31 @@
 .section-title {
   font-size: 28rpx;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text);
   margin-bottom: 16rpx;
   padding-left: 14rpx;
-  border-left: 6rpx solid #ff8800;
+  border-left: 6rpx solid var(--color-primary);
   line-height: 1;
 }
 .detail-row {
   display: flex;
   padding: 12rpx 0;
-  border-bottom: 1rpx solid #f7f7f7;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 .detail-row:last-child { border-bottom: none; }
 .detail-row .label {
   font-size: 26rpx;
-  color: #9ca3af;
+  color: var(--color-text-tertiary);
   width: 180rpx;
   flex-shrink: 0;
 }
 .detail-row .value {
   font-size: 26rpx;
-  color: #374151;
+  color: var(--color-text);
   flex: 1;
   word-break: break-all;
 }
-.detail-row .value-strong { color: #ff8800; font-weight: 600; }
+.detail-row .value-strong { color: var(--color-primary); font-weight: 600; }
 
 /* 身材数据 */
 .body-data-grid {
@@ -325,25 +331,25 @@
   gap: 16rpx;
 }
 .body-item {
-  background: #f9fafb;
+  background: var(--color-bg);
   border-radius: 12rpx;
   padding: 20rpx;
   text-align: center;
 }
 .body-label {
   font-size: 24rpx;
-  color: #9ca3af;
+  color: var(--color-text-tertiary);
   display: block;
   margin-bottom: 8rpx;
 }
 .body-value {
   font-size: 30rpx;
-  color: #1f2937;
+  color: var(--color-text);
   font-weight: 600;
 }
 .body-unit {
   font-size: 22rpx;
-  color: #9ca3af;
+  color: var(--color-text-tertiary);
   margin-left: 4rpx;
   font-weight: normal;
 }
@@ -359,14 +365,14 @@
   align-items: center;
   gap: 8rpx;
   padding: 12rpx 22rpx;
-  background: #f3f4f6;
+  background: var(--color-bg);
   border-radius: 999rpx;
   font-size: 24rpx;
-  color: #9ca3af;
+  color: var(--color-text-tertiary);
 }
 .option-item.active {
-  background: #fff4e0;
-  color: #ff8800;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 /* 图片 */
@@ -379,18 +385,18 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 12rpx;
-  background: #f3f4f6;
+  background: var(--color-bg);
 }
 
 /* 备注 */
 .remark-box {
-  background: #f9fafb;
+  background: var(--color-bg);
   border-radius: 12rpx;
   padding: 20rpx;
 }
 .remark-text {
   font-size: 26rpx;
-  color: #4b5563;
+  color: var(--color-text-secondary);
   line-height: 1.7;
 }
 
@@ -403,7 +409,7 @@
   padding: 20rpx 32rpx;
   padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
   background: #fff;
-  border-top: 1rpx solid #f0f0f0;
+  border-top: 1rpx solid var(--color-divider);
 }
 .footer-btn {
   flex: 1;
@@ -418,11 +424,11 @@
 }
 .footer-btn-reject {
   background: #fff;
-  color: #cf1322;
+  color: var(--color-danger);
   border: 1rpx solid #ffd1d1;
 }
 .footer-btn-approve {
-  background: linear-gradient(135deg, #ff8800, #ff6a00);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: #fff;
-  box-shadow: 0 6rpx 16rpx rgba(255, 136, 0, 0.3);
+  box-shadow: 0 6rpx 16rpx rgba(255, 140, 58, 0.3);
 }

@@ -1,8 +1,6 @@
 {
   "usingComponents": {
-    "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-button": "tdesign-miniprogram/button/button",
-    "t-input": "tdesign-miniprogram/input/input"
+    "t-icon": "tdesign-miniprogram/icon/icon"
   },
   "navigationBarTitleText": "工期计算器"
 }

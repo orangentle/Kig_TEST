@@ -24,7 +24,7 @@ PS：云端的 envId 为测试环境，字段、订单内容仅供参考。
 ### 管理后台
 - **概览统计**：总数 / 待审核 / 制作中 / 加急 / 逾期 / 已完成 / 已归档 多维概览卡，可点击穿透筛选
 - **筛选与搜索**：阶段 Tab、关键词模糊（订单号/客户/角色/旺旺/昵称）、日期区间、是否含归档
-- **订单审核**：独立审核页（待审核 / 已通过 / 已驳回 / 全部 Tab + 计数），支持单条与批量通过/驳回，驳回带备注
+- **订单审核**：独立审核页（待审核 / 已通过 / 全部 Tab + 计数），支持单条与批量通过/驳回。**驳回 = 删除订单**(防止假单污染库 + 释放 tbOrderId 唯一索引槽位),驳回原因会写入客户的"驳回通知",ta 下次进个人中心会弹引导提示并跳转到下单页重新提交
 - **批量操作**：选择模式 + 推进阶段 / 设为阶段 / 设加急 / 取消加急 / 分配排单号 / 解锁 / 归档 / 删除
 - **新增订单**：表单与客户端字段对齐，分 6 个区块（基本 / 联系 / 身材 / 定制选项 / 排期 / 图片 / 备注），支持多图上传
 - **订单详情(管理员视角)**：附加"客户信息"卡(`?admin=true` 进入时显示),展示称呼/微信昵称/旺旺/QQ/手机号,支持复制/拨打；提供"✏️ 编辑订单"全字段弹窗(基本/联系/身材/选项/排期/图片/备注),改完直接调 `batchUpdateOrders` 的 `set-fields` action 保存
@@ -34,12 +34,14 @@ PS：云端的 envId 为测试环境，字段、订单内容仅供参考。
 ## 订单生命周期
 
 ```
-[客户提交]            [管理员审核]            [开始制作]                          [完成]
-status=pending  →  ─┬─ approve → status=normal  →  推进阶段 → status=completed
-stage=pending       │                              stage=queued/modeling/...    stage=shipped
-                    └─ reject  → status=rejected
-                                 stage=pending（可重新沟通）
+[客户提交]            [管理员审核]                          [开始制作]                          [完成]
+status=pending  →  ─┬─ approve → status=normal       →  推进阶段 → status=completed
+stage=pending       │           stage=queued             stage=modeling/...                stage=shipped
+                    └─ reject  → 订单直接删除 + 通知客户
+                                 (释放 tbOrderId 唯一槽位,防止假单污染库)
 ```
+
+> 客户主动取消(`cancelOrder`)只在「待审核 + 未锁定」时允许,取消后订单保留为 `status=canceled` 占用 tbOrderId 槽位,如需复用须联系客服真删。三层防重单:**前端 blur 提示 → 云函数 WHERE 校验 → DB 唯一索引 `idx_tbOrderId`**。
 
 ## 制作流程
 
@@ -74,7 +76,7 @@ stage=pending       │                              stage=queued/modeling/...  
 
 订单核心类型集中在 `miniprogram/types/order.ts`，所有页面统一引用：
 
-- `OrderStatus`: `pending | normal | urgent | rejected | completed`
+- `OrderStatus`: `pending | normal | urgent | canceled | completed` (驳回不再保留状态,订单直接删除)
 - `OrderStage`: `pending | queued | modeling | painting | hair | shipped`
 - `Order` 字段：基本信息 / 时间 / 进度 / 状态 / `userInfo` / `bodyMeasurements` / `options` / 图片 / `reviewInfo`
 
@@ -175,7 +177,8 @@ prototype/
 - [x] 客户端下单流程（含锁定 + 订阅消息）
 - [x] 云函数：登录 / 订单 CRUD / 批量操作 / 审核
 - [x] 管理后台（列表 / 概览 / 筛选 / 批量 / 新增）
-- [x] 订单审核子页（通过 / 驳回 / 计数）
+- [x] 订单审核子页（通过 / 驳回 / 计数;驳回 = 直接删除 + 客户端弹窗引导重新下单）
+- [x] 防刷假单:tbOrderId 唯一索引 + 驳回即删 + 二次元友好提示文案
 - [x] 共享 TS 类型迁移
 - [x] 工期计算器(节假日 API + 多年缓存)
 - [x] 全站 UI 美化(首页装饰背景 + 工期计算器视觉重做 + 二次元俏皮文案)

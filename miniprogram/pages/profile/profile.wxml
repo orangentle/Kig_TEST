@@ -16,10 +16,14 @@
         bindchooseavatar="onLoginChooseAvatar"
       >
         <image
+          wx:if="{{loginForm.avatarUrl}}"
           class="login-avatar-image"
-          src="{{loginForm.avatarUrl || '/assets/images/icon.jpg'}}"
+          src="{{loginForm.avatarUrl}}"
           mode="aspectFill"
         ></image>
+        <view wx:else class="login-avatar-image avatar-placeholder">
+          <t-icon name="user-1" size="96rpx" color="#d8c8b0" />
+        </view>
         <text class="login-avatar-hint">{{loginForm.avatarUrl ? '点击更换头像' : '点击选择头像'}}</text>
       </button>
 
@@ -55,17 +59,22 @@
       <view class="user-info-container">
         <view class="avatar-container" bindtap="chooseAvatar" bindlongpress="onAdminLongPress">
           <image
+            wx:if="{{userInfo.avatarUrl}}"
             class="user-avatar"
-            src="{{userInfo.avatarUrl || '/assets/images/icon.jpg'}}"
+            src="{{userInfo.avatarUrl}}"
             mode="aspectFill"
           ></image>
+          <view wx:else class="user-avatar avatar-placeholder">
+            <t-icon name="user-1" size="72rpx" color="#d8c8b0" />
+          </view>
           <view class="avatar-edit-icon">
             <t-icon name="edit" size="24rpx" color="#fff"></t-icon>
           </view>
         </view>
         <view class="user-info">
           <text class="user-name">{{userInfo.nickName || '鼠鼠用户'}}</text>
-          <text class="user-id">ID: {{userId || '12345678'}}</text>
+          <text class="user-id" wx:if="{{taobaoName}}">淘宝: {{taobaoName}}</text>
+          <text class="user-id user-id-empty" wx:else bind:tap="showEditProfileModal">点这里绑定淘宝旺旺 →</text>
         </view>
         <view class="edit-profile-btn">
           <t-button icon="edit" size="small" shape="round" variant="outline" theme="primary" bind:tap="showEditProfileModal">编辑资料</t-button>
@@ -97,7 +106,6 @@
       <!-- 我的订单 -->
       <view class="section-header">
         <text class="section-title">我的订单</text>
-        <text class="section-more" bindtap="viewAllOrders">查看全部</text>
       </view>
       
       <view class="order-list">
@@ -111,8 +119,8 @@
           >
             <view class="order-item-header">
               <text class="order-id">订单号: {{item.orderId}}</text>
-              <view class="order-status {{item.status === 'pending' ? 'status-pending' : item.status === 'completed' ? 'status-completed' : item.status === 'rejected' ? 'status-rejected' : 'status-normal'}}">
-                {{item.status === 'pending' ? '待审核' : item.status === 'rejected' ? '已驳回' : item.status === 'completed' ? '已完成' : '制作中'}}
+              <view class="order-status {{item.status === 'pending' ? 'status-pending' : item.status === 'completed' ? 'status-completed' : item.status === 'rejected' ? 'status-rejected' : item.status === 'canceled' ? 'status-canceled' : 'status-normal'}}">
+                {{item.status === 'pending' ? '待审核' : item.status === 'rejected' ? '已驳回' : item.status === 'canceled' ? '已取消' : item.status === 'completed' ? '已完成' : '制作中'}}
               </view>
             </view>
             
@@ -127,7 +135,9 @@
         </block>
         <block wx:else>
           <view class="empty-state">
-            <image class="empty-image" src="/assets/images/icon.jpg" mode="aspectFit"></image>
+            <view class="empty-image empty-image-placeholder">
+              <t-icon name="file-copy" size="80rpx" color="#d8c8b0" />
+            </view>
             <text class="empty-text">还没有订单呢~ 快去定制一只吧 ✨</text>
           </view>
         </block>
@@ -174,7 +184,10 @@
       <scroll-view scroll-y class="edit-profile-content" enhanced show-scrollbar="{{false}}">
         <view class="edit-profile-scroll-inner">
           <view class="edit-avatar-section" bindtap="chooseAvatar">
-            <image class="edit-avatar" src="{{tempUserInfo.avatarUrl || '/assets/images/icon.jpg'}}" mode="aspectFill"></image>
+            <image wx:if="{{tempUserInfo.avatarUrl}}" class="edit-avatar" src="{{tempUserInfo.avatarUrl}}" mode="aspectFill"></image>
+            <view wx:else class="edit-avatar avatar-placeholder">
+              <t-icon name="user-1" size="80rpx" color="#d8c8b0" />
+            </view>
             <text class="edit-avatar-hint">点击修改头像</text>
           </view>
         

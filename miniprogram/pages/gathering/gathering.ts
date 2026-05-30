@@ -31,12 +31,14 @@ Page({
   data: {
     activeEvents: 2,
     albumCount: 128,
+    brandLogoUrl: '',
     upcomingEvents: [] as EventItem[],
     recentPhotos: [] as PhotoItem[],
     mySignups: [] as SignupItem[],
   },
 
   onLoad() {
+    this.loadBrandLogo();
     this.loadData();
   },
 
@@ -49,6 +51,14 @@ Page({
     this.loadData().then(() => {
       wx.stopPullDownRefresh();
     });
+  },
+
+  async loadBrandLogo() {
+    const app = getApp<IAppOption>();
+    const url = app.globalData.brandLogoUrl || (app.globalData.brandLogoReady ? await app.globalData.brandLogoReady : '');
+    if (url) {
+      this.setData({ brandLogoUrl: url });
+    }
   },
 
   async loadData() {
@@ -96,10 +106,8 @@ Page({
   },
 
   loadRecentPhotos() {
-    // TODO: 从云存储加载最新照片
-    // 目前使用本地logo作为占位图，等有真实照片后再替换为云存储路径
-    // 真实路径示例: getPhotoUrl('event_001', 'p001') => cloud://xxx/gathering/okr0.0/photos/p001.jpg
-    const defaultPhoto = '/assets/images/okr_logo.png';
+    // TODO: 从云存储加载最新照片，暂用品牌 logo 占位
+    const defaultPhoto = this.data.brandLogoUrl;
     const photos: PhotoItem[] = [
       { url: defaultPhoto, eventName: 'OKR0.0启动聚' },
       { url: defaultPhoto, eventName: 'OKR0.0启动聚' },
@@ -107,7 +115,7 @@ Page({
       { url: defaultPhoto, eventName: 'OKR0.0启动聚' },
       { url: defaultPhoto, eventName: 'OKR0.0启动聚' },
     ];
-    
+
     this.setData({
       recentPhotos: photos,
       albumCount: photos.length

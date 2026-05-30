@@ -6,11 +6,10 @@ page {
 
 .container {
   min-height: 100vh;
-  background-color: #fbf4e7;
+  background-color: var(--color-bg);
   display: flex;
   flex-direction: column;
   position: relative;
-  /* 整页底层：浅色爪印散落（极低透明度，仅作纹理） */
   background-image:
     url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='%23c89968' fill-opacity='0.07'%3E%3Cg transform='translate(30 40) rotate(-20)'%3E%3Cellipse cx='30' cy='40' rx='14' ry='12'/%3E%3Cellipse cx='14' cy='22' rx='5' ry='7'/%3E%3Cellipse cx='25' cy='13' rx='5' ry='7'/%3E%3Cellipse cx='38' cy='13' rx='5' ry='7'/%3E%3Cellipse cx='49' cy='22' rx='5' ry='7'/%3E%3C/g%3E%3Cg transform='translate(160 140) rotate(18)'%3E%3Cellipse cx='30' cy='40' rx='14' ry='12'/%3E%3Cellipse cx='14' cy='22' rx='5' ry='7'/%3E%3Cellipse cx='25' cy='13' rx='5' ry='7'/%3E%3Cellipse cx='38' cy='13' rx='5' ry='7'/%3E%3Cellipse cx='49' cy='22' rx='5' ry='7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   background-size: 480rpx 480rpx;
@@ -21,7 +20,7 @@ page {
 .page-header {
   padding: 70rpx 40rpx 36rpx;
   padding-top: calc(80rpx + env(safe-area-inset-top));
-  background: linear-gradient(180deg, #fbf4e7 0%, #fbf4e7 70%, rgba(251, 244, 231, 0) 100%);
+  background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg) 70%, rgba(255, 249, 238, 0) 100%);
   text-align: center;
   position: relative;
   z-index: 1;
@@ -37,7 +36,7 @@ page {
 
 .divider-star {
   font-size: 22rpx;
-  color: #ff9eb5;
+  color: var(--color-primary-light);
   margin: 0 14rpx;
   line-height: 1;
 }
@@ -57,7 +56,7 @@ page {
   display: block;
   font-size: 56rpx;
   font-weight: 700;
-  color: #3a2410;
+  color: var(--color-text);
   letter-spacing: 8rpx;
   line-height: 1.15;
   margin-bottom: 16rpx;
@@ -69,7 +68,7 @@ page {
 .page-subtitle {
   display: block;
   font-size: 26rpx;
-  color: #c25a1a;
+  color: var(--color-deco-warm);
   letter-spacing: 2rpx;
   font-weight: 500;
   line-height: 1.4;
@@ -89,12 +88,12 @@ page {
 
 /* 区段卡片：白底 / 暖描边 / 金色顶线 */
 .section {
-  background: #fff;
-  border: 1rpx solid #f0e6d6;
+  background: var(--color-card);
+  border: 1rpx solid var(--color-divider);
   border-radius: 28rpx;
   margin-bottom: 24rpx;
   overflow: hidden;
-  box-shadow: 0 4rpx 20rpx rgba(168, 90, 21, 0.06);
+  box-shadow: var(--shadow-sm);
   position: relative;
 }
 
@@ -121,8 +120,8 @@ page {
   width: 56rpx;
   height: 56rpx;
   border-radius: 50%;
-  background: #fdf3e3;
-  border: 1rpx solid #f0e0c4;
+  background: var(--color-primary-bg);
+  border: 1rpx solid var(--color-divider);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,7 +131,7 @@ page {
 .section-text {
   font-size: 30rpx;
   font-weight: 600;
-  color: #3a2410;
+  color: var(--color-text);
   letter-spacing: 3rpx;
   font-family: var(--font-deco);
 }
@@ -140,12 +139,21 @@ page {
 .section-line {
   flex: 1;
   height: 1rpx;
-  background: linear-gradient(90deg, #f0e0c4, transparent);
+  background: linear-gradient(90deg, var(--color-divider), transparent);
   margin-left: 8rpx;
 }
 
 .form-item {
   padding: 4rpx 16rpx;
+}
+
+.form-hint {
+  font-size: 22rpx;
+  padding: 6rpx 24rpx 0;
+  line-height: 1.4;
+}
+.form-hint-error {
+  color: var(--color-danger, #cf1322);
 }
 
 /* 身材数据预览 */
@@ -164,14 +172,14 @@ page {
 
 .body-data-item .label {
   font-size: 24rpx;
-  color: #a08060;
+  color: var(--color-text-tertiary);
   margin-right: 10rpx;
   letter-spacing: 0;
 }
 
 .body-data-item .value {
   font-size: 28rpx;
-  color: #3a2410;
+  color: var(--color-text);
   font-weight: 600;
   letter-spacing: 0;
 }
@@ -181,7 +189,7 @@ page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #a08060;
+  color: var(--color-text-secondary);
   font-size: 24rpx;
   letter-spacing: 0;
   line-height: 1.6;
@@ -200,7 +208,7 @@ page {
 .upload-tip {
   display: block;
   font-size: 22rpx;
-  color: #a08060;
+  color: var(--color-text-tertiary);
   margin-top: 14rpx;
   letter-spacing: 0;
   line-height: 1.6;
@@ -211,15 +219,15 @@ page {
   display: flex;
   align-items: center;
   padding: 18rpx 22rpx;
-  background: linear-gradient(135deg, #fff4e6, #ffeacc);
+  background: linear-gradient(135deg, var(--color-primary-bg), var(--color-deco-soft));
   margin: 0 32rpx 28rpx;
   border-radius: 16rpx;
-  border: 1rpx solid #ffd8a8;
+  border: 1rpx solid #FFD8A8;
 }
 
 .urgent-text {
   font-size: 24rpx;
-  color: #c25a1a;
+  color: var(--color-deco-warm);
   margin-left: 12rpx;
   flex: 1;
   line-height: 1.5;
@@ -238,7 +246,7 @@ page {
   right: 0;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(20rpx);
-  border-top: 1rpx solid #f0e6d6;
+  border-top: 1rpx solid var(--color-divider);
   padding: 18rpx 32rpx 18rpx;
   padding-bottom: calc(18rpx + env(safe-area-inset-bottom));
   z-index: 99;
@@ -251,7 +259,7 @@ page {
   justify-content: center;
   margin-bottom: 14rpx;
   font-size: 22rpx;
-  color: #a08060;
+  color: var(--color-text-tertiary);
   letter-spacing: 0;
 }
 
@@ -261,10 +269,10 @@ page {
 
 /* 主按钮：暖橙渐变 + 深色阴影，更显高端 */
 .t-button--primary {
-  background: linear-gradient(135deg, #ff9020 0%, #e87815 100%) !important;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%) !important;
   border-color: transparent !important;
   border-radius: 999rpx !important;
-  box-shadow: 0 10rpx 24rpx rgba(232, 120, 21, 0.3) !important;
+  box-shadow: 0 10rpx 24rpx rgba(232, 114, 42, 0.3) !important;
   letter-spacing: 6rpx !important;
   font-weight: 500 !important;
   text-indent: 6rpx !important;

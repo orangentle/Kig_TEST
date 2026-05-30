@@ -1,7 +1,20 @@
 <view class="container">
-  <view class="hero">
-    <image class="cover" src="{{work.coverFileId || '/assets/images/icon.jpg'}}" mode="aspectFill" />
+  <view class="hero" bindtap="previewCover">
+    <image
+      wx:if="{{work.coverFileId}}"
+      class="cover {{panDistance < 0 ? 'cover-pan' : ''}}"
+      style="{{panDistance < 0 ? '--pan-distance: ' + panDistance + 'rpx;' : ''}}"
+      src="{{work.coverFileId}}"
+      mode="{{coverMode}}"
+    />
+    <view wx:else class="cover cover-placeholder">
+      <t-icon name="image" size="120rpx" color="#d8c8b0" />
+    </view>
     <view class="hero-mask"></view>
+    <view wx:if="{{work.coverFileId && panDistance < 0}}" class="hero-zoom-hint">
+      <t-icon name="zoom-in" size="28rpx" color="#fff" />
+      <text>点击查看大图</text>
+    </view>
     <view class="hero-info">
       <view class="hero-title">{{work.roleName}}</view>
       <view class="hero-source">来源 · {{work.source}}</view>
@@ -15,7 +28,7 @@
           <t-icon name="tag" size="32rpx" color="#ff8800" />
           <text>分类</text>
         </view>
-        <view class="info-value">{{work.category || '未分类'}}</view>
+        <view class="info-value">{{work.categoryLabel || '未分类'}}</view>
       </view>
       <view class="divider"></view>
       <view class="info-row">

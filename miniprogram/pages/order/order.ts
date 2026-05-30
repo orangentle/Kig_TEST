@@ -42,7 +42,8 @@ Page({
     faceCountOptions: [1, 2, 3],
     faceCountIndex: 0,
     isSubmitting: false,
-    hasLogin: false
+    hasLogin: false,
+    tbOrderIdHint: ''   // 订单号校验提示
   },
 
   onLoad() {
@@ -88,7 +89,30 @@ Page({
   },
 
   onTbOrderIdChange(e: any) {
-    this.setData({ 'formData.tbOrderId': (e?.detail?.value ?? '') as string });
+    this.setData({
+      'formData.tbOrderId': (e?.detail?.value ?? '') as string,
+      tbOrderIdHint: ''
+    });
+  },
+
+  async onTbOrderIdBlur() {
+    const tbOrderId = (this.data.formData.tbOrderId || '').trim();
+    if (!tbOrderId) return;
+    try {
+      const { result } = await wx.cloud.callFunction({
+        name: 'getOrders',
+        data: { tbOrderId }
+      }) as any;
+      const list = (result && result.data) || [];
+      const conflict = list.find((o: any) => o.tbOrderId === tbOrderId);
+      if (conflict) {
+        this.setData({ tbOrderIdHint: '这个单号已经有小伙伴用过啦~ 确认一下是不是填错了？如需改动请联系客服喔 ♡' });
+      } else {
+        this.setData({ tbOrderIdHint: '' });
+      }
+    } catch (_) {
+      // 网络异常静默，提交时云函数会再次拦截
+    }
   },
 
   onIpChange(e: any) {
@@ -196,39 +220,39 @@ Page({
     const { formData, useProfileBodyData, profileBodyData, referenceImages, replaceFaceImages } = this.data;
 
     if (!formData.tbOrderId.trim()) {
-      Message.error({ context: this, offset: [20, 32], content: '请填写淘宝定金订单号' });
+      Message.warning({ context: this, offset: [20, 32], content: '鼠鼠找不到淘宝订单号呜呜~ 先填一下嘛 (｡>﹏<｡)' });
       return false;
     }
     if (!formData.roleName.trim()) {
-      Message.error({ context: this, offset: [20, 32], content: '请输入角色名称' });
+      Message.warning({ context: this, offset: [20, 32], content: '小可爱还没有名字哦~ 给ta取一个吧 ♡' });
       return false;
     }
     if (!formData.ip.trim()) {
-      Message.error({ context: this, offset: [20, 32], content: '请输入角色所属 IP' });
+      Message.warning({ context: this, offset: [20, 32], content: '角色来自哪个作品呀? 鼠鼠想知道~ (◍•ᴗ•◍)' });
       return false;
     }
 
     if (useProfileBodyData) {
       if (!profileBodyData || !profileBodyData.height) {
-        Message.error({ context: this, offset: [20, 32], content: '请先完善个人资料中的身材数据' });
+        Message.warning({ context: this, offset: [20, 32], content: '个人资料里还没身材数据呢~ 先去补一下嘛 ♡' });
         return false;
       }
     } else {
       if (!formData.height || !formData.headCircumference) {
-        Message.error({ context: this, offset: [20, 32], content: '请填写完整的身材数据' });
+        Message.warning({ context: this, offset: [20, 32], content: '身高和头围是必须的喔~ 不然鼠鼠没法量 (｡•́︿•̀｡)' });
         return false;
       }
     }
 
     if (referenceImages.length === 0) {
-      Message.error({ context: this, offset: [20, 32], content: '请上传至少一张角色参考图' });
+      Message.warning({ context: this, offset: [20, 32], content: '至少要一张参考图嘛~ 鼠鼠才知道要捏成什么样子呀 (˃ ⌑ ˂ഃ )' });
       return false;
     }
 
     if (formData.needReplaceFace && replaceFaceImages.length < formData.replaceFaceCount) {
-      Message.error({
+      Message.warning({
         context: this, offset: [20, 32],
-        content: `请上传 ${formData.replaceFaceCount} 张替换脸图片`
+        content: `还差 ${formData.replaceFaceCount - replaceFaceImages.length} 张替换脸图哦~ 一脸一图才不会认错呀 ♡`
       });
       return false;
     }
@@ -274,12 +298,13 @@ Page({
 
     this.setData({ isSubmitting: true });
 
-    // 请求订阅消息授权（发货通知）。tmplId 由小程序后台配置后替换
-    const SHIPPING_TMPL_ID = 'REPLACE_WITH_SHIPPING_TMPL_ID';
+    // 请求订阅消息授权（已排单 / 发货 两个节点）
+    const QUEUED_TMPL_ID   = 'hNOQznZnaw3VR7Bcnmnv0HJBO1F8P_kxIGpIACi3VTk';
+    const SHIPPING_TMPL_ID = 'rJMkotC0cffPQfvmFi_kwhfFcCo5fQcmFfa3ai_xkFk';
     try {
       await new Promise((resolve) => {
         wx.requestSubscribeMessage({
-          tmplIds: [SHIPPING_TMPL_ID],
+          tmplIds: [QUEUED_TMPL_ID, SHIPPING_TMPL_ID],
           complete: () => resolve(null)
         });
       });
@@ -341,7 +366,7 @@ Page({
     } catch (error: any) {
       wx.hideLoading();
       console.error('提交订单失败', error);
-      Message.error({ context: this, offset: [20, 32], content: error.message || '提交失败，请重试' });
+      Message.error({ context: this, offset: [20, 32], content: error.message || '提交失败惹~ 鼠鼠再试一次嘛 (｡•́︿•̀｡)' });
     } finally {
       this.setData({ isSubmitting: false });
     }

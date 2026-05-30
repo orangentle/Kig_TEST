@@ -127,35 +127,35 @@ Page({
     const { searchValue, currentSort, works, pageSize, currentPage } = this.data as any;
     const page = resetPage ? 1 : currentPage;
     let filtered = [...works];
-    
+
     // 应用搜索筛选
     if (searchValue) {
       const keyword = searchValue.toLowerCase();
-      filtered = filtered.filter(work => 
-        (work.roleName || '').toLowerCase().includes(keyword) || 
+      filtered = filtered.filter(work =>
+        (work.roleName || '').toLowerCase().includes(keyword) ||
         (work.source || '').toLowerCase().includes(keyword)
       );
     }
-    
+
     // 应用分类筛选
     if (['original', 'game', 'anime'].includes(currentSort)) {
       filtered = filtered.filter(work => work.category === currentSort);
     }
-    
+
     // 应用排序
     if (currentSort === 'latest') {
       filtered.sort((a, b) => (b.createTime || 0) - (a.createTime || 0));
     } else if (currentSort === 'name') {
       filtered.sort((a, b) => a.roleName.localeCompare(b.roleName));
     }
-    
+
     const visible = filtered.slice(0, pageSize * page);
     this.setData({
       filteredWorks: filtered,
       displayedWorks: visible,
       currentPage: page,
       hasMore: filtered.length > visible.length
-    });
+    }, () => this.measureSourceOverflow());
   },
 
   // 加载更多
@@ -163,12 +163,42 @@ Page({
     this.setData({
       currentPage: this.data.currentPage + 1
     });
-    
+
     const { filteredWorks, pageSize, currentPage } = this.data as any;
     const visible = filteredWorks.slice(0, pageSize * currentPage);
     this.setData({
       displayedWorks: visible,
       hasMore: filteredWorks.length > visible.length
+    }, () => this.measureSourceOverflow());
+  },
+
+  // 测量每条「来源」是否溢出，溢出则注入折返滚动距离与时长
+  measureSourceOverflow() {
+    const list = (this.data as any).displayedWorks || [];
+    if (!list.length) return;
+    const query = wx.createSelectorQuery().in(this);
+    list.forEach((_w: any, idx: number) => {
+      query.select(`#src-wrap-${idx}`).boundingClientRect();
+      query.select(`#src-text-${idx}`).boundingClientRect();
+    });
+    query.exec((res: any[]) => {
+      if (!res || !res.length) return;
+      const updates: Record<string, any> = {};
+      for (let i = 0; i < list.length; i++) {
+        const wrap = res[i * 2];
+        const text = res[i * 2 + 1];
+        if (!wrap || !text) continue;
+        const overflow = text.width - wrap.width;
+        if (overflow > 2) {
+          updates[`displayedWorks[${i}].needScroll`] = true;
+          updates[`displayedWorks[${i}].scrollDistance`] = -Math.round(overflow);
+          // 速度约 30px/s，再加 2s 端点停顿基底
+          updates[`displayedWorks[${i}].scrollDuration`] = Math.max(4, Math.round(overflow / 30) + 2);
+        } else if ((list[i] as any).needScroll) {
+          updates[`displayedWorks[${i}].needScroll`] = false;
+        }
+      }
+      if (Object.keys(updates).length) this.setData(updates);
     });
   },
 

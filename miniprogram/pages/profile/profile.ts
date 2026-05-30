@@ -27,6 +27,7 @@ Component({
       nickName: ''
     },
     userId: '',
+    taobaoName: '',
     orders: [] as OrderInfo[],
     orderStats: {
       processing: 0,
@@ -80,6 +81,7 @@ Component({
     show() {
       if (this.data.hasLogin) {
         this.loadOrders();
+        (this as any).checkRejectNotices();
       }
     }
   },
@@ -126,13 +128,13 @@ Component({
                 nickName: userProfile.nickName
               },
               userId: userProfile.userId || result.openid.slice(-8),
+              taobaoName: userProfile.taobaoName || '',
               isAdmin: userProfile.isAdmin || false
             });
             
             // 加载订单数据
             this.loadOrders();
           } else {
-            console.log('用户未注册，等待用户授权');
             this.setData({ hasLogin: false });
           }
         }
@@ -239,6 +241,50 @@ Component({
       }
     },
 
+    // 检查并展示订单驳回通知(从云端 users.pendingRejectNotices 拉取)
+    async checkRejectNotices() {
+      try {
+        const db = wx.cloud.database();
+        const _ = db.command;
+        const { result: loginRes } = await wx.cloud.callFunction({ name: 'login' }) as any;
+        const openid = loginRes && loginRes.openid;
+        if (!openid) return;
+        const r = await db.collection('users')
+          .where({ _openid: openid })
+          .field({ pendingRejectNotices: true })
+          .limit(1)
+          .get();
+        const notices = (r.data[0] && (r.data[0] as any).pendingRejectNotices) || [];
+        if (!notices.length) return;
+
+        // 拼接展示内容
+        const lines = notices.slice(0, 5).map((n: any, i: number) =>
+          `${i + 1}. 「${n.roleName || '订单'}」(单号 ${n.tbOrderId || '-'})\n   原因: ${n.reason || '信息有误'}`
+        );
+        const extra = notices.length > 5 ? `\n\n…还有 ${notices.length - 5} 条` : '';
+        const content = `鼠鼠帮你看了下,有 ${notices.length} 单需要重新填一下喔~\n\n${lines.join('\n')}${extra}`;
+
+        wx.showModal({
+          title: '订单需要重新提交 ♡',
+          content,
+          confirmText: '去重新下单',
+          cancelText: '知道啦',
+          success: (res) => {
+            // 无论选哪个都清掉通知,避免反复弹
+            db.collection('users')
+              .where({ _openid: openid })
+              .update({ data: { pendingRejectNotices: _.set([]) } })
+              .catch((e: any) => console.warn('清理驳回通知失败', e));
+            if (res.confirm) {
+              wx.switchTab({ url: '/pages/order/order' });
+            }
+          }
+        });
+      } catch (err) {
+        console.warn('checkRejectNotices 失败', err);
+      }
+    },
+
     // 加载订单数据
     async loadOrders() {
       try {
@@ -320,15 +366,7 @@ Component({
         url: `/pages/order-detail/order-detail?id=${tbOrderId}`
       });
     },
-    
-    // 查看全部订单
-    viewAllOrders() {
-      wx.showToast({
-        title: '这个被你看到啦~ 还在赶工中',
-        icon: 'none'
-      });
-    },
-    
+
     // 打开工期计算器
     onOpenWorkDayCalc() {
       wx.navigateTo({ url: '/pages/work-day-calc/work-day-calc' });
@@ -498,8 +536,6 @@ Component({
 
     // 显示编辑资料弹窗
     async showEditProfileModal() {
-      console.log('编辑资料按钮被点击');
-      
       try {
         // 从数据库获取完整的用户信息
         const { result } = await wx.cloud.callFunction({
@@ -534,7 +570,6 @@ Component({
           },
           tempAvatarPath: ''
         });
-        console.log('弹窗状态设置完成', this.data.showEditPopup, this.data.tempUserInfo);
       } catch (error) {
         console.error('加载用户信息失败', error);
         // 如果加载失败，使用默认值

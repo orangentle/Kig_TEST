@@ -2,7 +2,7 @@
 
 .container {
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: var(--color-bg);
   padding-bottom: 40rpx;
 }
 
@@ -32,13 +32,13 @@
 
 .month-year {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .month-num {
   font-size: 40rpx;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text);
 }
 
 /* 日历卡片 */
@@ -59,7 +59,7 @@
   flex: 1;
   text-align: center;
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   padding: 16rpx 0;
 }
 
@@ -80,25 +80,25 @@
 
 .day-num {
   font-size: 28rpx;
-  color: #333;
+  color: var(--color-text);
 }
 
 .calendar-day.other-month .day-num {
-  color: #ccc;
+  color: var(--color-text-placeholder);
 }
 
 .calendar-day.today {
-  background: #fff7e6;
+  background: var(--color-primary-bg);
   border-radius: 12rpx;
 }
 
 .calendar-day.today .day-num {
-  color: #ff8800;
+  color: var(--color-primary);
   font-weight: bold;
 }
 
 .calendar-day.selected {
-  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   border-radius: 12rpx;
 }
 
@@ -110,7 +110,7 @@
 .event-dot {
   width: 8rpx;
   height: 8rpx;
-  background: #ff8800;
+  background: var(--color-primary);
   border-radius: 50%;
   margin-top: 4rpx;
 }
@@ -135,7 +135,7 @@
 .section-title {
   font-size: 32rpx;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 /* 日程列表 */
@@ -158,7 +158,7 @@
 
 .time-start {
   font-size: 24rpx;
-  color: #333;
+  color: var(--color-text);
   font-weight: 500;
 }
 
@@ -171,7 +171,7 @@
 
 .time-end {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .schedule-content {
@@ -183,24 +183,24 @@
   background: #fff;
   border-radius: 16rpx;
   padding: 24rpx;
-  border-left: 6rpx solid #ff8800;
+  border-left: 6rpx solid var(--color-primary);
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
 }
 
 .schedule-card.gathering {
-  border-left-color: #ff8800;
+  border-left-color: var(--color-primary);
 }
 
 .schedule-card.photo {
-  border-left-color: #5b8def;
+  border-left-color: var(--color-gathering-2);
 }
 
 .schedule-card.workshop {
-  border-left-color: #52c41a;
+  border-left-color: var(--color-gathering-3);
 }
 
 .schedule-card.market {
-  border-left-color: #ff6b9d;
+  border-left-color: var(--color-gathering-1);
 }
 
 .schedule-header {
@@ -213,15 +213,15 @@
 .schedule-name {
   font-size: 30rpx;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
   flex: 1;
 }
 
 .schedule-type-tag {
   font-size: 22rpx;
   padding: 4rpx 16rpx;
-  background: #fff7e6;
-  color: #ff8800;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
   border-radius: 16rpx;
 }
 
@@ -233,7 +233,7 @@
 
 .meta-text {
   font-size: 24rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-left: 8rpx;
 }
 
@@ -249,7 +249,7 @@
   display: flex;
   align-items: center;
   padding: 24rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .upcoming-item:last-child {
@@ -266,18 +266,18 @@
 
 .date-month {
   font-size: 22rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .date-day {
   font-size: 44rpx;
   font-weight: bold;
-  color: #ff8800;
+  color: var(--color-primary);
 }
 
 .date-weekday {
   font-size: 22rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .upcoming-info {
@@ -287,13 +287,13 @@
 .upcoming-name {
   font-size: 28rpx;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 6rpx;
 }
 
 .upcoming-time {
   font-size: 24rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-bottom: 6rpx;
 }
 
@@ -301,7 +301,7 @@
   display: flex;
   align-items: center;
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .upcoming-location text {
@@ -321,23 +321,23 @@
 }
 
 .upcoming-type.gathering {
-  background: #fff7e6;
-  color: #ff8800;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 .upcoming-type.photo {
-  background: #e6f4ff;
-  color: #5b8def;
+  background: var(--color-primary-bg);
+  color: var(--color-gathering-2);
 }
 
 .upcoming-type.workshop {
   background: #f6ffed;
-  color: #52c41a;
+  color: var(--color-gathering-3);
 }
 
 .upcoming-type.market {
   background: #fff1f0;
-  color: #ff6b9d;
+  color: var(--color-gathering-1);
 }
 
 /* 空状态 */
@@ -357,7 +357,7 @@
 
 .empty-text {
   font-size: 26rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   margin-top: 16rpx;
 }
 
@@ -375,13 +375,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 32rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .detail-title {
   font-size: 34rpx;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .detail-close {
@@ -395,13 +395,13 @@
 
 .detail-section {
   padding: 24rpx 32rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .section-label {
   font-size: 28rpx;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
   display: block;
   margin-bottom: 16rpx;
 }
@@ -423,19 +423,19 @@
 
 .row-label {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   display: block;
   margin-bottom: 4rpx;
 }
 
 .row-value {
   font-size: 28rpx;
-  color: #333;
+  color: var(--color-text);
 }
 
 .detail-desc {
   font-size: 28rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   line-height: 1.8;
 }
 
@@ -446,7 +446,7 @@
 .agenda-item {
   display: flex;
   padding: 12rpx 0;
-  border-bottom: 1rpx dashed #f0f0f0;
+  border-bottom: 1rpx dashed var(--color-divider);
 }
 
 .agenda-item:last-child {
@@ -456,7 +456,7 @@
 .agenda-time {
   min-width: 160rpx;
   font-size: 26rpx;
-  color: #ff8800;
+  color: var(--color-primary);
   font-weight: 500;
   flex-shrink: 0;
 }
@@ -464,7 +464,7 @@
 .agenda-content {
   flex: 1;
   font-size: 26rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   white-space: pre-wrap;
   line-height: 1.6;
 }
@@ -472,7 +472,7 @@
 .detail-footer {
   padding: 24rpx 32rpx;
   padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
-  border-top: 1rpx solid #f0f0f0;
+  border-top: 1rpx solid var(--color-divider);
 }
 
 .action-btn {
@@ -488,6 +488,6 @@
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: #fff;
 }

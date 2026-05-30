@@ -2,7 +2,7 @@
 
 .container {
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: var(--color-bg);
   padding-bottom: 40rpx;
 }
 
@@ -25,7 +25,7 @@
   flex: 1;
   font-size: 28rpx;
   font-weight: 500;
-  color: #ff8800;
+  color: var(--color-primary);
   margin-left: 12rpx;
 }
 
@@ -39,7 +39,7 @@
 
 .notice-item {
   font-size: 24rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   line-height: 1.8;
 }
 
@@ -59,12 +59,12 @@
 .section-title {
   font-size: 32rpx;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .section-more {
   font-size: 26rpx;
-  color: #ff8800;
+  color: var(--color-primary);
 }
 
 /* 筛选 */
@@ -77,7 +77,7 @@
   display: flex;
   align-items: center;
   font-size: 26rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   padding: 8rpx 16rpx;
   background: #fff;
   border-radius: 24rpx;
@@ -110,26 +110,26 @@
   position: absolute;
   top: 12rpx;
   left: 12rpx;
-  font-size: 20rpx;
+  font-size: 22rpx;
   padding: 4rpx 12rpx;
   border-radius: 8rpx;
   color: #fff;
 }
 
 .event-badge.open {
-  background: #52c41a;
+  background: var(--color-success);
 }
 
 .event-badge.upcoming {
-  background: #fa8c16;
+  background: var(--color-primary);
 }
 
 .event-badge.closed {
-  background: #999;
+  background: var(--color-text-tertiary);
 }
 
 .event-badge.full {
-  background: #ff4d4f;
+  background: var(--color-danger);
 }
 
 .event-info {
@@ -141,7 +141,7 @@
 .event-name {
   font-size: 30rpx;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 12rpx;
 }
 
@@ -153,7 +153,7 @@
 
 .meta-text {
   font-size: 24rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-left: 8rpx;
 }
 
@@ -167,18 +167,18 @@
 .event-fee {
   font-size: 32rpx;
   font-weight: 600;
-  color: #ff4d4f;
+  color: var(--color-danger);
 }
 
 .event-fee.free {
-  color: #52c41a;
+  color: var(--color-success);
   font-size: 28rpx;
 }
 
 .signup-btn {
   font-size: 24rpx;
   padding: 12rpx 32rpx;
-  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: #fff;
   border: none;
   border-radius: 32rpx;
@@ -187,7 +187,7 @@
 
 .signup-btn.disabled {
   background: #e0e0e0;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 /* 我的报名列表 */
@@ -203,7 +203,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 28rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .my-signup-item:last-child {
@@ -216,13 +216,13 @@
 
 .signup-event-name {
   font-size: 28rpx;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 8rpx;
 }
 
 .signup-time {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .signup-right {
@@ -239,17 +239,17 @@
 
 .signup-status-tag.confirmed {
   background: #f6ffed;
-  color: #52c41a;
+  color: var(--color-success);
 }
 
 .signup-status-tag.pending {
-  background: #fff7e6;
-  color: #fa8c16;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 .signup-status-tag.cancelled {
-  background: #f5f5f5;
-  color: #999;
+  background: var(--color-bg);
+  color: var(--color-text-tertiary);
 }
 
 /* 空状态 */
@@ -269,7 +269,7 @@
 
 .empty-text {
   font-size: 26rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   margin-top: 16rpx;
 }
 
@@ -287,13 +287,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 32rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .detail-title {
   font-size: 34rpx;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .detail-close {
@@ -307,7 +307,7 @@
 
 .detail-section {
   padding: 24rpx 32rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .detail-row {
@@ -327,23 +327,23 @@
 
 .row-label {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   display: block;
   margin-bottom: 4rpx;
 }
 
 .row-value {
   font-size: 28rpx;
-  color: #333;
+  color: var(--color-text);
 }
 
 .row-value.free {
-  color: #52c41a;
+  color: var(--color-success);
 }
 
 .detail-desc {
   font-size: 28rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   line-height: 1.8;
   margin-top: 16rpx;
 }
@@ -351,7 +351,7 @@
 .detail-footer {
   padding: 24rpx 32rpx;
   padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
-  border-top: 1rpx solid #f0f0f0;
+  border-top: 1rpx solid var(--color-divider);
 }
 
 .action-btn {
@@ -367,11 +367,11 @@
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: #fff;
 }
 
 .action-btn.disabled {
   background: #e0e0e0;
-  color: #999;
+  color: var(--color-text-tertiary);
 }

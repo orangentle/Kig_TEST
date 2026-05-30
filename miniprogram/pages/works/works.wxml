@@ -50,18 +50,24 @@
       >
         <view class="work-image-container">
           <image
+            wx:if="{{item.imageUrl}}"
             class="work-image"
-            src="{{item.imageUrl || '/assets/images/icon.jpg'}}"
+            src="{{item.imageUrl}}"
             mode="aspectFill"
             lazy-load="true"
           ></image>
+          <view wx:else class="work-image work-image-placeholder">
+            <t-icon name="image" size="80rpx" color="#d8c8b0" />
+          </view>
           <view class="cat-badge cat-{{item.category}}">{{item.categoryLabel}}</view>
           <view class="work-title-overlay">
             <text class="work-title">{{item.roleName}}</text>
           </view>
         </view>
         <view class="work-info">
-          <text class="work-source">来源: {{item.source}}</text>
+          <view class="work-source-wrap {{item.needScroll ? 'marquee' : ''}}" id="src-wrap-{{index}}">
+            <text class="work-source" id="src-text-{{index}}" style="{{item.needScroll ? '--scroll-distance:' + item.scrollDistance + 'px; animation-duration:' + item.scrollDuration + 's' : ''}}">来源: {{item.source}}</text>
+          </view>
           <text class="work-date">{{item.date}}</text>
         </view>
       </view>

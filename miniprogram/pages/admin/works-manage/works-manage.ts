@@ -35,6 +35,28 @@ Page({
       { label: '动漫角色', value: 'anime' }
     ],
     works: [] as WorkItem[],
+    filteredWorks: [] as WorkItem[],
+    stats: { total: 0, published: 0, unpublished: 0 },
+    statusFilters: [
+      { label: '全部', value: 'all', count: 0 },
+      { label: '已上架', value: 'published', count: 0 },
+      { label: '未上架', value: 'unpublished', count: 0 }
+    ] as { label: string; value: string; count: number }[],
+    categoryFilters: [
+      { label: '全部分类', value: 'all' },
+      { label: '自设', value: 'original' },
+      { label: '游戏', value: 'game' },
+      { label: '动漫', value: 'anime' }
+    ],
+    statusFilter: 'all',
+    categoryFilter: 'all',
+    keyword: '',
+    selectionMode: false,
+    selectedIds: [] as string[],
+    isSelected: {} as Record<string, boolean>,
+    formPopupVisible: false,
+    actionSheetVisible: false,
+    actionItem: null as WorkItem | null,
     isLoading: false,
     isSubmitting: false,
     isUploading: false
@@ -66,7 +88,6 @@ Page({
         } as WorkItem;
       });
 
-      // 把 cloud:// fileID 解析成临时 URL,否则 image 标签显示不了
       const fileIDs = rawWorks
         .map(w => w.coverFileId)
         .filter(id => !!id && id.startsWith('cloud://'));
@@ -87,6 +108,7 @@ Page({
       }));
 
       this.setData({ works });
+      this.applyFilter();
     } catch (error) {
       console.error('加载作品失败', error);
       wx.showToast({ title: '加载作品失败', icon: 'none' });
@@ -95,17 +117,227 @@ Page({
     }
   },
 
+  applyFilter() {
+    const { works, statusFilter, categoryFilter, keyword, selectedIds } = this.data;
+    const kw = (keyword || '').trim().toLowerCase();
+    const filteredWorks = works.filter(w => {
+      if (statusFilter === 'published' && !w.isPublished) return false;
+      if (statusFilter === 'unpublished' && w.isPublished) return false;
+      if (categoryFilter !== 'all' && w.category !== categoryFilter) return false;
+      if (kw) {
+        const hay = `${w.roleName} ${w.source}`.toLowerCase();
+        if (!hay.includes(kw)) return false;
+      }
+      return true;
+    });
+
+    const total = works.length;
+    const published = works.filter(w => w.isPublished).length;
+    const unpublished = total - published;
+
+    const statusFilters = [
+      { label: '全部', value: 'all', count: total },
+      { label: '已上架', value: 'published', count: published },
+      { label: '未上架', value: 'unpublished', count: unpublished }
+    ];
+
+    // 选中集合中已被筛选掉的项移除
+    const filteredIds = new Set(filteredWorks.map(w => w._id!));
+    const cleanedSelected = selectedIds.filter(id => filteredIds.has(id));
+    const isSelected: Record<string, boolean> = {};
+    cleanedSelected.forEach(id => { isSelected[id] = true; });
+
+    this.setData({
+      filteredWorks,
+      stats: { total, published, unpublished },
+      statusFilters,
+      selectedIds: cleanedSelected,
+      isSelected
+    });
+  },
+
+  onSearchInput(e: any) {
+    this.setData({ keyword: e.detail.value });
+    this.applyFilter();
+  },
+  onClearKeyword() {
+    this.setData({ keyword: '' });
+    this.applyFilter();
+  },
+  onSetStatus(e: any) {
+    this.setData({ statusFilter: e.currentTarget.dataset.value });
+    this.applyFilter();
+  },
+  onSetCategory(e: any) {
+    this.setData({ categoryFilter: e.currentTarget.dataset.value });
+    this.applyFilter();
+  },
+
+  onToggleSelectionMode() {
+    const next = !this.data.selectionMode;
+    this.setData({
+      selectionMode: next,
+      selectedIds: [],
+      isSelected: {}
+    });
+  },
+
+  onRowTap(e: any) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    if (this.data.selectionMode) {
+      this.toggleSelect(id);
+    }
+  },
+
+  onRowLongPress(e: any) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    if (!this.data.selectionMode) {
+      this.setData({ selectionMode: true });
+    }
+    this.toggleSelect(id);
+  },
+
+  toggleSelect(id: string) {
+    const { selectedIds, isSelected } = this.data;
+    let next: string[];
+    if (isSelected[id]) {
+      next = selectedIds.filter(x => x !== id);
+    } else {
+      next = [...selectedIds, id];
+    }
+    const map: Record<string, boolean> = {};
+    next.forEach(x => { map[x] = true; });
+    this.setData({ selectedIds: next, isSelected: map });
+  },
+
+  onSelectAllToggle() {
+    const { filteredWorks, selectedIds } = this.data;
+    if (selectedIds.length === filteredWorks.length && filteredWorks.length > 0) {
+      this.setData({ selectedIds: [], isSelected: {} });
+    } else {
+      const ids = filteredWorks.map(w => w._id!);
+      const map: Record<string, boolean> = {};
+      ids.forEach(id => { map[id] = true; });
+      this.setData({ selectedIds: ids, isSelected: map });
+    }
+  },
+
+  onRowAction(e: any) {
+    const id = e.currentTarget.dataset.id;
+    const item = this.data.works.find(w => w._id === id) || null;
+    this.setData({ actionItem: item, actionSheetVisible: true });
+  },
+  onActionSheetClose() {
+    this.setData({ actionSheetVisible: false });
+  },
+
+  async onActionTogglePublish() {
+    const item = this.data.actionItem;
+    if (!item || !item._id) return;
+    this.setData({ actionSheetVisible: false });
+    try {
+      const db = wx.cloud.database();
+      await db.collection('works').doc(item._id).update({ data: { isPublished: !item.isPublished } });
+      wx.showToast({ title: item.isPublished ? '已下架' : '已上架', icon: 'success' });
+      this.fetchWorks();
+    } catch (e) {
+      console.error(e);
+      wx.showToast({ title: '操作失败', icon: 'none' });
+    }
+  },
+
+  async onActionDelete() {
+    const item = this.data.actionItem;
+    if (!item || !item._id) return;
+    this.setData({ actionSheetVisible: false });
+    const confirm = await this.confirm('删除确认', `确定删除「${item.roleName}」？此操作不可撤销`);
+    if (!confirm) return;
+    try {
+      const db = wx.cloud.database();
+      await db.collection('works').doc(item._id).remove();
+      wx.showToast({ title: '已删除', icon: 'success' });
+      this.fetchWorks();
+    } catch (e) {
+      console.error(e);
+      wx.showToast({ title: '删除失败', icon: 'none' });
+    }
+  },
+
+  async onBatchPublish(e: any) {
+    const publish = e.currentTarget.dataset.publish === true || e.currentTarget.dataset.publish === 'true';
+    const ids = this.data.selectedIds;
+    if (ids.length === 0) return;
+    const confirm = await this.confirm(
+      publish ? '批量上架' : '批量下架',
+      `确定将 ${ids.length} 件作品${publish ? '上架' : '下架'}？`
+    );
+    if (!confirm) return;
+    wx.showLoading({ title: '处理中...', mask: true });
+    try {
+      const db = wx.cloud.database();
+      await Promise.all(ids.map(id => db.collection('works').doc(id).update({ data: { isPublished: publish } })));
+      wx.hideLoading();
+      wx.showToast({ title: '操作完成', icon: 'success' });
+      this.setData({ selectionMode: false, selectedIds: [], isSelected: {} });
+      this.fetchWorks();
+    } catch (e) {
+      wx.hideLoading();
+      console.error(e);
+      wx.showToast({ title: '部分操作失败', icon: 'none' });
+    }
+  },
+
+  async onBatchDelete() {
+    const ids = this.data.selectedIds;
+    if (ids.length === 0) return;
+    const confirm = await this.confirm('批量删除', `确定删除 ${ids.length} 件作品？此操作不可撤销`);
+    if (!confirm) return;
+    wx.showLoading({ title: '删除中...', mask: true });
+    try {
+      const db = wx.cloud.database();
+      await Promise.all(ids.map(id => db.collection('works').doc(id).remove()));
+      wx.hideLoading();
+      wx.showToast({ title: '已删除', icon: 'success' });
+      this.setData({ selectionMode: false, selectedIds: [], isSelected: {} });
+      this.fetchWorks();
+    } catch (e) {
+      wx.hideLoading();
+      console.error(e);
+      wx.showToast({ title: '部分删除失败', icon: 'none' });
+    }
+  },
+
+  confirm(title: string, content: string): Promise<boolean> {
+    return new Promise(resolve => {
+      wx.showModal({
+        title,
+        content,
+        confirmColor: '#E07458',
+        success: res => resolve(!!res.confirm),
+        fail: () => resolve(false)
+      });
+    });
+  },
+
+  // ===== 表单 =====
+  onShowFormPopup() {
+    this.setData({ formPopupVisible: true });
+  },
+  onFormPopupClose() {
+    this.setData({ formPopupVisible: false });
+  },
+
   onInputChange(e: any) {
     const field = e.currentTarget.dataset.field;
     const value = e.detail.value;
     this.setData({ [`form.${field}`]: value });
   },
-
   onCategoryChange(e: any) {
     const index = Number(e.detail.value || 0);
     this.setData({ 'form.categoryIndex': index });
   },
-
   onPublishSwitch(e: any) {
     this.setData({ 'form.isPublished': !!e.detail.value });
   },
@@ -122,7 +354,6 @@ Page({
           fail: reject
         });
       });
-      // 立刻显示本地预览,再后台上传
       this.setData({ 'form.coverPreview': filePath, isUploading: true });
       const cloudPath = `images/works/${Date.now()}-${Math.floor(Math.random() * 1000)}.jpg`;
       const uploadRes = await wx.cloud.uploadFile({ cloudPath, filePath });
@@ -187,6 +418,7 @@ Page({
       });
       wx.showToast({ title: '保存成功', icon: 'success' });
       this.resetForm();
+      this.setData({ formPopupVisible: false });
       this.fetchWorks();
     } catch (error) {
       console.error('保存作品失败', error);
@@ -208,43 +440,6 @@ Page({
         coverPreview: ''
       }
     });
-  },
-
-  async onTogglePublish(e: any) {
-    const id = e.currentTarget.dataset.id;
-    const value = e.detail.value;
-    if (!id) return;
-    try {
-      const db = wx.cloud.database();
-      await db.collection('works').doc(id).update({ data: { isPublished: !!value } });
-      this.fetchWorks();
-    } catch (error) {
-      console.error('更新上架状态失败', error);
-      wx.showToast({ title: '更新失败', icon: 'none' });
-    }
-  },
-
-  async onDelete(e: any) {
-    const id = e.currentTarget.dataset.id;
-    if (!id) return;
-    const confirmRes = await new Promise<{ confirm: boolean }>((resolve) => {
-      wx.showModal({
-        title: '删除确认',
-        content: '确定删除该作品吗？此操作不可撤销',
-        confirmColor: '#ff4d4f',
-        success: (res) => resolve({ confirm: res.confirm })
-      });
-    });
-    if (!confirmRes.confirm) return;
-    try {
-      const db = wx.cloud.database();
-      await db.collection('works').doc(id).remove();
-      wx.showToast({ title: '已删除', icon: 'success' });
-      this.fetchWorks();
-    } catch (error) {
-      console.error('删除作品失败', error);
-      wx.showToast({ title: '删除失败', icon: 'none' });
-    }
   },
 
   formatDate(ts: number) {

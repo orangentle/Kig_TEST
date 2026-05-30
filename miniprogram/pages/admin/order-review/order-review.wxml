@@ -65,8 +65,11 @@
               <text class="tb-id-label">淘宝单号</text>
               <text class="tb-id">{{item.tbOrderId || '未填'}}</text>
             </view>
-            <view class="status-pill {{item.isUrgent ? 'pill-urgent' : item.status === 'pending' ? 'pill-pending' : item.status === 'rejected' ? 'pill-rejected' : 'pill-normal'}}">
-              {{item.status === 'pending' ? '待审核' : item.status === 'rejected' ? '已驳回' : item.isUrgent ? '加急' : item.progressStage || '已通过'}}
+            <view class="pill-group">
+              <view wx:if="{{item.isUrgent}}" class="status-pill pill-urgent">加急</view>
+              <view class="status-pill {{item.status === 'pending' ? 'pill-pending' : item.status === 'rejected' ? 'pill-rejected' : 'pill-normal'}}">
+                {{item.status === 'pending' ? '待审核' : item.status === 'rejected' ? '已驳回' : item.progressStage || '已通过'}}
+              </view>
             </view>
           </view>
 
@@ -117,8 +120,9 @@
       <view class="detail-header">
         <view class="detail-title-wrap">
           <text class="detail-title">订单详情</text>
-          <view class="detail-status-pill {{currentOrder.isUrgent ? 'pill-urgent' : currentOrder.status === 'pending' ? 'pill-pending' : currentOrder.status === 'rejected' ? 'pill-rejected' : 'pill-normal'}}">
-            {{currentOrder.status === 'pending' ? '待审核' : currentOrder.status === 'rejected' ? '已驳回' : currentOrder.isUrgent ? '加急' : currentOrder.progressStage || '已通过'}}
+          <view wx:if="{{currentOrder.isUrgent}}" class="detail-status-pill pill-urgent">加急</view>
+          <view class="detail-status-pill {{currentOrder.status === 'pending' ? 'pill-pending' : currentOrder.status === 'rejected' ? 'pill-rejected' : 'pill-normal'}}">
+            {{currentOrder.status === 'pending' ? '待审核' : currentOrder.status === 'rejected' ? '已驳回' : currentOrder.progressStage || '已通过'}}
           </view>
         </view>
         <t-icon name="close" size="48rpx" color="#999" bind:tap="onCloseDetailPopup" />

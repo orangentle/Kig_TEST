@@ -2,7 +2,7 @@
 
 .container {
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: var(--color-bg);
   padding-bottom: 40rpx;
 }
 
@@ -19,7 +19,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, #ff6b9d, #ff8800);
+  background: linear-gradient(135deg, var(--color-gathering-1), var(--color-primary));
 }
 
 .banner-content {
@@ -81,19 +81,19 @@
 }
 
 .bg-pink {
-  background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+  background: linear-gradient(135deg, var(--color-gathering-1), var(--color-primary-light));
 }
 
 .bg-blue {
-  background: linear-gradient(135deg, #5b8def, #7fa3f7);
+  background: linear-gradient(135deg, var(--color-gathering-2), var(--color-deco-warm));
 }
 
 .bg-orange {
-  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
 }
 
 .bg-green {
-  background: linear-gradient(135deg, #52c41a, #73d13d);
+  background: linear-gradient(135deg, var(--color-gathering-3), var(--color-warning));
 }
 
 .card-info {
@@ -105,17 +105,17 @@
 .card-title {
   font-size: 32rpx;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 8rpx;
 }
 
 .card-desc {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .card-badge {
-  background: #ff8800;
+  background: var(--color-primary);
   color: #fff;
   font-size: 22rpx;
   padding: 6rpx 16rpx;
@@ -132,7 +132,7 @@
 
 .card-tag.hot {
   background: #fff1f0;
-  color: #ff4d4f;
+  color: var(--color-danger);
 }
 
 /* 区块样式 */
@@ -151,12 +151,12 @@
 .section-title {
   font-size: 32rpx;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .section-more {
   font-size: 26rpx;
-  color: #ff8800;
+  color: var(--color-primary);
 }
 
 /* 活动列表 */
@@ -170,7 +170,7 @@
 .event-card {
   display: flex;
   padding: 28rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .event-card:last-child {
@@ -180,7 +180,7 @@
 .event-date {
   width: 100rpx;
   height: 100rpx;
-  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   border-radius: 16rpx;
   display: flex;
   flex-direction: column;
@@ -210,13 +210,13 @@
 .event-name {
   font-size: 30rpx;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 8rpx;
 }
 
 .event-location {
   font-size: 24rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-bottom: 8rpx;
 }
 
@@ -228,7 +228,7 @@
 
 .event-spots {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .event-status {
@@ -239,17 +239,17 @@
 
 .event-status.open {
   background: #f6ffed;
-  color: #52c41a;
+  color: var(--color-success);
 }
 
 .event-status.upcoming {
-  background: #fff7e6;
-  color: #fa8c16;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 .event-status.closed {
-  background: #f5f5f5;
-  color: #999;
+  background: var(--color-bg);
+  color: var(--color-text-tertiary);
 }
 
 /* 照片滚动 */
@@ -303,7 +303,7 @@
 
 .empty-text {
   font-size: 26rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   margin-top: 16rpx;
 }
 
@@ -320,7 +320,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 28rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .signup-item:last-child {
@@ -334,13 +334,13 @@
 
 .signup-event {
   font-size: 28rpx;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 8rpx;
 }
 
 .signup-time {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .signup-status {
@@ -351,15 +351,15 @@
 
 .signup-status.confirmed {
   background: #f6ffed;
-  color: #52c41a;
+  color: var(--color-success);
 }
 
 .signup-status.pending {
-  background: #fff7e6;
-  color: #fa8c16;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 .signup-status.cancelled {
-  background: #f5f5f5;
-  color: #999;
+  background: var(--color-bg);
+  color: var(--color-text-tertiary);
 }

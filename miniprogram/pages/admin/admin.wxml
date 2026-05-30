@@ -130,8 +130,11 @@
         <view class="card-body">
           <view class="card-row-1">
             <text class="role-name">{{item.roleName || '未命名'}}</text>
-            <view class="status-pill {{item.isUrgent ? 'pill-urgent' : item.status === 'completed' ? 'pill-completed' : item.status === 'pending' ? 'pill-pending' : 'pill-normal'}}">
-              {{item.isUrgent ? '加急' : item.status === 'completed' ? '已完成' : item.status === 'pending' ? '待审核' : item.progressStage || '进行中'}}
+            <view class="pill-group">
+              <view wx:if="{{item.isUrgent}}" class="status-pill pill-urgent">加急</view>
+              <view class="status-pill {{item.status === 'completed' ? 'pill-completed' : item.status === 'pending' ? 'pill-pending' : 'pill-normal'}}">
+                {{item.status === 'completed' ? '已完成' : item.status === 'pending' ? '待审核' : item.progressStage || '进行中'}}
+              </view>
             </view>
           </view>
           <view class="card-row-2">

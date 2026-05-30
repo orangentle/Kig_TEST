@@ -95,15 +95,6 @@ export function getEventCoverUrl(eventId: string, ext: string = 'jpg'): string {
 }
 
 /**
- * 获取活动相册封面图路径（使用活动封面）
- * @param eventId 活动ID
- * @param ext 文件扩展名，默认jpg
- */
-export function getAlbumCoverUrl(eventId: string, ext: string = 'jpg'): string {
-  return getEventCoverUrl(eventId, ext);
-}
-
-/**
  * 获取活动照片路径
  * @param eventId 活动ID
  * @param photoId 照片ID
@@ -131,15 +122,6 @@ export function getProductMainUrl(productId: string, ext: string = 'jpg'): strin
  */
 export function getProductDetailUrl(productId: string, index: number, ext: string = 'jpg'): string {
   return getCloudPath(`${CLOUD_PATHS.gathering.merch.products}${productId}/detail_${index}.${ext}`);
-}
-
-/**
- * 获取娃聚Banner图路径
- * @param bannerId banner ID
- * @param ext 文件扩展名，默认jpg
- */
-export function getGatheringBannerUrl(bannerId: string, ext: string = 'jpg'): string {
-  return getCloudPath(`${CLOUD_PATHS.gathering.banners}${bannerId}.${ext}`);
 }
 
 /**
@@ -189,13 +171,3 @@ export async function getTempFileUrl(fileID: string): Promise<string> {
     throw error;
   }
 }
-
-// 默认占位图（当云存储图片加载失败时使用）
-export const DEFAULT_IMAGES = {
-  event: 'https://picsum.photos/seed/default_event/400/300',
-  album: 'https://picsum.photos/seed/default_album/400/300',
-  photo: 'https://picsum.photos/seed/default_photo/400/400',
-  product: 'https://picsum.photos/seed/default_product/400/400',
-  banner: 'https://picsum.photos/seed/default_banner/750/300',
-  avatar: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
-};

@@ -3,14 +3,14 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg);
+  background: var(--color-bg-admin);
 }
 
 /* 顶部 */
 .top-bar {
   padding: 28rpx 28rpx 20rpx;
   padding-top: calc(20rpx + env(safe-area-inset-top));
-  background: linear-gradient(135deg, #ff8800 0%, #ffa733 60%, #ffc266 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
   color: #fff;
   display: flex;
   align-items: center;
@@ -30,7 +30,7 @@
 
 /* 概览卡 */
 .stats-scroll {
-  background: linear-gradient(180deg, #ffa733 0%, #ffa733 50%, var(--color-bg) 50%, var(--color-bg) 100%);
+  background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-primary-light) 50%, var(--color-bg-admin) 50%, var(--color-bg-admin) 100%);
   padding: 4rpx 0 12rpx;
 }
 
@@ -68,12 +68,12 @@
 }
 
 .stat-card.total .stat-num { color: var(--color-primary); }
-.stat-card.pending .stat-num { color: #faad14; }
-.stat-card.urgent .stat-num { color: #ff4d4f; }
-.stat-card.overdue .stat-num { color: #ff4d4f; }
-.stat-card.completed .stat-num { color: #52c41a; }
-.stat-card.archived .stat-num { color: #8a8a8a; }
-.stat-card.processing .stat-num { color: #1890ff; }
+.stat-card.pending .stat-num { color: var(--color-warning); }
+.stat-card.urgent .stat-num { color: var(--color-danger); }
+.stat-card.overdue .stat-num { color: var(--color-danger); }
+.stat-card.completed .stat-num { color: var(--color-success); }
+.stat-card.archived .stat-num { color: var(--color-text-tertiary); }
+.stat-card.processing .stat-num { color: var(--color-info); }
 
 /* 工具栏 */
 .toolbar {
@@ -91,8 +91,8 @@
   align-items: center;
   justify-content: center;
   padding: 10rpx 12rpx;
-  font-size: 20rpx;
-  color: #666;
+  font-size: 22rpx;
+  color: var(--color-text-secondary);
   background: #fff;
   border-radius: 16rpx;
   min-width: 80rpx;
@@ -121,7 +121,7 @@
 .tab-chip {
   padding: 10rpx 24rpx;
   background: #fff;
-  color: #5a5a5a;
+  color: var(--color-text-secondary);
   font-size: 24rpx;
   border-radius: 999rpx;
   flex-shrink: 0;
@@ -129,7 +129,7 @@
 }
 
 .tab-chip-active {
-  background: linear-gradient(135deg, #ff8800, #ffaa33);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: #fff;
   box-shadow: 0 4rpx 12rpx rgba(255, 136, 0, 0.3);
 }
@@ -195,7 +195,7 @@
 .order-card:active { transform: scale(0.99); }
 
 .card-selected {
-  background: #fff8f0;
+  background: var(--color-primary-bg);
   box-shadow: 0 0 0 2rpx var(--color-primary), var(--shadow-md);
 }
 
@@ -205,13 +205,13 @@
   width: 8rpx;
 }
 
-.stripe-normal { background: #d0d0d0; }
-.stripe-urgent { background: #ff4d4f; }
-.stripe-pending { background: #faad14; }
-.stripe-completed { background: #52c41a; }
+.stripe-normal { background: var(--color-divider); }
+.stripe-urgent { background: var(--color-danger); }
+.stripe-pending { background: var(--color-warning); }
+.stripe-completed { background: var(--color-success); }
 
 .card-urgent {
-  background: linear-gradient(90deg, #fff5f5 0%, #fff 30%);
+  background: linear-gradient(90deg, #fff1f0 0%, #fff 30%);
 }
 
 .card-check {
@@ -223,7 +223,7 @@
 .check-box {
   width: 40rpx; height: 40rpx;
   border-radius: 50%;
-  border: 2rpx solid #d0d0d0;
+  border: 2rpx solid var(--color-divider);
   background: #fff;
   display: flex; align-items: center; justify-content: center;
 }
@@ -249,11 +249,18 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 380rpx;
+  max-width: 320rpx;
+}
+
+.pill-group {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  flex-shrink: 0;
 }
 
 .status-pill {
-  font-size: 20rpx;
+  font-size: 22rpx;
   padding: 4rpx 14rpx;
   border-radius: 999rpx;
   font-weight: 500;
@@ -261,9 +268,9 @@
 }
 
 .pill-normal { background: var(--color-primary-bg); color: var(--color-primary); }
-.pill-urgent { background: #fff1f0; color: #ff4d4f; }
-.pill-pending { background: #fffbe6; color: #faad14; }
-.pill-completed { background: #f0faf3; color: #52c41a; }
+.pill-urgent { background: #fff1f0; color: var(--color-danger); }
+.pill-pending { background: #fffbe6; color: var(--color-warning); }
+.pill-completed { background: #f0faf3; color: var(--color-success); }
 
 .card-row-2 {
   display: flex;
@@ -288,14 +295,14 @@
 .progress-mini-bar {
   flex: 1;
   height: 8rpx;
-  background: #f0f0f0;
+  background: var(--color-divider);
   border-radius: 999rpx;
   overflow: hidden;
 }
 
 .progress-mini-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ff8800, #ffcc33);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
   border-radius: 999rpx;
 }
 
@@ -353,7 +360,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #f7f8fa;
+  background: var(--color-bg);
   border-radius: 16rpx;
   padding: 14rpx 22rpx;
   font-size: 22rpx;
@@ -363,11 +370,11 @@
 }
 
 .batch-btn text { margin-top: 6rpx; }
-.batch-btn:active { background: #efeff2; }
+.batch-btn:active { background: var(--color-divider); }
 
-.batch-btn-primary { background: #f0faf2; color: #389e0d; }
+.batch-btn-primary { background: #f0faf2; color: var(--color-success); }
 .batch-btn-primary:active { background: #d9f5dd; }
-.batch-btn-danger { background: #fff1f0; color: #cf1322; }
+.batch-btn-danger { background: #fff1f0; color: var(--color-danger); }
 .batch-btn-danger:active { background: #ffd6d3; }
 
 /* 弹窗面板 */
@@ -394,7 +401,7 @@
   color: var(--color-text);
 }
 
-.popup-row:active { background: #f7f8fa; }
+.popup-row:active { background: var(--color-bg); }
 
 .popup-row-active {
   color: var(--color-primary);
@@ -442,7 +449,7 @@
 
 .filter-picker {
   padding: 20rpx 24rpx;
-  background: #f7f8fa;
+  background: var(--color-bg);
   border-radius: 16rpx;
   font-size: 26rpx;
   color: var(--color-text);
@@ -484,13 +491,13 @@
 }
 
 .action-row text { margin-left: 20rpx; }
-.action-row:active { background: #f7f8fa; }
+.action-row:active { background: var(--color-bg); }
 
 .action-cancel {
   margin: 16rpx 32rpx 0;
   text-align: center;
   padding: 24rpx 0;
-  background: #f7f8fa;
+  background: var(--color-bg);
   border-radius: 16rpx;
   font-size: 28rpx;
   color: var(--color-text-secondary);
@@ -531,10 +538,10 @@
 .form-section-title {
   font-size: 26rpx;
   font-weight: 700;
-  color: #ff8800;
+  color: var(--color-primary);
   margin-bottom: 20rpx;
   padding-left: 16rpx;
-  border-left: 6rpx solid #ff8800;
+  border-left: 6rpx solid var(--color-primary);
   line-height: 1.2;
 }
 
@@ -552,7 +559,7 @@
 .form-textarea {
   width: 100%;
   min-height: 140rpx;
-  background: #f7f8fa;
+  background: var(--color-bg);
   border-radius: 12rpx;
   padding: 16rpx 20rpx;
   font-size: 28rpx;
@@ -589,9 +596,9 @@
 .img-add {
   width: 180rpx;
   height: 180rpx;
-  border: 2rpx dashed #d0d0d0;
+  border: 2rpx dashed var(--color-divider);
   border-radius: 12rpx;
-  background: #f7f8fa;
+  background: var(--color-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -616,12 +623,12 @@
   margin-bottom: 12rpx;
 }
 
-.required { color: #ff4d4f; }
+.required { color: var(--color-danger); }
 
 .form-input {
   width: 100%;
   height: 80rpx;
-  background: #f7f8fa;
+  background: var(--color-bg);
   border-radius: 12rpx;
   padding: 0 20rpx;
   font-size: 28rpx;
@@ -631,7 +638,7 @@
 .form-picker {
   height: 80rpx;
   line-height: 80rpx;
-  background: #f7f8fa;
+  background: var(--color-bg);
   border-radius: 12rpx;
   padding: 0 20rpx;
   font-size: 28rpx;
@@ -659,7 +666,7 @@
 .danger-title {
   font-size: 26rpx;
   font-weight: 600;
-  color: #d04848;
+  color: var(--color-danger);
   margin-bottom: 12rpx;
   letter-spacing: 1rpx;
 }
@@ -672,7 +679,7 @@
 }
 .danger-desc--all {
   margin-top: 16rpx;
-  color: #d04848;
+  color: var(--color-danger);
   font-weight: 500;
 }
 .danger-btn {
@@ -684,11 +691,11 @@
 }
 .danger-btn--mock {
   background: #fff;
-  color: #d04848;
+  color: var(--color-danger);
   border: 1rpx solid #f5cccc;
 }
 .danger-btn--all {
-  background: #d04848;
+  background: var(--color-danger);
   color: #fff;
 }
 .danger-btn:active { opacity: 0.85; }

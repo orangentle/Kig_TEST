@@ -33,24 +33,29 @@ exports.main = async (event, context) => {
 
   const tbOrderIdTrim = (tbOrderId || '').toString().trim()
   if (!tbOrderIdTrim) {
-    return { success: false, error: '请填写淘宝定金订单号' }
+    return { success: false, error: '鼠鼠找不到淘宝订单号呜呜~ 先填一下嘛 (｡>﹏<｡)' }
   }
   if (!roleName || !ip) {
-    return { success: false, error: '角色名称和角色所属 IP 不能为空' }
+    return { success: false, error: '角色名字和所属作品都要填哦~ 鼠鼠才能开工呀 ♡' }
   }
 
   if (!referenceImages || referenceImages.length === 0) {
-    return { success: false, error: '请上传至少一张角色参考图' }
+    return { success: false, error: '至少要一张参考图嘛~ 不然鼠鼠不知道捏成什么样 (˃ ⌑ ˂ഃ )' }
   }
 
-  // 同一个淘宝定金订单号只能提交一次定制表
+  // 淘宝订单号全局唯一（含已取消），与 DB 唯一索引 idx_tbOrderId 对齐
+  // 取消订单不释放号位，如需复用需联系客服真删
   try {
-    const dup = await db.collection('orders').where({ tbOrderId: tbOrderIdTrim }).limit(1).get()
+    const dup = await db.collection('orders')
+      .where({ tbOrderId: tbOrderIdTrim })
+      .limit(1)
+      .get()
     if (dup.data && dup.data.length > 0) {
-      return { success: false, error: '该淘宝订单号已提交过定制表，如需修改请联系客服' }
+      return { success: false, error: '这个单号已经有小伙伴用过啦~ 确认下是不是填错了？如需改动请联系客服喔 ♡' }
     }
   } catch (e) {
     console.error('校验订单号唯一性失败', e)
+    return { success: false, error: '订单号校验出了点小问题~ 鼠鼠喘口气再试 (｡•́︿•̀｡)' }
   }
 
   const needReplaceFace = !!(options && options.needReplaceFace)
@@ -58,7 +63,7 @@ exports.main = async (event, context) => {
 
   if (needReplaceFace) {
     if (!replaceFaceImages || replaceFaceImages.length !== replaceFaceCount) {
-      return { success: false, error: `替换脸数量与图片数量不一致，应为 ${replaceFaceCount} 张` }
+      return { success: false, error: `替换脸要 ${replaceFaceCount} 张图哦~ 一脸一图鼠鼠才不会认错呀 ♡` }
     }
   }
 
@@ -131,6 +136,11 @@ exports.main = async (event, context) => {
     return { success: true, orderId, _id: result._id }
   } catch (error) {
     console.error('提交订单失败', error)
-    return { success: false, error: error.message || '提交订单失败' }
+    // 唯一索引冲突（并发提交或绕过 WHERE 检查时）
+    const msg = (error && (error.errMsg || error.message)) || ''
+    if (/duplicate|E11000|unique/i.test(msg)) {
+      return { success: false, error: '这个单号已经有小伙伴用过啦~ 确认下是不是填错了？如需改动请联系客服喔 ♡' }
+    }
+    return { success: false, error: error.message || '提交失败惹~ 鼠鼠再试一次嘛 (｡•́︿•̀｡)' }
   }
 }

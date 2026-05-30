@@ -24,8 +24,8 @@
         <text class="role-name">{{order.roleName}}</text>
         <text class="role-sub" wx:if="{{order.queueNumber}}">{{order.queueNumber}}</text>
       </view>
-      <view class="status-pill {{order.status === 'urgent' ? 'pill-urgent' : order.status === 'completed' ? 'pill-done' : order.status === 'rejected' ? 'pill-rejected' : order.status === 'pending' ? 'pill-pending' : 'pill-normal'}}">
-        {{order.status === 'urgent' ? '加急' : order.status === 'completed' ? '已完成' : order.status === 'rejected' ? '已驳回' : order.status === 'pending' ? '待审核' : '进行中'}}
+      <view class="status-pill {{order.status === 'urgent' ? 'pill-urgent' : order.status === 'completed' ? 'pill-done' : order.status === 'rejected' ? 'pill-rejected' : order.status === 'canceled' ? 'pill-canceled' : order.status === 'pending' ? 'pill-pending' : 'pill-normal'}}">
+        {{order.status === 'urgent' ? '加急' : order.status === 'completed' ? '已完成' : order.status === 'rejected' ? '已驳回' : order.status === 'canceled' ? '已取消' : order.status === 'pending' ? '待审核' : '进行中'}}
       </view>
     </view>
 
@@ -38,6 +38,18 @@
       <view class="banner-body">
         <text class="banner-title">订单已被驳回</text>
         <text class="banner-remark" wx:if="{{order.reviewInfo.reviewRemark}}">原因：{{order.reviewInfo.reviewRemark}}</text>
+      </view>
+    </view>
+    <view class="review-banner banner-canceled" wx:if="{{order.status === 'canceled'}}">
+      <t-icon name="close-circle" size="32rpx" color="#888" />
+      <text>订单已取消</text>
+    </view>
+
+    <!-- 用户取消按钮：仅 pending 且未锁定且非管理员视角 -->
+    <view class="cancel-row" wx:if="{{!isAdmin && order.status === 'pending' && !order.isLocked}}">
+      <view class="cancel-btn" bindtap="onCancelOrder">
+        <t-icon name="close-circle" size="28rpx" color="#cf1322" />
+        <text>取消订单</text>
       </view>
     </view>
 

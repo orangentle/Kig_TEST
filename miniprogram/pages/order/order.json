@@ -6,7 +6,6 @@
     "t-textarea": "tdesign-miniprogram/textarea/textarea",
     "t-switch": "tdesign-miniprogram/switch/switch",
     "t-cell": "tdesign-miniprogram/cell/cell",
-    "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
     "t-upload": "tdesign-miniprogram/upload/upload",
     "t-message": "tdesign-miniprogram/message/message",
     "t-icon": "tdesign-miniprogram/icon/icon"

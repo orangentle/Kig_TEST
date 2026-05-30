@@ -43,8 +43,8 @@ Page({
     currentEvent: {} as EventDetail
   },
 
-  onLoad() {
-    this.loadEvents();
+  async onLoad() {
+    await this.loadEvents();
     this.loadMySignups();
   },
 
@@ -62,9 +62,9 @@ Page({
     this.setData({ showNotice: false });
   },
 
-  loadEvents() {
-    // 加载活动数据
-    const defaultCover = '/assets/images/okr_logo.png';
+  async loadEvents() {
+    const app = getApp<IAppOption>();
+    const defaultCover = app.globalData.brandLogoUrl || (app.globalData.brandLogoReady ? await app.globalData.brandLogoReady : '');
     const mockEvents: EventDetail[] = [
       {
         id: 'event_001',

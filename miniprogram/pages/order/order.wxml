@@ -26,8 +26,10 @@
             placeholder="请填写淘宝定金订单号"
             value="{{formData.tbOrderId}}"
             bind:change="onTbOrderIdChange"
+            bind:blur="onTbOrderIdBlur"
             required
           />
+          <view wx:if="{{tbOrderIdHint}}" class="form-hint form-hint-error">{{tbOrderIdHint}}</view>
         </view>
 
         <view class="form-item">

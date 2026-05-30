@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <view class="container">
-  <!-- 背景装饰 -->
+  <!-- 背景装饰（精简：保留两枚爪印 + 一颗星）-->
   <view class="bg-deco">
     <view class="deco-circle dc1"></view>
     <view class="deco-circle dc2"></view>
@@ -8,13 +8,14 @@
     <text class="deco-paw p1">🐾</text>
     <text class="deco-paw p2">🐾</text>
     <text class="deco-paw p3">✦</text>
-    <text class="deco-paw p4">✧</text>
-    <text class="deco-paw p5">✦</text>
   </view>
 
   <!-- 顶部Banner -->
   <view class="header-banner">
-    <image class="logo" src="/assets/images/icon.jpg" mode="aspectFill"></image>
+    <image wx:if="{{logoUrl}}" class="logo" src="{{logoUrl}}" mode="aspectFit"></image>
+    <view wx:else class="logo logo-placeholder">
+      <t-icon name="image" size="80rpx" color="#d8c8b0" />
+    </view>
     <view class="title">
       <text class="title-char c1">鼠</text>
       <text class="title-char c2">鼠</text>
@@ -76,6 +77,68 @@
         <text class="service-name">偶壳娃聚</text>
         <text class="service-desc">社区活动聚会</text>
         <view class="hot-tag">热门</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 信息模块：定制流程 / 排单状态 / FAQ -->
+  <view class="info-section">
+    <view class="info-block">
+      <view class="info-title">定制流程</view>
+      <view class="flow-list">
+        <view class="flow-step">
+          <view class="flow-num">1</view>
+          <text class="flow-name">已排单</text>
+          <text class="flow-desc">付定金</text>
+        </view>
+        <view class="flow-step">
+          <view class="flow-num">2</view>
+          <text class="flow-name">建模</text>
+          <text class="flow-desc">头壳成型</text>
+        </view>
+        <view class="flow-step">
+          <view class="flow-num">3</view>
+          <text class="flow-name">上妆</text>
+          <text class="flow-desc">面部彩绘</text>
+        </view>
+        <view class="flow-step">
+          <view class="flow-num">4</view>
+          <text class="flow-name">假毛</text>
+          <text class="flow-desc">植毛造型</text>
+        </view>
+        <view class="flow-step">
+          <view class="flow-num">5</view>
+          <text class="flow-name">已发货</text>
+          <text class="flow-desc">尾款顺丰</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="info-block">
+      <view class="info-title">当前排单</view>
+      <view class="queue-row">
+        <text class="queue-label"><text class="queue-status-dot dot-busy"></text>U 类常规</text>
+        <text class="queue-value">约 150 个工作日</text>
+      </view>
+      <view class="queue-row">
+        <text class="queue-label"><text class="queue-status-dot dot-open"></text>U 类加急</text>
+        <text class="queue-value">约 60 个工作日</text>
+      </view>
+    </view>
+
+    <view class="info-block">
+      <view class="info-title">常见问题</view>
+      <view class="faq-item">
+        <view class="faq-q">如何下单？</view>
+        <view class="faq-a">点击「立即定制」填写需求，我们会在 24 小时内联系确认。</view>
+      </view>
+      <view class="faq-item">
+        <view class="faq-q">价格如何核算？</view>
+        <view class="faq-a">根据尺寸、材质、工艺复杂度报价，沟通后会给出明细。</view>
+      </view>
+      <view class="faq-item">
+        <view class="faq-q">能否售后维修？</view>
+        <view class="faq-a">支持基础维修和清洁，发货 30 天内非人为损坏免费返修。</view>
       </view>
     </view>
   </view>

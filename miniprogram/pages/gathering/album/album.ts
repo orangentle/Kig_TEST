@@ -1,9 +1,12 @@
 // pages/gathering/album/album.ts
 import { getPhotoUrl, uploadPhoto, CLOUD_PATHS } from '../../../utils/cloudStorage';
 
-// 默认图片
-const DEFAULT_COVER = '/assets/images/okr_logo.png';
 const DEFAULT_AVATAR = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0';
+
+async function getDefaultCover(): Promise<string> {
+  const app = getApp<IAppOption>();
+  return app.globalData.brandLogoUrl || (app.globalData.brandLogoReady ? await app.globalData.brandLogoReady : '');
+}
 
 interface Album {
   id: string;
@@ -40,8 +43,9 @@ Page({
     currentPhotoDetail: {} as Photo
   },
 
-  onLoad() {
-    this.loadAlbums();
+  async onLoad() {
+    const cover = await getDefaultCover();
+    this.loadAlbums(cover);
     this.loadPhotos();
   },
 
@@ -49,34 +53,34 @@ Page({
     wx.navigateBack();
   },
 
-  loadAlbums() {
+  loadAlbums(coverUrl: string) {
     // TODO: 实际应从云数据库加载
     const albums: Album[] = [
       {
         id: '2026spring',
         name: '2026春季娃聚',
-        coverUrl: DEFAULT_COVER,
+        coverUrl,
         photoCount: 156,
         date: '2026-03-15'
       },
       {
         id: '2025winter',
         name: '2025冬季茶话会',
-        coverUrl: DEFAULT_COVER,
+        coverUrl,
         photoCount: 89,
         date: '2025-12-20'
       },
       {
         id: '2025autumn',
         name: '2025秋季摄影会',
-        coverUrl: DEFAULT_COVER,
+        coverUrl,
         photoCount: 234,
         date: '2025-10-05'
       },
       {
         id: '2025summer',
         name: '2025夏日市集',
-        coverUrl: DEFAULT_COVER,
+        coverUrl,
         photoCount: 312,
         date: '2025-07-18'
       }

@@ -2,7 +2,7 @@
 
 .container {
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: var(--color-bg);
   padding-bottom: 120rpx;
 }
 
@@ -20,16 +20,16 @@
 
 .tab-item {
   font-size: 28rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   padding: 12rpx 32rpx;
   margin-right: 16rpx;
-  background: #f5f5f5;
+  background: var(--color-bg);
   border-radius: 32rpx;
   transition: all 0.3s;
 }
 
 .tab-item.active {
-  background: linear-gradient(135deg, #ff8800, #ffaa00);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: #fff;
   font-weight: 500;
 }
@@ -136,7 +136,7 @@
 
 .empty-text {
   font-size: 28rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   margin-top: 20rpx;
 }
 
@@ -159,21 +159,21 @@
   display: flex;
   align-items: center;
   padding: 16rpx 40rpx;
-  background: #fff7e6;
+  background: var(--color-primary-bg);
   border-radius: 32rpx;
-  border: 2rpx solid #ff8800;
+  border: 2rpx solid var(--color-primary);
 }
 
 .tip-content text {
   font-size: 28rpx;
-  color: #ff8800;
+  color: var(--color-primary);
   font-weight: 500;
   margin-left: 8rpx;
 }
 
 .tip-desc {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   margin-top: 12rpx;
 }
 
@@ -191,7 +191,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 24rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .detail-user {
@@ -208,12 +208,12 @@
 .user-name {
   font-size: 28rpx;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
 }
 
 .upload-time {
   font-size: 24rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   margin-top: 4rpx;
 }
 
@@ -222,7 +222,7 @@
 }
 
 .detail-image {
-  background: #f5f5f5;
+  background: var(--color-bg);
   min-height: 400rpx;
   max-height: 60vh;
   overflow: hidden;
@@ -231,9 +231,9 @@
 .detail-content {
   padding: 24rpx;
   font-size: 28rpx;
-  color: #333;
+  color: var(--color-text);
   line-height: 1.6;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .detail-actions {
@@ -248,7 +248,7 @@
   flex-direction: column;
   align-items: center;
   font-size: 24rpx;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .action-item text {

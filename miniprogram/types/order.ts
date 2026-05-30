@@ -6,12 +6,12 @@ export type OrderStatus =
   | 'pending'    // 已提交，等待管理员审核
   | 'normal'     // 审核通过，正常生产中
   | 'urgent'     // 加急（与 isUrgent 等价的状态标记）
-  | 'rejected'   // 已驳回
+  | 'canceled'   // 已取消（用户主动撤单）
   | 'completed'; // 已完成（最终态）
 
 /** 订单制作阶段（写入数据库 `stage` 字段） */
 export type OrderStage =
-  | 'pending'  // 待审核 / 已驳回
+  | 'pending'  // 待审核
   | 'queued'   // 已排单
   | 'modeling' // 建模
   | 'painting' // 上妆

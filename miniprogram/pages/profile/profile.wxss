@@ -3,14 +3,14 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #fdf8f0;
+  background: var(--color-bg);
 }
 
 /* 顶部 — 不再使用大块橙色渐变，回到米底 */
 .header-gradient {
   padding: 24rpx 32rpx 60rpx;
   padding-top: calc(40rpx + env(safe-area-inset-top));
-  background: #fdf8f0;
+  background: var(--color-bg);
   position: relative;
   overflow: hidden;
 }
@@ -23,7 +23,7 @@
   width: 320rpx;
   height: 320rpx;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #ffe9c2, transparent 70%);
+  background: radial-gradient(circle at 30% 30%, var(--color-deco-soft), transparent 70%);
   pointer-events: none;
 }
 
@@ -31,7 +31,7 @@
   font-size: 42rpx;
   font-weight: 700;
   text-align: center;
-  color: #3a2410;
+  color: var(--color-text);
   letter-spacing: 6rpx;
   position: relative;
   z-index: 2;
@@ -70,7 +70,7 @@
 
 .login-tip {
   font-size: 26rpx;
-  color: #a08060;
+  color: var(--color-text-secondary);
   margin-bottom: 56rpx;
   letter-spacing: 2rpx;
 }
@@ -103,7 +103,7 @@
 
 .login-avatar-hint {
   font-size: 24rpx;
-  color: #a08060;
+  color: var(--color-text-secondary);
   margin-top: 16rpx;
   letter-spacing: 1rpx;
 }
@@ -111,7 +111,7 @@
 .login-nick-wrap {
   width: 80%;
   background: #fff;
-  border: 1rpx solid #f0e6d6;
+  border: 1rpx solid var(--color-divider);
   border-radius: 20rpx;
   padding: 20rpx 28rpx;
   margin-bottom: 40rpx;
@@ -120,7 +120,7 @@
 
 .login-nick-input {
   font-size: 30rpx;
-  color: #3a2410;
+  color: var(--color-text);
   width: 100%;
 }
 
@@ -152,7 +152,7 @@
   right: 0;
   width: 40rpx;
   height: 40rpx;
-  background: #ff9020;
+  background: var(--color-primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -169,15 +169,19 @@
 .user-name {
   font-size: 36rpx;
   font-weight: 700;
-  color: #3a2410;
+  color: var(--color-text);
   margin-bottom: 8rpx;
   letter-spacing: 2rpx;
 }
 
 .user-id {
   font-size: 22rpx;
-  color: #a08060;
+  color: var(--color-text-secondary);
   letter-spacing: 1rpx;
+}
+.user-id-empty {
+  color: var(--color-primary);
+  text-decoration: underline;
 }
 
 .edit-profile-btn {
@@ -200,7 +204,7 @@
   display: flex;
   justify-content: space-around;
   background: #fff;
-  border: 1rpx solid #f0e6d6;
+  border: 1rpx solid var(--color-divider);
   border-radius: 24rpx;
   padding: 28rpx 16rpx;
   margin-bottom: 28rpx;
@@ -222,13 +226,13 @@
   top: 12rpx;
   bottom: 12rpx;
   width: 1rpx;
-  background: #f0e6d6;
+  background: var(--color-divider);
 }
 
 .stat-number {
   font-size: 40rpx;
   font-weight: 700;
-  color: #ff9020;
+  color: var(--color-primary);
   margin-bottom: 8rpx;
   line-height: 1;
   font-family: "Hannotate SC", "Yuanti SC", "PingFang SC", sans-serif;
@@ -236,7 +240,7 @@
 
 .stat-label {
   font-size: 22rpx;
-  color: #a08060;
+  color: var(--color-text-secondary);
   letter-spacing: 1rpx;
 }
 
@@ -252,7 +256,7 @@
 .section-title {
   font-size: 30rpx;
   font-weight: 600;
-  color: #3a2410;
+  color: var(--color-text);
   position: relative;
   padding-left: 16rpx;
   letter-spacing: 2rpx;
@@ -267,12 +271,12 @@
   width: 6rpx;
   height: 24rpx;
   border-radius: 4rpx;
-  background: #ff9020;
+  background: var(--color-primary);
 }
 
 .section-more {
   font-size: 24rpx;
-  color: #c25a1a;
+  color: var(--color-deco-warm);
   letter-spacing: 1rpx;
 }
 
@@ -283,7 +287,7 @@
 
 .order-item {
   background: #fff;
-  border: 1rpx solid #f0e6d6;
+  border: 1rpx solid var(--color-divider);
   border-radius: 24rpx;
   padding: 24rpx 28rpx;
   margin-bottom: 16rpx;
@@ -293,7 +297,7 @@
 
 .order-item:active {
   transform: scale(0.99);
-  background: #fdf8f0;
+  background: var(--color-bg);
 }
 
 .order-item-header {
@@ -302,12 +306,12 @@
   align-items: center;
   margin-bottom: 16rpx;
   padding-bottom: 14rpx;
-  border-bottom: 1rpx dashed #f0e6d6;
+  border-bottom: 1rpx dashed var(--color-divider);
 }
 
 .order-id {
   font-size: 22rpx;
-  color: #a08060;
+  color: var(--color-text-secondary);
   font-weight: 500;
   letter-spacing: 1rpx;
 }
@@ -320,11 +324,12 @@
   letter-spacing: 1rpx;
 }
 
-.status-pending { background: #fff4e6; color: #c25a1a; border: 1rpx solid #ffd8a8; }
-.status-approved { background: #eaf3ff; color: #2070d8; border: 1rpx solid #cce0f5; }
-.status-normal { background: #fff4e6; color: #ff9020; border: 1rpx solid #ffd8a8; }
-.status-completed { background: #eef7ee; color: #4a8a4a; border: 1rpx solid #c8e6c8; }
-.status-rejected { background: #fdecec; color: #d04848; border: 1rpx solid #f5cccc; }
+.status-pending { background: var(--color-primary-bg); color: var(--color-deco-warm); border: 1rpx solid #ffd8a8; }
+.status-approved { background: #eaf3ff; color: var(--color-info); border: 1rpx solid #cce0f5; }
+.status-normal { background: var(--color-primary-bg); color: var(--color-primary); border: 1rpx solid #ffd8a8; }
+.status-completed { background: #eef7ee; color: var(--color-success); border: 1rpx solid #c8e6c8; }
+.status-rejected { background: #fdecec; color: var(--color-danger); border: 1rpx solid #f5cccc; }
+.status-canceled { background: #f5f5f5; color: #888; border: 1rpx solid #e5e5e5; }
 
 .order-item-content {
   display: flex;
@@ -339,18 +344,18 @@
 .order-role {
   font-size: 30rpx;
   font-weight: 600;
-  color: #3a2410;
+  color: var(--color-text);
   margin-bottom: 6rpx;
   letter-spacing: 1rpx;
 }
 
 .order-time {
   font-size: 22rpx;
-  color: #a08060;
+  color: var(--color-text-secondary);
 }
 
 .order-action {
-  color: #c25a1a;
+  color: var(--color-deco-warm);
   font-size: 24rpx;
   font-weight: 500;
   padding-left: 16rpx;
@@ -365,7 +370,7 @@
   justify-content: center;
   padding: 80rpx 0;
   background: #fff;
-  border: 1rpx solid #f0e6d6;
+  border: 1rpx solid var(--color-divider);
   border-radius: 24rpx;
   box-shadow: 0 2rpx 12rpx rgba(168, 90, 21, 0.04);
 }
@@ -378,9 +383,24 @@
   border-radius: 50%;
 }
 
+.empty-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fdf6ec;
+  opacity: 1;
+}
+
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fdf6ec;
+}
+
 .empty-text {
   font-size: 24rpx;
-  color: #a08060;
+  color: var(--color-text-secondary);
   letter-spacing: 1rpx;
 }
 
@@ -392,16 +412,16 @@
   margin-top: 24rpx;
   padding: 24rpx 28rpx;
   background: #fff;
-  border: 1rpx solid #f0e6d6;
+  border: 1rpx solid var(--color-divider);
   border-radius: 20rpx;
   box-shadow: 0 2rpx 10rpx rgba(168, 90, 21, 0.04);
 }
-.tool-card:active { background: #fffaf2; }
+.tool-card:active { background: var(--color-bg-warm); }
 .tool-icon {
   width: 72rpx;
   height: 72rpx;
   border-radius: 16rpx;
-  background: #fff4e6;
+  background: var(--color-primary-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -416,13 +436,13 @@
 }
 .tool-title {
   font-size: 28rpx;
-  color: #3a2410;
+  color: var(--color-text);
   font-weight: 600;
   letter-spacing: 2rpx;
 }
 .tool-desc {
   font-size: 22rpx;
-  color: #a08060;
+  color: var(--color-text-secondary);
   line-height: 1.4;
 }
 
@@ -449,13 +469,13 @@
 
 .admin-click-hint {
   font-size: 22rpx;
-  color: #c25a1a;
+  color: var(--color-deco-warm);
   letter-spacing: 1rpx;
 }
 
 /* 把 t-button primary 在该页强制为单色暖橙 */
 .primary-button {
-  background: #ff9020 !important;
+  background: var(--color-primary) !important;
   border-radius: 999rpx !important;
   box-shadow: 0 8rpx 20rpx rgba(255, 144, 32, 0.25) !important;
   letter-spacing: 4rpx !important;
@@ -479,13 +499,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 32rpx 32rpx 20rpx;
-  border-bottom: 1rpx solid #f5efe4;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .edit-profile-title {
   font-size: 32rpx;
   font-weight: 700;
-  color: #3a2410;
+  color: var(--color-text);
   letter-spacing: 2rpx;
 }
 
@@ -512,10 +532,10 @@
 .section-title-small {
   font-size: 26rpx;
   font-weight: 600;
-  color: #3a2410;
+  color: var(--color-text);
   margin-bottom: 18rpx;
   padding-left: 16rpx;
-  border-left: 6rpx solid #ff9020;
+  border-left: 6rpx solid var(--color-primary);
   line-height: 1.2;
   letter-spacing: 2rpx;
 }
@@ -538,7 +558,7 @@
 
 .edit-avatar-hint {
   font-size: 22rpx;
-  color: #c25a1a;
+  color: var(--color-deco-warm);
   letter-spacing: 1rpx;
 }
 

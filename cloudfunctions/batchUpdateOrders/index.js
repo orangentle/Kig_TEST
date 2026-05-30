@@ -33,22 +33,62 @@ function findStage(value) {
   return STAGE_FLOW.find(s => s.value === value);
 }
 
-// 发货通知（简易版）。tmplId 需在小程序后台申请「发货通知」订阅消息模板后填入
-const SHIPPING_TMPL_ID = 'REPLACE_WITH_SHIPPING_TMPL_ID';
+// 订阅消息模板 ID（在 https://mp.weixin.qq.com → 订阅消息 → 我的模板 申请后填入）
+// 已排单：模板「排单成功通知」，字段 name3(付款人名) / thing5(温馨提示)
+// 已发货：模板「账单通知」，字段 thing14(开单人) / thing25(订单内容)
+const QUEUED_TMPL_ID   = 'hNOQznZnaw3VR7Bcnmnv0HJBO1F8P_kxIGpIACi3VTk';
+const SHIPPING_TMPL_ID = 'rJMkotC0cffPQfvmFi_kwhfFcCo5fQcmFfa3ai_xkFk';
+
+function isPlaceholder(id) {
+  return !id || id.startsWith('REPLACE_');
+}
+
+async function getNickName(openid) {
+  try {
+    const r = await usersCollection
+      .where({ _openid: openid })
+      .field({ nickName: true })
+      .limit(1)
+      .get();
+    const name = r.data[0] && r.data[0].nickName;
+    return (name || '客户').slice(0, 10);
+  } catch (_) {
+    return '客户';
+  }
+}
+
+async function sendQueuedNotice(item) {
+  if (!item._openid || isPlaceholder(QUEUED_TMPL_ID)) return;
+  try {
+    const nickName = await getNickName(item._openid);
+    await cloud.openapi.subscribeMessage.send({
+      touser: item._openid,
+      templateId: QUEUED_TMPL_ID,
+      page: `pages/order-detail/order-detail?id=${item.orderId || ''}`,
+      data: {
+        name3:  { value: nickName },
+        thing5: { value: '审核通过已进入排单' }
+      }
+    });
+  } catch (err) {
+    console.warn('已排单通知发送失败', item._openid, err && err.errMsg);
+  }
+}
+
 async function sendShippingNotice(item) {
-  if (!item._openid || !SHIPPING_TMPL_ID || SHIPPING_TMPL_ID.startsWith('REPLACE_')) return;
+  if (!item._openid || isPlaceholder(SHIPPING_TMPL_ID)) return;
   try {
     await cloud.openapi.subscribeMessage.send({
       touser: item._openid,
       templateId: SHIPPING_TMPL_ID,
       page: `pages/order-detail/order-detail?id=${item.orderId || ''}`,
       data: {
-        thing1: { value: (item.roleName || '您的头壳').slice(0, 20) },
-        thing2: { value: '已发货，请注意查收' }
+        thing14: { value: '鼠鼠工坊' },
+        thing25: { value: ((item.roleName || '头壳') + ' 已发货').slice(0, 20) }
       }
     });
   } catch (err) {
-    console.warn('subscribeMessage.send failed', item._openid, err && err.errMsg);
+    console.warn('发货通知发送失败', item._openid, err && err.errMsg);
   }
 }
 
@@ -116,37 +156,72 @@ exports.main = async (event, context) => {
         updateData = { isUrgent: true, status: 'urgent', updateTime: now };
         break;
 
-      case 'review-approve':
+      case 'review-approve': {
         // 审核通过：进入"已排单"，可正常生产
-        updateData = {
-          status: 'normal',
-          stage: 'queued',
-          progressStage: '已排单',
-          progressPercent: 10,
-          reviewInfo: {
-            reviewTime: now,
-            reviewBy: OPENID,
-            reviewRemark: (payload && payload.remark) || '审核通过'
-          },
-          updateTime: now
-        };
+        const items = await ordersCollection
+          .where({ _id: _.in(orderIds) })
+          .field({ stage: true, _openid: true, orderId: true, roleName: true })
+          .get();
+        perItemUpdates = items.data.map(item => ({
+          _id: item._id,
+          _openid: item._openid,
+          orderId: item.orderId,
+          roleName: item.roleName,
+          enteredQueued: item.stage !== 'queued',
+          data: {
+            status: 'normal',
+            stage: 'queued',
+            progressStage: '已排单',
+            progressPercent: 10,
+            reviewInfo: {
+              reviewTime: now,
+              reviewBy: OPENID,
+              reviewRemark: (payload && payload.remark) || '审核通过'
+            },
+            updateTime: now
+          }
+        }));
         break;
+      }
 
-      case 'review-reject':
-        // 驳回：标记 rejected，仍锁定，需要客户改单后由客服重新提交
-        updateData = {
-          status: 'rejected',
-          stage: 'pending',
-          progressStage: '已驳回',
-          progressPercent: 0,
-          reviewInfo: {
-            reviewTime: now,
-            reviewBy: OPENID,
-            reviewRemark: (payload && payload.remark) || '信息有误，请联系客服'
-          },
-          updateTime: now
+      case 'review-reject': {
+        // 驳回 = 直接删除订单(防止假单污染 + 释放 tbOrderId 唯一索引槽位)
+        // 同时把驳回原因塞进用户文档,客户下次打开个人中心会看到引导弹窗
+        const remark = (payload && payload.remark) || '信息有误,请按提示重新下单';
+        const items = await ordersCollection
+          .where({ _id: _.in(orderIds) })
+          .field({ _openid: true, tbOrderId: true, roleName: true, orderId: true })
+          .get();
+
+        // 1) 写驳回通知到用户文档(数组,允许多条堆积)
+        const notices = items.data.map(it => ({
+          tbOrderId: it.tbOrderId || '',
+          roleName: it.roleName || '',
+          orderId: it.orderId || '',
+          reason: remark,
+          rejectTime: now
+        }));
+        await Promise.all(items.data.map((it, idx) =>
+          usersCollection.where({ _openid: it._openid }).update({
+            data: { pendingRejectNotices: _.push([notices[idx]]) }
+          }).catch(err => console.warn('写驳回通知失败', it._openid, err))
+        ));
+
+        // 2) 删除订单
+        const results = await Promise.all(items.data.map(it =>
+          ordersCollection.doc(it._id).remove()
+            .then(() => true)
+            .catch(err => { console.error('reject-delete fail', it._id, err); return false; })
+        ));
+        const ok = results.filter(Boolean).length;
+        return {
+          success: true,
+          action,
+          requested: orderIds.length,
+          succeeded: ok,
+          failed: orderIds.length - ok
         };
-        break;
+      }
 
       case 'unmark-urgent':
         updateData = { isUrgent: false, status: 'normal', updateTime: now };
@@ -255,6 +330,12 @@ exports.main = async (event, context) => {
       if (action === 'advance-stage') {
         const shipped = perItemUpdates.filter(u => u.nextStage && u.nextStage.value === 'shipped');
         await Promise.all(shipped.map(u => sendShippingNotice(u))).catch(e => console.warn('发货通知发送失败', e));
+      }
+
+      // 已排单通知：审核通过且确实是从非 queued 转入 queued 时推送
+      if (action === 'review-approve') {
+        const queued = perItemUpdates.filter(u => u.enteredQueued);
+        await Promise.all(queued.map(u => sendQueuedNotice(u))).catch(e => console.warn('已排单通知发送失败', e));
       }
     }
 

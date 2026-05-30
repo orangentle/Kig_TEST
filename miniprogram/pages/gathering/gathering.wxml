@@ -4,7 +4,7 @@
   <view class="header-banner">
     <view class="banner-gradient"></view>
     <view class="banner-content">
-      <image class="banner-logo" src="/assets/images/okr_logo.png" mode="aspectFit" />
+      <image class="banner-logo" src="{{brandLogoUrl}}" mode="aspectFit" />
       <text class="banner-title">偶壳OKR</text>
       <text class="banner-subtitle">与同好相聚，分享快乐时光</text>
     </view>

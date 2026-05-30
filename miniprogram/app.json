@@ -6,18 +6,42 @@
     "pages/profile/profile",
     "pages/order/order",
     "pages/order-detail/order-detail",
-    "pages/admin/works-manage/works-manage",
-    "pages/admin/admin",
-    "pages/admin/order-review/order-review",
-    "pages/gathering/gathering",
-    "pages/gathering/signup/signup",
-    "pages/gathering/schedule/schedule",
-    "pages/gathering/merch/merch",
-    "pages/gathering/album/album",
     "pages/work-day-calc/work-day-calc",
     "pages/logs/logs",
     "pages/webview/webview"
   ],
+  "subPackages": [
+    {
+      "root": "pages/admin",
+      "name": "admin",
+      "pages": [
+        "admin",
+        "works-manage/works-manage",
+        "order-review/order-review"
+      ]
+    },
+    {
+      "root": "pages/gathering",
+      "name": "gathering",
+      "pages": [
+        "gathering",
+        "signup/signup",
+        "schedule/schedule",
+        "merch/merch",
+        "album/album"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/profile/profile": {
+      "network": "all",
+      "packages": ["admin"]
+    },
+    "pages/index/index": {
+      "network": "wifi",
+      "packages": ["gathering"]
+    }
+  },
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "鼠鼠工坊",
@@ -74,6 +98,7 @@
     "wx9f4e7b73adbd8f38"
   ],
   "sitemapLocation": "sitemap.json",
+  "__usePrivacyCheck__": true,
   "networkTimeout": {
     "request": 30000,
     "downloadFile": 30000,

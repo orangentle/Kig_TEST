@@ -21,17 +21,19 @@ Component({
 
   lifetimes: {
     attached() {
-      // 确保云环境已初始化
-      if (wx.cloud) {
-        console.log('云环境已初始化');
-      } else {
+      if (!wx.cloud) {
         console.error('云环境未初始化，请检查app.ts中的初始化代码');
       }
-      
-      // 设置图片路径
-      this.setData({
-        logoUrl: app.globalData.logoUrl,
-      });
+
+      const cached = app.globalData.ratLogoUrl;
+      if (cached) {
+        this.setData({ logoUrl: cached });
+      }
+      if (app.globalData.ratLogoReady) {
+        app.globalData.ratLogoReady.then(url => {
+          if (url && url !== this.data.logoUrl) this.setData({ logoUrl: url });
+        });
+      }
     }
   },
 

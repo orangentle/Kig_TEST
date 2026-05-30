@@ -4,7 +4,6 @@ import Message from 'tdesign-miniprogram/message/index';
 const TABS = [
   { key: 'pending',  label: '待审核' },
   { key: 'approved', label: '已通过' },
-  { key: 'rejected', label: '已驳回' },
   { key: 'all',      label: '全部' }
 ];
 
@@ -13,7 +12,7 @@ Page({
     tabs: TABS,
     currentTab: 'pending',
     orders: [] as any[],
-    counts: { pending: 0, approved: 0, rejected: 0, all: 0 } as Record<string, number>,
+    counts: { pending: 0, approved: 0, all: 0 } as Record<string, number>,
     searchValue: '',
     showDetailPopup: false,
     currentOrder: null as any,
@@ -74,7 +73,6 @@ Page({
     switch (this.data.currentTab) {
       case 'pending':  where.status = 'pending'; break;
       case 'approved': where.stage = _.in(['queued', 'modeling', 'painting', 'hair', 'shipped']); break;
-      case 'rejected': where.status = 'rejected'; break;
     }
     const kw = (this.data.searchValue || '').trim();
     if (kw) {
@@ -97,17 +95,15 @@ Page({
       const db = wx.cloud.database();
       const _ = db.command;
       const col = db.collection('orders');
-      const [pending, approved, rejected, all] = await Promise.all([
+      const [pending, approved, all] = await Promise.all([
         col.where({ status: 'pending' }).count(),
         col.where({ stage: _.in(['queued', 'modeling', 'painting', 'hair', 'shipped']) }).count(),
-        col.where({ status: 'rejected' }).count(),
         col.count()
       ]);
       this.setData({
         counts: {
           pending: pending.total || 0,
           approved: approved.total || 0,
-          rejected: rejected.total || 0,
           all: all.total || 0
         }
       });
@@ -206,36 +202,36 @@ Page({
   async doRejectOrder(order: any) {
     wx.showModal({
       title: '驳回订单',
-      content: `驳回订单「${order.tbOrderId || order.orderId}」，请填写驳回原因：`,
+      content: `驳回订单「${order.tbOrderId || order.orderId}」会直接删除这条记录,并通知客户重新提交。请填写驳回原因:`,
       editable: true,
-      placeholderText: '如：身材数据缺失、参考图模糊…',
+      placeholderText: '如:身材数据缺失、参考图模糊、淘宝单号填错…',
       confirmColor: '#cf1322',
       success: async (res) => {
         if (!res.confirm) return;
-        const remark = (res.content || '').trim() || '信息有误，请联系客服';
+        const remark = (res.content || '').trim() || '信息有误,请按提示重新下单';
         try {
           wx.showLoading({ title: '处理中...' });
-          const db = wx.cloud.database();
-          await db.collection('orders').doc(order._id).update({
+          const { result } = await wx.cloud.callFunction({
+            name: 'batchUpdateOrders',
             data: {
-              status: 'rejected',
-              stage: 'pending',
-              progressStage: '已驳回',
-              progressPercent: 0,
-              'reviewInfo.reviewTime': db.serverDate(),
-              'reviewInfo.reviewRemark': remark,
-              updateTime: db.serverDate()
+              orderIds: [order._id],
+              action: 'review-reject',
+              payload: { remark }
             }
-          });
+          }) as any;
           wx.hideLoading();
-          Message.success({ context: this, offset: [20, 32], content: '订单已驳回' });
-          this.setData({ showDetailPopup: false });
-          this.refreshOrders();
-          this.loadCounts();
-        } catch (error) {
+          if (result && result.success) {
+            Message.success({ context: this, offset: [20, 32], content: '已驳回并删除,客户会收到通知' });
+            this.setData({ showDetailPopup: false });
+            this.refreshOrders();
+            this.loadCounts();
+          } else {
+            throw new Error((result && result.error) || '操作失败');
+          }
+        } catch (error: any) {
           wx.hideLoading();
           console.error('驳回失败', error);
-          Message.error({ context: this, offset: [20, 32], content: '操作失败' });
+          Message.error({ context: this, offset: [20, 32], content: error.message || '操作失败' });
         }
       }
     });

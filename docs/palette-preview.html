@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>鼠鼠工坊 · 蜂蜜烤橘色板预览</title>
+<style>
+  :root {
+    /* 品牌色 */
+    --color-primary: #FF8C3A;
+    --color-primary-light: #FFB070;
+    --color-primary-dark: #E8722A;
+    --color-accent: #F2B441;
+
+    /* 背景 */
+    --color-bg: #FFF9EE;
+    --color-bg-admin: #FAF6EE;
+    --color-bg-warm: #FFF1DD;
+    --color-card: #FFFFFF;
+    --color-divider: #F4E4CC;
+
+    /* 文字 */
+    --color-text: #2E1B0A;
+    --color-text-secondary: #6B4F38;
+    --color-text-tertiary: #A88971;
+    --color-text-placeholder: #C9B299;
+    --color-text-on-primary: #FFFFFF;
+
+    /* 状态 */
+    --color-success: #5BAE6A;
+    --color-warning: #F2B441;
+    --color-danger:  #E07458;
+    --color-info:    #6B9CC9;
+
+    /* 装饰 */
+    --color-deco-warm: #C25A1A;
+    --color-deco-deep: #4A2810;
+    --color-deco-soft: #FFE9C2;
+
+    /* gathering */
+    --color-gathering-1: #FF8C3A;
+    --color-gathering-2: #E8722A;
+    --color-gathering-3: #F2B441;
+
+    --shadow-sm: 0 1px 4px rgba(184, 110, 40, 0.06);
+    --shadow-md: 0 3px 12px rgba(184, 110, 40, 0.10);
+    --shadow-lg: 0 6px 18px rgba(255, 140, 58, 0.20);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: 40px 24px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+
+  h1 { font-size: 32px; margin-bottom: 4px; color: var(--color-deco-deep); }
+  .subtitle { color: var(--color-text-secondary); margin-bottom: 32px; font-size: 15px; }
+
+  h2 {
+    font-size: 20px;
+    margin: 40px 0 16px;
+    padding-left: 12px;
+    border-left: 4px solid var(--color-primary);
+    color: var(--color-deco-deep);
+  }
+  h3 { font-size: 15px; color: var(--color-text-secondary); margin: 16px 0 8px; font-weight: 600; }
+
+  /* 色卡 */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .swatch {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    background: var(--color-card);
+  }
+  .swatch-color { height: 80px; }
+  .swatch-info { padding: 10px 12px; }
+  .swatch-name { font-size: 13px; font-weight: 600; color: var(--color-text); }
+  .swatch-var { font-size: 11px; color: var(--color-text-tertiary); font-family: monospace; }
+  .swatch-hex { font-size: 12px; color: var(--color-text-secondary); font-family: monospace; margin-top: 2px; }
+
+  /* 组件示例 */
+  .demo-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px; }
+
+  .btn {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: var(--color-text-on-primary);
+    box-shadow: var(--shadow-lg);
+  }
+  .btn-secondary {
+    background: var(--color-card);
+    color: var(--color-primary-dark);
+    border: 1.5px solid var(--color-primary);
+  }
+  .btn-ghost {
+    background: var(--color-bg-warm);
+    color: var(--color-deco-warm);
+  }
+  .btn-accent {
+    background: var(--color-accent);
+    color: var(--color-deco-deep);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .badge-success { background: rgba(91, 174, 106, 0.15); color: var(--color-success); }
+  .badge-warning { background: rgba(242, 180, 65, 0.18); color: #B8861E; }
+  .badge-danger  { background: rgba(224, 116, 88, 0.15); color: var(--color-danger); }
+  .badge-info    { background: rgba(107, 156, 201, 0.15); color: var(--color-info); }
+  .badge-soft    { background: var(--color-deco-soft); color: var(--color-deco-warm); }
+
+  /* 模拟卡片 */
+  .mock-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .mock {
+    background: var(--color-card);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .mock-label {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    padding: 8px 16px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* 首页样卡 */
+  .home-card {
+    background:
+      radial-gradient(circle at 20% 10%, var(--color-deco-soft) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, #FFE0B5 0%, transparent 50%),
+      var(--color-bg-warm);
+    padding: 24px;
+    min-height: 200px;
+    position: relative;
+  }
+  .home-title {
+    font-family: "Hannotate SC", "STKaiti", "KaiTi", serif;
+    font-size: 28px;
+    color: var(--color-deco-deep);
+    font-weight: 700;
+  }
+  .home-title .accent { color: var(--color-deco-warm); }
+  .home-sub { color: var(--color-text-secondary); font-size: 13px; margin-top: 6px; }
+  .home-cta {
+    margin-top: 18px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+    padding: 12px 24px;
+    border-radius: 999px;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+  }
+  .paw {
+    position: absolute;
+    color: var(--color-primary);
+    opacity: 0.3;
+    font-size: 22px;
+  }
+
+  /* 订单卡 */
+  .order-card { padding: 18px; }
+  .order-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .order-id { font-family: monospace; font-size: 13px; color: var(--color-text-tertiary); }
+  .order-title { font-size: 15px; font-weight: 600; color: var(--color-text); margin-bottom: 4px; }
+  .order-desc { font-size: 13px; color: var(--color-text-secondary); }
+  .order-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--color-divider); }
+  .order-price { color: var(--color-primary-dark); font-weight: 700; font-size: 16px; }
+
+  /* gathering 卡 */
+  .gathering-card { padding: 0; }
+  .gathering-banner {
+    background: linear-gradient(135deg, var(--color-gathering-1), var(--color-gathering-2));
+    color: white;
+    padding: 24px;
+    position: relative;
+  }
+  .gathering-banner::after {
+    content: '🐾';
+    position: absolute;
+    right: 20px;
+    bottom: 14px;
+    font-size: 36px;
+    opacity: 0.4;
+  }
+  .gathering-banner h4 { font-size: 18px; margin-bottom: 4px; }
+  .gathering-banner p { font-size: 12px; opacity: 0.9; }
+  .gathering-funcs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 16px; }
+  .func {
+    text-align: center;
+    padding: 14px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+  .func-1 { background: linear-gradient(135deg, #FFE0B5, #FFD08A); }
+  .func-2 { background: linear-gradient(135deg, #FFD9B8, #FFB070); color: white; }
+  .func-3 { background: linear-gradient(135deg, var(--color-deco-soft), #F5C97A); }
+  .func-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+
+  /* admin 卡 */
+  .admin-card {
+    background: var(--color-bg-admin);
+    padding: 20px;
+  }
+  .admin-head {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
+  .admin-head h4 { font-size: 16px; }
+  .admin-head p { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+  .admin-stat { display: flex; gap: 10px; }
+  .stat {
+    flex: 1;
+    background: var(--color-card);
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-num { font-size: 20px; font-weight: 700; color: var(--color-primary-dark); }
+  .stat-label { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  /* 表单卡 */
+  .form-card { padding: 18px; background: var(--color-bg-warm); }
+  .form-label { font-size: 13px; color: var(--color-text-secondary); font-weight: 600; margin-bottom: 6px; }
+  .form-input {
+    width: 100%;
+    background: var(--color-card);
+    border: 1px solid var(--color-divider);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: var(--color-text);
+    margin-bottom: 12px;
+  }
+  .form-input.focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(255, 140, 58, 0.15); }
+
+  /* 对比 */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .cmp { padding: 20px; border-radius: 16px; text-align: center; font-size: 13px; }
+  .cmp-old { background: #f6f7fb; color: #333; border: 1px dashed #ccc; }
+  .cmp-old .dot { background: #ff8800; }
+  .cmp-old .dot2 { background: #ffcc00; }
+  .cmp-new { background: var(--color-bg-warm); color: var(--color-text); border: 1px solid var(--color-divider); }
+  .cmp-new .dot { background: var(--color-primary); }
+  .cmp-new .dot2 { background: var(--color-accent); }
+  .dot { display:inline-block; width:32px; height:32px; border-radius:50%; margin:0 6px; }
+  .cmp-tag { font-size: 11px; color: var(--color-text-tertiary); margin-top: 8px; }
+
+  footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--color-divider); color: var(--color-text-tertiary); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>🐾 鼠鼠工坊 · 蜂蜜烤橘色板</h1>
+  <p class="subtitle">方案 B · 暖奶咖底 + 蜂蜜橘主色 + 蜂蜜金点缀 · 给美术总监确认用</p>
+
+  <!-- ============= 1. 色卡 ============= -->
+  <h2>1. 色板总览</h2>
+
+  <h3>品牌色</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch-color" style="background:#FF8C3A"></div><div class="swatch-info"><div class="swatch-name">蜂蜜橘 主色</div><div class="swatch-var">--color-primary</div><div class="swatch-hex">#FF8C3A</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#FFB070"></div><div class="swatch-info"><div class="swatch-name">蜜桃橘 浅</div><div class="swatch-var">--color-primary-light</div><div class="swatch-hex">#FFB070</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#E8722A"></div><div class="swatch-info"><div class="swatch-name">烤橘 深</div><div class="swatch-var">--color-primary-dark</div><div class="swatch-hex">#E8722A</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#F2B441"></div><div class="swatch-info"><div class="swatch-name">蜂蜜金 点缀</div><div class="swatch-var">--color-accent</div><div class="swatch-hex">#F2B441</div></div></div>
+  </div>
+
+  <h3>背景层级</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch-color" style="background:#FFF9EE; border-bottom:1px solid #eee"></div><div class="swatch-info"><div class="swatch-name">用户端 全局底</div><div class="swatch-var">--color-bg</div><div class="swatch-hex">#FFF9EE</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#FAF6EE"></div><div class="swatch-info"><div class="swatch-name">admin 全局底</div><div class="swatch-var">--color-bg-admin</div><div class="swatch-hex">#FAF6EE</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#FFF1DD"></div><div class="swatch-info"><div class="swatch-name">区块底</div><div class="swatch-var">--color-bg-warm</div><div class="swatch-hex">#FFF1DD</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#FFFFFF; border:1px solid #eee"></div><div class="swatch-info"><div class="swatch-name">卡片白</div><div class="swatch-var">--color-card</div><div class="swatch-hex">#FFFFFF</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#F4E4CC"></div><div class="swatch-info"><div class="swatch-name">奶咖描边</div><div class="swatch-var">--color-divider</div><div class="swatch-hex">#F4E4CC</div></div></div>
+  </div>
+
+  <h3>文字</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch-color" style="background:#2E1B0A"></div><div class="swatch-info"><div class="swatch-name">深可可棕 主文</div><div class="swatch-var">--color-text</div><div class="swatch-hex">#2E1B0A</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#6B4F38"></div><div class="swatch-info"><div class="swatch-name">中可可棕 次文</div><div class="swatch-var">--color-text-secondary</div><div class="swatch-hex">#6B4F38</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#A88971"></div><div class="swatch-info"><div class="swatch-name">浅可可棕 三级</div><div class="swatch-var">--color-text-tertiary</div><div class="swatch-hex">#A88971</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#C9B299"></div><div class="swatch-info"><div class="swatch-name">奶棕 占位</div><div class="swatch-var">--color-text-placeholder</div><div class="swatch-hex">#C9B299</div></div></div>
+  </div>
+
+  <h3>状态色</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch-color" style="background:#5BAE6A"></div><div class="swatch-info"><div class="swatch-name">抹茶绿 成功</div><div class="swatch-var">--color-success</div><div class="swatch-hex">#5BAE6A</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#F2B441"></div><div class="swatch-info"><div class="swatch-name">蜂蜜金 警告</div><div class="swatch-var">--color-warning</div><div class="swatch-hex">#F2B441</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#E07458"></div><div class="swatch-info"><div class="swatch-name">砖红 危险</div><div class="swatch-var">--color-danger</div><div class="swatch-hex">#E07458</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#6B9CC9"></div><div class="swatch-info"><div class="swatch-name">雾蓝 信息</div><div class="swatch-var">--color-info</div><div class="swatch-hex">#6B9CC9</div></div></div>
+  </div>
+
+  <h3>装饰色（手写字 / 爪印 / 标签底）</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch-color" style="background:#C25A1A"></div><div class="swatch-info"><div class="swatch-name">深焦糖 手写主</div><div class="swatch-var">--color-deco-warm</div><div class="swatch-hex">#C25A1A</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#4A2810"></div><div class="swatch-info"><div class="swatch-name">墨棕 手写深</div><div class="swatch-var">--color-deco-deep</div><div class="swatch-hex">#4A2810</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#FFE9C2"></div><div class="swatch-info"><div class="swatch-name">浅蜜 装饰底</div><div class="swatch-var">--color-deco-soft</div><div class="swatch-hex">#FFE9C2</div></div></div>
+  </div>
+
+  <!-- ============= 2. 组件 ============= -->
+  <h2>2. 组件示例</h2>
+
+  <h3>按钮</h3>
+  <div class="demo-row">
+    <button class="btn btn-primary">提交订单</button>
+    <button class="btn btn-secondary">查看详情</button>
+    <button class="btn btn-ghost">再看看</button>
+    <button class="btn btn-accent">立即抢购</button>
+  </div>
+
+  <h3>状态标签</h3>
+  <div class="demo-row">
+    <span class="badge badge-success">已完成</span>
+    <span class="badge badge-warning">待审核</span>
+    <span class="badge badge-danger">已取消</span>
+    <span class="badge badge-info">系统消息</span>
+    <span class="badge badge-soft">手作中</span>
+  </div>
+
+  <h3>文字层级</h3>
+  <div style="background: var(--color-card); border-radius: 16px; padding: 20px; box-shadow: var(--shadow-sm);">
+    <div style="font-size: 22px; font-weight: 700; color: var(--color-text);">主标题 · 鼠鼠工坊</div>
+    <div style="font-size: 15px; color: var(--color-text-secondary); margin-top: 6px;">次级文字 · 一只一只用心捏出来的可爱朋友</div>
+    <div style="font-size: 13px; color: var(--color-text-tertiary); margin-top: 4px;">三级文字 · 工期 7-14 天 · 顺丰包邮</div>
+    <div style="font-size: 13px; color: var(--color-text-placeholder); margin-top: 4px;">占位文字 · 请输入备注信息</div>
+  </div>
+
+  <!-- ============= 3. 模拟界面 ============= -->
+  <h2>3. 关键页面氛围模拟</h2>
+
+  <div class="mock-grid">
+
+    <div class="mock">
+      <div class="mock-label">首页 / index</div>
+      <div class="home-card">
+        <span class="paw" style="top:14px;right:18px;">🐾</span>
+        <span class="paw" style="bottom:60px;left:30px;font-size:16px;">🐾</span>
+        <div class="home-title">鼠鼠<span class="accent">工坊</span></div>
+        <div class="home-sub">一针一线 · 手作温度 · 可爱定制</div>
+        <div class="home-cta">立即定制 →</div>
+      </div>
+    </div>
+
+    <div class="mock">
+      <div class="mock-label">订单详情 / order-detail</div>
+      <div class="order-card">
+        <div class="order-head">
+          <span class="order-id">#OR20260530001</span>
+          <span class="badge badge-warning">手作中</span>
+        </div>
+        <div class="order-title">桔梗鼠鼠 · 棉花娃娃 20cm</div>
+        <div class="order-desc">浅杏色绒布 · 双层裙装 · 含挂件</div>
+        <div class="order-meta">
+          <span style="color:var(--color-text-tertiary);font-size:12px;">预计 06/12 完成</span>
+          <span class="order-price">¥ 286</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock">
+      <div class="mock-label">偶壳娃聚 / gathering</div>
+      <div class="gathering-card">
+        <div class="gathering-banner">
+          <h4>偶壳娃聚 · 五月场</h4>
+          <p>报名进行中 · 24/30</p>
+        </div>
+        <div class="gathering-funcs">
+          <div class="func func-1"><span class="func-icon">📅</span>报名</div>
+          <div class="func func-2"><span class="func-icon">🛍️</span>周边</div>
+          <div class="func func-3"><span class="func-icon">📷</span>相册</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock">
+      <div class="mock-label">管理后台 / admin</div>
+      <div class="admin-card">
+        <div class="admin-head">
+          <h4>订单管理</h4>
+          <p>今日新增 12 · 待处理 5</p>
+        </div>
+        <div class="admin-stat">
+          <div class="stat"><div class="stat-num">128</div><div class="stat-label">本月订单</div></div>
+          <div class="stat"><div class="stat-num">¥36k</div><div class="stat-label">本月营收</div></div>
+          <div class="stat"><div class="stat-num">94%</div><div class="stat-label">准时率</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock">
+      <div class="mock-label">下单表单 / order</div>
+      <div class="form-card">
+        <div class="form-label">作品类型</div>
+        <input class="form-input" value="棉花娃娃 20cm" />
+        <div class="form-label">备注 <span style="color:var(--color-primary-dark);font-weight:400">*</span></div>
+        <input class="form-input focus" placeholder="想要的颜色/造型..." />
+        <button class="btn btn-primary" style="width:100%;margin-top:4px;">提交订单 · ¥286</button>
+      </div>
+    </div>
+
+    <div class="mock">
+      <div class="mock-label">作品卡 / works</div>
+      <div style="padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div style="background: var(--color-bg-warm); border-radius: 12px; aspect-ratio: 1; display:flex; align-items:center; justify-content:center; font-size:40px;">🐭</div>
+        <div style="background: var(--color-deco-soft); border-radius: 12px; aspect-ratio: 1; display:flex; align-items:center; justify-content:center; font-size:40px;">🧸</div>
+        <div style="grid-column: span 2;">
+          <div style="font-weight:600;font-size:14px;">桔梗鼠鼠</div>
+          <div style="font-size:12px;color:var(--color-text-tertiary);">2024 春 · 限定款</div>
+          <span class="badge badge-soft" style="margin-top:6px;">售罄</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============= 4. 新旧对比 ============= -->
+  <h2>4. 新旧对比</h2>
+  <div class="compare">
+    <div class="cmp cmp-old">
+      <div style="font-weight:600;margin-bottom:10px;color:#666;">旧版</div>
+      <span class="dot" style="background:#ff8800"></span>
+      <span class="dot" style="background:#ffcc00"></span>
+      <span class="dot" style="background:#fdf8f0"></span>
+      <span class="dot" style="background:#f6f7fb;border:1px solid #ddd"></span>
+      <div class="cmp-tag">纯橙 + 纯黄 + 冷灰底，三调子打架</div>
+    </div>
+    <div class="cmp cmp-new">
+      <div style="font-weight:600;margin-bottom:10px;color:var(--color-deco-deep);">新版 · 蜂蜜烤橘</div>
+      <span class="dot" style="background:#FF8C3A"></span>
+      <span class="dot" style="background:#F2B441"></span>
+      <span class="dot" style="background:#FFF9EE"></span>
+      <span class="dot" style="background:#C25A1A"></span>
+      <div class="cmp-tag">蜂蜜橘 + 蜂蜜金 + 奶咖底 + 焦糖手写，同温度系统</div>
+    </div>
+  </div>
+
+  <footer>
+    色板基于「方案 B 蜂蜜烤橘」· 共 22 个 token · 兼容用户端与 admin 后台<br />
+    生成于 2026-05-30 · 文件：docs/palette-preview.html
+  </footer>
+
+</div>
+</body>
+</html>

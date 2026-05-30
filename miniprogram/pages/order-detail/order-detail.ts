@@ -1,5 +1,6 @@
 // order-detail.ts
 import type { Order } from '../../types/order';
+import { STAGE_FLOW } from '../../types/order';
 
 type OrderDetail = Order;
 
@@ -9,12 +10,8 @@ interface Step {
 }
 
 const STAGE_OPTIONS = [
-  { value: 'pending',  label: '待审核', percent: 0 },
-  { value: 'queued',   label: '已排单', percent: 10 },
-  { value: 'modeling', label: '建模',   percent: 30 },
-  { value: 'painting', label: '上妆',   percent: 55 },
-  { value: 'hair',     label: '假毛',   percent: 80 },
-  { value: 'shipped',  label: '已发货', percent: 100 }
+  { value: 'pending', label: '待审核', percent: 0 },
+  ...STAGE_FLOW
 ];
 
 Page({
@@ -128,6 +125,49 @@ Page({
 
   onBack() {
     wx.navigateBack();
+  },
+
+  onCancelOrder() {
+    const o: any = this.data.order || {};
+    if (!o || o.status !== 'pending') {
+      wx.showToast({ title: '当前状态不可取消', icon: 'none' });
+      return;
+    }
+    if (o.isLocked) {
+      wx.showToast({ title: '订单已锁定，请联系客服', icon: 'none' });
+      return;
+    }
+    wx.showModal({
+      title: '确认取消订单？',
+      content: '取消后无法恢复，定金退款请联系客服。',
+      confirmText: '确认取消',
+      cancelText: '再想想',
+      confirmColor: '#cf1322',
+      success: async (res) => {
+        if (!res.confirm) return;
+        wx.showLoading({ title: '取消中...' });
+        try {
+          const { result } = await wx.cloud.callFunction({
+            name: 'cancelOrder',
+            data: { tbOrderId: o.tbOrderId, reason: '用户主动取消' }
+          }) as any;
+          wx.hideLoading();
+          if (result && result.success) {
+            wx.showToast({ title: '已取消', icon: 'success' });
+            this.loadOrderDetail(o.tbOrderId);
+          } else {
+            wx.showModal({
+              title: '取消失败',
+              content: (result && result.error) || '请稍后再试',
+              showCancel: false
+            });
+          }
+        } catch (err: any) {
+          wx.hideLoading();
+          wx.showToast({ title: err?.message || '取消失败', icon: 'none' });
+        }
+      }
+    });
   },
 
   onPreviewImage(e: any) {
