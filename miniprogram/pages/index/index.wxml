@@ -35,6 +35,8 @@
       shape="round"
       icon="edit"
       class="order-button"
+      hover-class="order-button-hover"
+      hover-stay-time="80"
       bind:tap="goToOrder"
     >
       立即定制

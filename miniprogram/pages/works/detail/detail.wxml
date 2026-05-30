@@ -64,6 +64,8 @@
       block
       shape="round"
       class="primary-button"
+      hover-class="primary-button-hover"
+      hover-stay-time="80"
       bind:tap="goToOrder"
     >我也想定制同款</t-button>
   </view>

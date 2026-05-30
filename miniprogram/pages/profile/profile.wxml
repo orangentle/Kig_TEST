@@ -47,6 +47,8 @@
         loading="{{isLoading}}"
         bind:tap="onLoginSubmit"
         class="login-button primary-button"
+        hover-class="primary-button-hover"
+        hover-stay-time="80"
       >
         登录
       </t-button>
@@ -165,6 +167,8 @@
             shape="round"
             bind:tap="enterAdminPanel"
             class="admin-button mb-medium primary-button"
+            hover-class="primary-button-hover"
+            hover-stay-time="80"
           >
             进入管理后台
           </t-button>

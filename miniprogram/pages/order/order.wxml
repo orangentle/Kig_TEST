@@ -203,6 +203,22 @@
 
   <!-- 底部提交按钮 -->
   <view class="submit-bar">
+    <view class="submit-summary">
+      <view class="sum-chip {{referenceImages.length > 0 ? 'chip-on' : ''}}">
+        <t-icon name="image" size="22rpx" color="{{referenceImages.length > 0 ? '#c25a1a' : '#bfa680'}}" />
+        <text>参考图 {{referenceImages.length}}/3</text>
+      </view>
+      <view class="sum-chip chip-on" wx:if="{{formData.needAccessory}}">
+        <text>含配饰</text>
+      </view>
+      <view class="sum-chip chip-on" wx:if="{{formData.needReplaceFace}}">
+        <text>替换脸 ×{{formData.replaceFaceCount}}</text>
+      </view>
+      <view class="sum-chip chip-urgent" wx:if="{{formData.isUrgent}}">
+        <t-icon name="flash" size="22rpx" color="#fff" />
+        <text>加急 +¥1200</text>
+      </view>
+    </view>
     <view class="submit-tip">
       <t-icon name="info-circle" size="32rpx" color="#ff8800" />
       <text>提交后订单会锁定，如需修改请联系客服</text>
@@ -212,6 +228,9 @@
       size="large"
       block
       loading="{{isSubmitting}}"
+      class="primary-button"
+      hover-class="primary-button-hover"
+      hover-stay-time="80"
       bind:tap="onSubmit"
     >
       提交订单

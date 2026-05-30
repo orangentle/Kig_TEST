@@ -267,13 +267,41 @@ page {
   margin-right: 8rpx;
 }
 
-/* 主按钮：暖橙渐变 + 深色阴影，更显高端 */
-.t-button--primary {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%) !important;
-  border-color: transparent !important;
-  border-radius: 999rpx !important;
-  box-shadow: 0 10rpx 24rpx rgba(232, 114, 42, 0.3) !important;
-  letter-spacing: 6rpx !important;
-  font-weight: 500 !important;
-  text-indent: 6rpx !important;
+/* 提交摘要 chips */
+.submit-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 14rpx;
+  justify-content: center;
 }
+
+.sum-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  height: 44rpx;
+  padding: 0 18rpx;
+  font-size: 22rpx;
+  letter-spacing: 0;
+  border-radius: 999rpx;
+  background: #f7f1e8;
+  color: #a89070;
+  border: 1rpx solid transparent;
+  line-height: 1;
+}
+
+.sum-chip.chip-on {
+  background: var(--color-primary-bg);
+  color: var(--color-deco-warm);
+  border-color: #f3d9b3;
+}
+
+.sum-chip.chip-urgent {
+  background: linear-gradient(135deg, #ff9a4a, #e8722a);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2rpx 6rpx rgba(232, 114, 42, 0.3);
+}
+
+/* 主按钮：使用全局 .primary-button 共享奶油糖果样式 */

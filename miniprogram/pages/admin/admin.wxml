@@ -276,7 +276,7 @@
       </view>
       <view class="filter-footer">
         <t-button variant="outline" size="large" bind:tap="onResetFilter">重置</t-button>
-        <t-button theme="primary" size="large" class="primary-button" bind:tap="onApplyFilter">应用</t-button>
+        <t-button theme="primary" size="large" class="primary-button" hover-class="primary-button-hover" hover-stay-time="80" bind:tap="onApplyFilter">应用</t-button>
       </view>
     </view>
   </t-popup>
@@ -482,7 +482,7 @@
       </scroll-view>
       <view class="form-footer">
         <t-button variant="outline" size="large" bind:tap="onCloseOrderForm">取消</t-button>
-        <t-button theme="primary" size="large" class="primary-button" loading="{{isSubmitting}}" bind:tap="onSubmitOrderForm">提交</t-button>
+        <t-button theme="primary" size="large" class="primary-button" hover-class="primary-button-hover" hover-stay-time="80" loading="{{isSubmitting}}" bind:tap="onSubmitOrderForm">提交</t-button>
       </view>
     </view>
   </t-popup>
