@@ -114,8 +114,8 @@ exports.main = async (event, context) => {
       progressPercent: 0,
       // 归档 / 锁定
       isArchived: false,
-      isLocked: true,
-      lockedAt: db.serverDate(),
+      isLocked: false,
+      lockedAt: null,
       // 淘宝订单号（审核通过后填写真实号）
       taobaoOrderId: '',
       reviewInfo: {

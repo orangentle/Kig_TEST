@@ -185,41 +185,75 @@ Page({
     this.setData({ 'formData.remark': e.detail.value });
   },
 
-  onUploadAdd(e: any) {
-    const { files } = e.detail;
-    const next = [...this.data.referenceImages, ...files].slice(0, 3);
-    this.setData({ referenceImages: next });
+  onUploadAdd() {
+    const remain = 3 - this.data.referenceImages.length;
+    if (remain <= 0) return;
+    wx.chooseMedia({
+      count: remain,
+      mediaType: ['image'],
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const files = res.tempFiles.map((f: any) => ({ url: f.tempFilePath }));
+        const next = [...this.data.referenceImages, ...files].slice(0, 3);
+        this.setData({ referenceImages: next });
+      },
+      fail: (err) => {
+        if (err.errMsg && err.errMsg.indexOf('cancel') !== -1) return;
+        wx.showModal({ title: '上传失败', content: err.errMsg || '请重试', showCancel: false });
+      }
+    });
   },
 
   onUploadRemove(e: any) {
-    const { index } = e.detail;
+    const index = e.currentTarget.dataset.index;
     const newImages = [...this.data.referenceImages];
     newImages.splice(index, 1);
     this.setData({ referenceImages: newImages });
   },
 
-  onUploadFail(e: any) {
-    const msg = (e.detail && e.detail.errMsg) || '';
-    if (msg.indexOf('cancel') !== -1) return;
-    console.error('t-upload fail', e.detail);
-    wx.showModal({ title: '上传失败', content: msg || JSON.stringify(e.detail), showCancel: false });
+  onPreviewReference(e: any) {
+    const index = e.currentTarget.dataset.index;
+    const urls = this.data.referenceImages.map((f: any) => f.url);
+    wx.previewImage({ urls, current: urls[index] });
   },
 
-  onFaceUploadAdd(e: any) {
-    const { files } = e.detail;
+  onFaceUploadAdd() {
     const limit = this.data.formData.replaceFaceCount;
-    const next = [...this.data.replaceFaceImages, ...files].slice(0, limit);
-    this.setData({ replaceFaceImages: next });
+    const remain = limit - this.data.replaceFaceImages.length;
+    if (remain <= 0) return;
+    wx.chooseMedia({
+      count: remain,
+      mediaType: ['image'],
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const files = res.tempFiles.map((f: any) => ({ url: f.tempFilePath }));
+        const next = [...this.data.replaceFaceImages, ...files].slice(0, limit);
+        this.setData({ replaceFaceImages: next });
+      },
+      fail: (err) => {
+        if (err.errMsg && err.errMsg.indexOf('cancel') !== -1) return;
+        wx.showModal({ title: '上传失败', content: err.errMsg || '请重试', showCancel: false });
+      }
+    });
   },
 
   onFaceUploadRemove(e: any) {
-    const { index } = e.detail;
+    const index = e.currentTarget.dataset.index;
     const arr = [...this.data.replaceFaceImages];
     arr.splice(index, 1);
     this.setData({ replaceFaceImages: arr });
   },
 
+  onPreviewFace(e: any) {
+    const index = e.currentTarget.dataset.index;
+    const urls = this.data.replaceFaceImages.map((f: any) => f.url);
+    wx.previewImage({ urls, current: urls[index] });
+  },
+
   goToProfile() {
+    wx.setStorageSync('openBodyForm', true);
     wx.switchTab({ url: '/pages/profile/profile' });
   },
 

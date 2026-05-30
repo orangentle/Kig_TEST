@@ -83,6 +83,14 @@ Component({
         this.loadOrders();
         (this as any).checkRejectNotices();
       }
+      if (wx.getStorageSync('openBodyForm')) {
+        wx.removeStorageSync('openBodyForm');
+        if (this.data.hasLogin) {
+          setTimeout(() => { (this as any).showEditProfileModal(); }, 200);
+        } else {
+          wx.showToast({ title: '请先登录', icon: 'none' });
+        }
+      }
     }
   },
 
@@ -810,7 +818,8 @@ Component({
           wx.setStorageSync('userInfo', updatedUserInfo);
           
           this.setData({
-            userInfo: updatedUserInfo
+            userInfo: updatedUserInfo,
+            taobaoName: userInfo.taobaoName || ''
           });
           
           wx.showToast({

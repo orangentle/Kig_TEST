@@ -108,8 +108,15 @@
             </view>
           </view>
           <view class="body-data-tip" wx:else>
-            <text>您尚未在个人资料中填写身材数据，请先去完善。</text>
-            <t-button size="small" variant="text" theme="primary" bind:tap="goToProfile">去完善</t-button>
+            <view class="empty-body-card">
+              <view class="empty-body-icon">📏</view>
+              <text class="empty-body-title">还没有身材数据呢~</text>
+              <text class="empty-body-sub">个人资料里补一下，下次下单就自动带上啦</text>
+              <view class="empty-body-btn" bindtap="goToProfile">
+                <text>去补一下</text>
+                <t-icon name="chevron-right" size="28rpx" color="#fff" />
+              </view>
+            </view>
           </view>
         </block>
       </view>
@@ -123,14 +130,18 @@
         </view>
 
         <view class="upload-area">
-          <t-upload
-            media-type="{{['image']}}"
-            max="3"
-            files="{{referenceImages}}"
-            bind:add="onUploadAdd"
-            bind:remove="onUploadRemove"
-            bind:fail="onUploadFail"
-          />
+          <view class="uploader-grid">
+            <view class="uploader-tile" wx:for="{{referenceImages}}" wx:key="index">
+              <image class="uploader-img" src="{{item.url}}" mode="aspectFill" bindtap="onPreviewReference" data-index="{{index}}" />
+              <view class="uploader-remove" catchtap="onUploadRemove" data-index="{{index}}">
+                <t-icon name="close" size="24rpx" color="#fff" />
+              </view>
+            </view>
+            <view wx:if="{{referenceImages.length < 3}}" class="uploader-add" bindtap="onUploadAdd">
+              <t-icon name="add" size="48rpx" color="#bfa680" />
+              <text class="uploader-add-text">添加</text>
+            </view>
+          </view>
           <text class="upload-tip">最多 3 张 · 推荐正面 / 侧面 / 背面，若只有一张也可提交</text>
         </view>
       </view>
@@ -157,13 +168,18 @@
           </picker>
 
           <view class="upload-area">
-            <t-upload
-              media-type="{{['image']}}"
-              max="{{formData.replaceFaceCount}}"
-              files="{{replaceFaceImages}}"
-              bind:add="onFaceUploadAdd"
-              bind:remove="onFaceUploadRemove"
-            />
+            <view class="uploader-grid">
+              <view class="uploader-tile" wx:for="{{replaceFaceImages}}" wx:key="index">
+                <image class="uploader-img" src="{{item.url}}" mode="aspectFill" bindtap="onPreviewFace" data-index="{{index}}" />
+                <view class="uploader-remove" catchtap="onFaceUploadRemove" data-index="{{index}}">
+                  <t-icon name="close" size="24rpx" color="#fff" />
+                </view>
+              </view>
+              <view wx:if="{{replaceFaceImages.length < formData.replaceFaceCount}}" class="uploader-add" bindtap="onFaceUploadAdd">
+                <t-icon name="add" size="48rpx" color="#bfa680" />
+                <text class="uploader-add-text">添加</text>
+              </view>
+            </view>
             <text class="upload-tip">请上传 {{formData.replaceFaceCount}} 张替换脸表情图（一脸一图）</text>
           </view>
         </block>

@@ -159,7 +159,7 @@
           <t-icon name="search" size="56rpx" color="#fff" />
         </view>
         <text class="query-title">订单查询</text>
-        <text class="query-sub">输入淘宝订单号查看制作进度</text>
+        <text class="query-sub">输入淘宝订单号查看制作进度（仅可查询本人订单）</text>
       </view>
 
       <!-- 输入框 -->
