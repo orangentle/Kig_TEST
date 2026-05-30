@@ -29,7 +29,7 @@
     "es6": true,
     "compileWorklet": false,
     "uglifyFileName": false,
-    "uploadWithSourceMap": true,
+    "uploadWithSourceMap": false,
     "packNpmManually": true,
     "minifyWXSS": true,
     "minifyWXML": true,
@@ -49,7 +49,14 @@
   },
   "libVersion": "trial",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "regexp", "value": "\\.d\\.ts$" },
+      { "type": "regexp", "value": "\\.ts\\.map$" },
+      { "type": "regexp", "value": "\\.wxss\\.map$" },
+      { "type": "regexp", "value": "\\.js\\.map$" },
+      { "type": "regexp", "value": "miniprogram_npm/tdesign-miniprogram/(attachments|avatar-group|back-top|calendar|cascader|chat-actionbar|chat-content|chat-list|chat-loading|chat-markdown|chat-message|chat-sender|chat-thinking|check-tag|checkbox|checkbox-group|col|collapse|collapse-panel|color-picker|count-down|date-time-picker|dialog|divider|drawer|dropdown-item|dropdown-menu|fab|footer|form|form-item|guide|image-viewer|indexes|indexes-anchor|notice-bar|paragraph|picker|picker-item|popover|pull-down-refresh|qrcode|radio|radio-group|rate|result|row|scroll-view|segmented|side-bar|side-bar-item|skeleton|slider|stepper|swipe-cell|swiper|swiper-nav|tab-bar|tab-bar-item|table|text|title|toast|tree-select|watermark)/" },
+      { "type": "regexp", "value": "miniprogram_npm/tdesign-miniprogram/miniprogram_npm/(dayjs|marked|tinycolor2)/" }
+    ],
     "include": []
   },
   "appid": "wx85216a49304a8344",
