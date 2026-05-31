@@ -57,32 +57,11 @@ Page({
     // TODO: 实际应从云数据库加载
     const albums: Album[] = [
       {
-        id: '2026spring',
-        name: '2026春季娃聚',
+        id: 'event_001',
+        name: 'OKR0.0启动聚',
         coverUrl,
-        photoCount: 156,
-        date: '2026-03-15'
-      },
-      {
-        id: '2025winter',
-        name: '2025冬季茶话会',
-        coverUrl,
-        photoCount: 89,
-        date: '2025-12-20'
-      },
-      {
-        id: '2025autumn',
-        name: '2025秋季摄影会',
-        coverUrl,
-        photoCount: 234,
-        date: '2025-10-05'
-      },
-      {
-        id: '2025summer',
-        name: '2025夏日市集',
-        coverUrl,
-        photoCount: 312,
-        date: '2025-07-18'
+        photoCount: 6,
+        date: '2025-10-01'
       }
     ];
     this.setData({ albums });
@@ -93,69 +72,69 @@ Page({
     const photos: Photo[] = [
       {
         id: 'p001',
-        albumId: '2026spring',
-        url: getPhotoUrl('2026spring', 'p001'),
+        albumId: 'event_001',
+        url: getPhotoUrl('event_001', 'p001'),
         userName: '小鼠爱娃',
         userAvatar: DEFAULT_AVATAR,
-        uploadTime: '2026-03-15 15:30',
+        uploadTime: '2025-10-01 15:30',
         likes: 128,
         isLiked: false,
         comments: 23,
-        description: '今天的娃聚太开心了！认识了好多新朋友~'
+        description: 'OKR0.0启动聚现场超热闹！'
       },
       {
         id: 'p002',
-        albumId: '2026spring',
-        url: getPhotoUrl('2026spring', 'p002'),
+        albumId: 'event_001',
+        url: getPhotoUrl('event_001', 'p002'),
         userName: '娃娃收藏家',
         userAvatar: DEFAULT_AVATAR,
-        uploadTime: '2026-03-15 16:00',
+        uploadTime: '2025-10-01 16:00',
         likes: 89,
         isLiked: true,
         comments: 15
       },
       {
         id: 'p003',
-        albumId: '2026spring',
-        url: getPhotoUrl('2026spring', 'p003'),
+        albumId: 'event_001',
+        url: getPhotoUrl('event_001', 'p003'),
         userName: '摄影小白',
         userAvatar: DEFAULT_AVATAR,
-        uploadTime: '2026-03-15 16:30',
+        uploadTime: '2025-10-01 16:30',
         likes: 156,
         isLiked: false,
         comments: 32,
-        description: '樱花和娃娃真的太配了！'
+        description: '大合照时刻！'
       },
       {
         id: 'p004',
-        albumId: '2025winter',
-        url: getPhotoUrl('2025winter', 'p004'),
+        albumId: 'event_001',
+        url: getPhotoUrl('event_001', 'p004'),
         userName: 'BJD新手',
         userAvatar: DEFAULT_AVATAR,
-        uploadTime: '2025-12-20 14:00',
+        uploadTime: '2025-10-01 14:00',
         likes: 67,
         isLiked: false,
         comments: 8
       },
       {
         id: 'p005',
-        albumId: '2025autumn',
-        url: getPhotoUrl('2025autumn', 'p005'),
+        albumId: 'event_001',
+        url: getPhotoUrl('event_001', 'p005'),
         userName: '手作达人',
         userAvatar: DEFAULT_AVATAR,
-        uploadTime: '2025-10-05 11:00',
+        uploadTime: '2025-10-01 11:00',
         likes: 234,
         isLiked: true,
         comments: 45,
-        description: '自己给娃娃做的秋装，大家觉得怎么样？'
+        description: 'Bingo抽奖中奖啦！'
       },
       {
         id: 'p006',
-        albumId: '2025summer',
-        url: getPhotoUrl('2025summer', 'p006'),
+        albumId: 'event_001',
+        url: getPhotoUrl('event_001', 'p006'),
         userName: '夏日阳光',
         userAvatar: DEFAULT_AVATAR,
-        uploadTime: '2025-07-18 10:00',
+        uploadTime: '2025-10-01 10:00',
         likes: 189,
         isLiked: false,
         comments: 28

@@ -83,22 +83,6 @@ Page({
         description: '偶壳OKR首次启动聚会！感谢所有参与的娃友们，让我们一起见证了OKR社区的诞生。活动包含娃娃摄影、手作交流、周边交换等精彩环节，大家度过了难忘的一天！'
       },
       {
-        id: 'event_002',
-        name: '沈阳SSCA漫展小聚',
-        coverUrl: defaultCover,
-        date: '2026-02-06 至 2026-02-08',
-        time: '10:00-17:00',
-        location: '沈阳K11博览馆',
-        capacity: 0,
-        signupCount: 0,
-        fee: 0,
-        status: 'open',
-        statusText: '报名中',
-        canSignup: true,
-        hasSignup: false,
-        description: '趁着SSCA漫展期间，我们在沈阳K11博览馆组织一场娃友小聚！人数不限，欢迎所有娃友前来交流，一起逛漫展、拍美照！'
-      },
-      {
         id: 'event_003',
         name: 'OKR1.0聚会',
         coverUrl: defaultCover,

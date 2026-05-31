@@ -87,26 +87,6 @@ Page({
         canSignup: false
       },
       {
-        id: 'event_002',
-        name: '沈阳SSCA漫展小聚',
-        date: '2026-02-06',
-        dateText: '2026年2月6日-8日',
-        monthText: '2月',
-        dayNum: 6,
-        weekday: '周五-周日',
-        startTime: '10:00',
-        endTime: '17:00',
-        location: '沈阳K11博览馆',
-        host: '偶壳OKR',
-        type: 'gathering',
-        typeText: '娃聚',
-        description: '趁着SSCA漫展期间组织的娃友小聚，人数不限，欢迎所有娃友前来交流！',
-        agenda: [
-          { time: '待定', content: '活动安排敬请期待...' }
-        ],
-        canSignup: true
-      },
-      {
         id: 'event_003',
         name: 'OKR1.0聚会',
         date: '2026-05-02',

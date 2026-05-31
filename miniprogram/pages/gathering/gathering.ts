@@ -74,18 +74,6 @@ Page({
     // TODO: 从云数据库加载
     const events: EventItem[] = [
       {
-        _id: 'event_002',
-        title: '沈阳SSCA漫展小聚',
-        coverUrl: getEventCoverUrl('event_002'),
-        month: '02',
-        day: '06',
-        endDay: '08',
-        location: '沈阳K11博览馆',
-        remainingSpots: '不限',
-        status: 'open',
-        statusText: '报名中'
-      },
-      {
         _id: 'event_003',
         title: 'OKR1.0聚会',
         coverUrl: getEventCoverUrl('event_003'),
