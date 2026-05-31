@@ -199,16 +199,16 @@
         <view class="info-section">
           <view class="section-title-small">用户信息</view>
           <view class="edit-input-section">
-            <t-input label="昵称" value="{{tempUserInfo.nickName}}" placeholder="请输入昵称" bind:change="onNicknameChange" />
+            <t-input label="昵称" value="{{tempUserInfo.nickName}}" placeholder="请输入昵称" maxlength="20" bind:change="onNicknameChange" />
           </view>
           <view class="edit-input-section">
-            <t-input label="淘宝名称" value="{{tempUserInfo.taobaoName}}" placeholder="请输入淘宝名称" bind:change="onTaobaoNameChange" />
+            <t-input label="淘宝名称" value="{{tempUserInfo.taobaoName}}" placeholder="请输入淘宝名称" maxlength="30" bind:change="onTaobaoNameChange" />
           </view>
           <view class="edit-input-section">
-            <t-input label="QQ账号" value="{{tempUserInfo.qq}}" placeholder="请输入QQ账号" bind:change="onQQChange" />
+            <t-input label="QQ账号" value="{{tempUserInfo.qq}}" placeholder="请输入QQ账号" type="number" maxlength="11" bind:change="onQQChange" />
           </view>
           <view class="edit-input-section">
-            <t-input label="手机号" value="{{tempUserInfo.phone}}" placeholder="请输入手机号" type="number" bind:change="onPhoneChange" />
+            <t-input label="手机号" value="{{tempUserInfo.phone}}" placeholder="请输入手机号" type="number" maxlength="11" bind:change="onPhoneChange" />
           </view>
         </view>
         

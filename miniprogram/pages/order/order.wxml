@@ -29,6 +29,8 @@
             label="淘宝订单号"
             placeholder="请填写淘宝定金订单号"
             value="{{formData.tbOrderId}}"
+            type="number"
+            maxlength="20"
             bind:change="onTbOrderIdChange"
             bind:blur="onTbOrderIdBlur"
             required
@@ -41,6 +43,7 @@
             label="角色名称"
             placeholder="请输入角色名称"
             value="{{formData.roleName}}"
+            maxlength="30"
             bind:change="onRoleNameChange"
             required
           />
@@ -51,6 +54,7 @@
             label="角色所属IP"
             placeholder="如：原神、星铁、原创"
             value="{{formData.ip}}"
+            maxlength="30"
             bind:change="onIpChange"
             required
           />

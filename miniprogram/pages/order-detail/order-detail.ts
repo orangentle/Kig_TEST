@@ -1,6 +1,7 @@
 // order-detail.ts
 import type { Order } from '../../types/order';
 import { STAGE_FLOW } from '../../types/order';
+import { validateName, validateText, validateContactAndBody, toastIfFail } from '../../utils/validator';
 
 type OrderDetail = Order;
 
@@ -365,6 +366,20 @@ Page({
       wx.showToast({ title: '角色名称不能空~', icon: 'none' });
       return;
     }
+    // 鼠鼠校验：客户名 / 角色名 / IP / 联系方式 / 身材范围
+    if (!toastIfFail(validateName(f.customerName, '客户名称', false, 20))) return;
+    if (!toastIfFail(validateName(f.roleName, '角色名称', true, 30))) return;
+    if (!toastIfFail(validateText(f.ip, '角色出处', 30, false))) return;
+    if (!toastIfFail(validateContactAndBody({
+      qq: f.qq,
+      phone: f.phone,
+      taobaoName: f.taobaoName,
+      height: f.height,
+      weight: f.weight,
+      headCircumference: f.headCircumference,
+      shoulderWidth: f.shoulderWidth,
+    }))) return;
+
     if (f.needReplaceFace && this.data.editFaceImages.length < f.replaceFaceCount) {
       wx.showToast({ title: `请上传 ${f.replaceFaceCount} 张替换脸图`, icon: 'none' });
       return;

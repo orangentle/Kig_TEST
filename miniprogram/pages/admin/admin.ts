@@ -1,6 +1,7 @@
 // admin.ts - 管理后台（支持千级订单：分页 + 批量 + 筛选）
 import type { Order, StageDef } from '../../types/order';
 import { STAGE_FLOW } from '../../types/order';
+import { validateName, validateText, validateContactAndBody, toastIfFail } from '../../utils/validator';
 
 type OrderItem = Order;
 
@@ -649,6 +650,20 @@ Component({
         wx.showToast({ title: '请填写身高和头围', icon: 'none' });
         return;
       }
+      // 鼠鼠校验：客户名 / IP / 联系方式 / 身材范围
+      if (!toastIfFail(validateName(orderForm.customerName, '客户名称', true, 20))) return;
+      if (!toastIfFail(validateName(orderForm.roleName, '角色名称', true, 30))) return;
+      if (!toastIfFail(validateText(orderForm.ip, '角色出处', 30, false))) return;
+      if (!toastIfFail(validateContactAndBody({
+        qq: orderForm.qq,
+        phone: orderForm.phone,
+        taobaoName: orderForm.taobaoName,
+        height: orderForm.height,
+        weight: orderForm.weight,
+        headCircumference: orderForm.headCircumference,
+        shoulderWidth: orderForm.shoulderWidth,
+      }, { heightRequired: true, headRequired: true }))) return;
+
       if (orderForm.needReplaceFace && replaceFaceImages.length < orderForm.replaceFaceCount) {
         wx.showToast({ title: `请上传 ${orderForm.replaceFaceCount} 张替换脸图`, icon: 'none' });
         return;

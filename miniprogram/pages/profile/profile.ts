@@ -1,6 +1,7 @@
 // 获取应用实例
 import type { OrderStatus } from '../../types/order';
 import type { UserProfile } from '../../types/user';
+import { validateName, validateContactAndBody, toastIfFail } from '../../utils/validator';
 
 const globalApp = getApp<IAppOption>();
 
@@ -701,6 +702,22 @@ Component({
     // 保存用户资料
     async saveUserProfile() {
       try {
+        // 鼠鼠校验：昵称 + 联系方式 + 身材数据
+        const nick = this.data.tempUserInfo.nickName;
+        const nickRes = validateName(nick, '昵称', true, 20);
+        if (!toastIfFail(nickRes)) return;
+
+        const contactRes = validateContactAndBody({
+          qq: this.data.tempUserInfo.qq,
+          phone: this.data.tempUserInfo.phone,
+          taobaoName: this.data.tempUserInfo.taobaoName,
+          height: this.data.tempBodyMeasurements.height,
+          weight: this.data.tempBodyMeasurements.weight,
+          headCircumference: this.data.tempBodyMeasurements.headCircumference,
+          shoulderWidth: this.data.tempBodyMeasurements.shoulderWidth,
+        });
+        if (!toastIfFail(contactRes)) return;
+
         this.setData({ isLoading: true });
         
         // 如果有新头像，先上传头像

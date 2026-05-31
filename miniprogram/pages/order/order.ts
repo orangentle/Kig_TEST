@@ -1,6 +1,12 @@
 // order.ts
 import Message from 'tdesign-miniprogram/message/index';
 import type { BodyMeasurements } from '../../types/order';
+import {
+  validateTbOrderId,
+  validateName,
+  validateText,
+  validateRange,
+} from '../../utils/validator';
 
 const app = getApp<IAppOption>();
 
@@ -98,6 +104,12 @@ Page({
   async onTbOrderIdBlur() {
     const tbOrderId = (this.data.formData.tbOrderId || '').trim();
     if (!tbOrderId) return;
+    // 先做格式校验，不合法直接给提示，省掉一次云函数调用
+    const fmt = validateTbOrderId(tbOrderId);
+    if (!fmt.ok) {
+      this.setData({ tbOrderIdHint: fmt.msg || '' });
+      return;
+    }
     try {
       const { result } = await wx.cloud.callFunction({
         name: 'getOrders',
@@ -259,42 +271,59 @@ Page({
 
   validateForm(): boolean {
     const { formData, useProfileBodyData, profileBodyData, referenceImages, replaceFaceImages } = this.data;
+    const warn = (content: string) => {
+      Message.warning({ context: this, offset: [20, 32], content });
+    };
 
-    if (!formData.tbOrderId.trim()) {
-      Message.warning({ context: this, offset: [20, 32], content: '鼠鼠找不到淘宝订单号呜呜~ 先填一下嘛 (｡>﹏<｡)' });
-      return false;
-    }
+    // 淘宝订单号：必填 + 10-20 位数字
+    const tbRes = validateTbOrderId(formData.tbOrderId);
+    if (!tbRes.ok) { warn(tbRes.msg!); return false; }
+
+    // 角色名：必填，1-30 字
     if (!formData.roleName.trim()) {
-      Message.warning({ context: this, offset: [20, 32], content: '小可爱还没有名字哦~ 给ta取一个吧 ♡' });
+      warn('小可爱还没有名字哦~ 给ta取一个吧 ♡');
       return false;
     }
+    const roleRes = validateName(formData.roleName, '角色名称', false, 30);
+    if (!roleRes.ok) { warn(roleRes.msg!); return false; }
+
+    // IP：必填，≤30 字
     if (!formData.ip.trim()) {
-      Message.warning({ context: this, offset: [20, 32], content: '角色来自哪个作品呀? 鼠鼠想知道~ (◍•ᴗ•◍)' });
+      warn('角色来自哪个作品呀? 鼠鼠想知道~ (◍•ᴗ•◍)');
       return false;
     }
+    const ipRes = validateText(formData.ip, '角色出处', 30, false);
+    if (!ipRes.ok) { warn(ipRes.msg!); return false; }
 
     if (useProfileBodyData) {
       if (!profileBodyData || !profileBodyData.height) {
-        Message.warning({ context: this, offset: [20, 32], content: '个人资料里还没身材数据呢~ 先去补一下嘛 ♡' });
+        warn('个人资料里还没身材数据呢~ 先去补一下嘛 ♡');
         return false;
       }
     } else {
       if (!formData.height || !formData.headCircumference) {
-        Message.warning({ context: this, offset: [20, 32], content: '身高和头围是必须的喔~ 不然鼠鼠没法量 (｡•́︿•̀｡)' });
+        warn('身高和头围是必须的喔~ 不然鼠鼠没法量 (｡•́︿•̀｡)');
         return false;
+      }
+      // 身材范围校验（避免乱填 9999 之类）
+      const bodyChecks = [
+        validateRange(formData.height, '身高', 50, 250, true),
+        validateRange(formData.weight, '体重', 20, 300, false),
+        validateRange(formData.headCircumference, '头围', 30, 80, true),
+        validateRange(formData.shoulderWidth, '肩宽', 20, 80, false),
+      ];
+      for (const r of bodyChecks) {
+        if (!r.ok) { warn(r.msg!); return false; }
       }
     }
 
     if (referenceImages.length === 0) {
-      Message.warning({ context: this, offset: [20, 32], content: '至少要一张参考图嘛~ 鼠鼠才知道要捏成什么样子呀 (˃ ⌑ ˂ഃ )' });
+      warn('至少要一张参考图嘛~ 鼠鼠才知道要捏成什么样子呀 (˃ ⌑ ˂ഃ )');
       return false;
     }
 
     if (formData.needReplaceFace && replaceFaceImages.length < formData.replaceFaceCount) {
-      Message.warning({
-        context: this, offset: [20, 32],
-        content: `还差 ${formData.replaceFaceCount - replaceFaceImages.length} 张替换脸图哦~ 一脸一图才不会认错呀 ♡`
-      });
+      warn(`还差 ${formData.replaceFaceCount - replaceFaceImages.length} 张替换脸图哦~ 一脸一图才不会认错呀 ♡`);
       return false;
     }
 
