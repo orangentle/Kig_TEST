@@ -17,6 +17,7 @@ Component({
     queryValue: '',
     queryError: '',
     isQuerying: false,
+    isNavigating: false,
   },
 
   lifetimes: {
@@ -117,8 +118,13 @@ Component({
 
     // 跳转到偶壳娃聚页面
     goToGathering() {
+      if (this.data.isNavigating) return;
+      this.setData({ isNavigating: true });
       wx.navigateTo({
-        url: '/pages/gathering/gathering'
+        url: '/pages/gathering/gathering',
+        complete: () => {
+          setTimeout(() => this.setData({ isNavigating: false }), 300);
+        }
       });
     }
   },

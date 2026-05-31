@@ -1,7 +1,7 @@
 <!--pages/gathering/album/album.wxml - 聚会相册页面-->
 <view class="container">
   <!-- 自定义导航栏 -->
-  <t-navbar title="聚会相册" left-arrow bind:go-back="goBack" />
+  <t-navbar title="聚会相册" left-arrow placeholder bind:go-back="goBack" />
   
   <!-- 相册分类 -->
   <scroll-view scroll-x class="album-tabs" enhanced show-scrollbar="{{false}}">

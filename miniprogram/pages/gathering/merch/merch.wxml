@@ -1,7 +1,7 @@
 <!--pages/gathering/merch/merch.wxml - 鼠鼠周边页面-->
 <view class="container">
   <!-- 自定义导航栏 -->
-  <t-navbar title="鼠鼠周边" left-arrow bind:go-back="goBack" />
+  <t-navbar title="鼠鼠周边" left-arrow placeholder bind:go-back="goBack" />
   
   <!-- 顶部Banner -->
   <view class="banner-section">
