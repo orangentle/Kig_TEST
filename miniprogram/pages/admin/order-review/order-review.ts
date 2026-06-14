@@ -66,45 +66,32 @@ Page({
     }
   },
 
-  buildWhere() {
-    const db = wx.cloud.database();
-    const _ = db.command;
-    let where: any = {};
+  buildQueryParams() {
+    const params: any = {
+      page: this.data.page,
+      pageSize: this.data.pageSize
+    };
     switch (this.data.currentTab) {
-      case 'pending':  where.status = 'pending'; break;
-      case 'approved': where.stage = _.in(['queued', 'modeling', 'painting', 'hair', 'shipped']); break;
+      case 'pending':  params.status = 'pending'; break;
+      case 'approved': params.stage = ['queued', 'modeling', 'painting', 'hair', 'shipped']; break;
     }
     const kw = (this.data.searchValue || '').trim();
-    if (kw) {
-      where = _.and([
-        where,
-        _.or([
-          { tbOrderId: db.RegExp({ regexp: kw, options: 'i' }) },
-          { roleName: db.RegExp({ regexp: kw, options: 'i' }) },
-          { 'userInfo.nickName': db.RegExp({ regexp: kw, options: 'i' }) },
-          { 'userInfo.taobaoName': db.RegExp({ regexp: kw, options: 'i' }) },
-          { customerName: db.RegExp({ regexp: kw, options: 'i' }) }
-        ])
-      ]);
-    }
-    return where;
+    if (kw) params.keyword = kw;
+    return params;
   },
 
   async loadCounts() {
     try {
-      const db = wx.cloud.database();
-      const _ = db.command;
-      const col = db.collection('orders');
       const [pending, approved, all] = await Promise.all([
-        col.where({ status: 'pending' }).count(),
-        col.where({ stage: _.in(['queued', 'modeling', 'painting', 'hair', 'shipped']) }).count(),
-        col.count()
-      ]);
+        wx.cloud.callFunction({ name: 'getOrders', data: { status: 'pending', countOnly: true } }),
+        wx.cloud.callFunction({ name: 'getOrders', data: { stage: ['queued', 'modeling', 'painting', 'hair', 'shipped'], countOnly: true } }),
+        wx.cloud.callFunction({ name: 'getOrders', data: { countOnly: true } })
+      ]) as any[];
       this.setData({
         counts: {
-          pending: pending.total || 0,
-          approved: approved.total || 0,
-          all: all.total || 0
+          pending: (pending.result && pending.result.total) || 0,
+          approved: (approved.result && approved.result.total) || 0,
+          all: (all.result && all.result.total) || 0
         }
       });
     } catch (err) {
@@ -114,14 +101,13 @@ Page({
 
   async loadOrders(append: boolean = false) {
     try {
-      const db = wx.cloud.database();
-      const where = this.buildWhere();
-      const result = await db.collection('orders')
-        .where(where)
-        .orderBy('createTime', 'desc')
-        .skip((this.data.page - 1) * this.data.pageSize)
-        .limit(this.data.pageSize)
-        .get();
+      const { result } = await wx.cloud.callFunction({
+        name: 'getOrders',
+        data: this.buildQueryParams()
+      }) as any;
+      if (!result || !result.success) {
+        throw new Error((result && result.error) || '加载失败');
+      }
 
       const list = (result.data || []).map((order: any) => ({
         ...order,
@@ -133,7 +119,7 @@ Page({
 
       this.setData({
         orders: append ? [...this.data.orders, ...list] : list,
-        hasMore: list.length === this.data.pageSize
+        hasMore: !!result.hasMore
       });
     } catch (error) {
       console.error('加载订单失败', error);
@@ -170,27 +156,23 @@ Page({
         if (!res.confirm) return;
         try {
           wx.showLoading({ title: '处理中...' });
-          const db = wx.cloud.database();
-          await db.collection('orders').doc(order._id).update({
-            data: {
-              status: 'normal',
-              stage: 'queued',
-              progressStage: '已排单',
-              progressPercent: 10,
-              'reviewInfo.reviewTime': db.serverDate(),
-              'reviewInfo.reviewRemark': '审核通过',
-              updateTime: db.serverDate()
-            }
-          });
+          const { result } = await wx.cloud.callFunction({
+            name: 'batchUpdateOrders',
+            data: { orderIds: [order._id], action: 'review-approve' }
+          }) as any;
           wx.hideLoading();
-          Message.success({ context: this, offset: [20, 32], content: '订单已通过' });
-          this.setData({ showDetailPopup: false });
-          this.refreshOrders();
-          this.loadCounts();
-        } catch (error) {
+          if (result && result.success) {
+            Message.success({ context: this, offset: [20, 32], content: '订单已通过' });
+            this.setData({ showDetailPopup: false });
+            this.refreshOrders();
+            this.loadCounts();
+          } else {
+            throw new Error((result && result.error) || '操作失败');
+          }
+        } catch (error: any) {
           wx.hideLoading();
           console.error('审核失败', error);
-          Message.error({ context: this, offset: [20, 32], content: '操作失败' });
+          Message.error({ context: this, offset: [20, 32], content: error.message || '操作失败' });
         }
       }
     });

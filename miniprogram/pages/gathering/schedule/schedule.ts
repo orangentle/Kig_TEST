@@ -1,4 +1,6 @@
 // pages/gathering/schedule/schedule.ts
+import type { GatheringEventView } from '../../../types/gathering';
+import { getEventViews } from '../events';
 
 interface CalendarDay {
   date: string;
@@ -9,30 +11,6 @@ interface CalendarDay {
   isSelected: boolean;
 }
 
-interface AgendaItem {
-  time: string;
-  content: string;
-}
-
-interface ScheduleEvent {
-  id: string;
-  name: string;
-  date: string;
-  dateText: string;
-  monthText: string;
-  dayNum: number;
-  weekday: string;
-  startTime: string;
-  endTime: string;
-  location: string;
-  host?: string;
-  type: 'gathering' | 'photo' | 'workshop' | 'market';
-  typeText: string;
-  description?: string;
-  agenda?: AgendaItem[];
-  canSignup: boolean;
-}
-
 Page({
   data: {
     currentYear: new Date().getFullYear(),
@@ -41,18 +19,31 @@ Page({
     calendarDays: [] as CalendarDay[],
     selectedDate: '',
     selectedDateText: '今天',
-    dayEvents: [] as ScheduleEvent[],
-    upcomingEvents: [] as ScheduleEvent[],
-    allEvents: [] as ScheduleEvent[],
+    dayEvents: [] as GatheringEventView[],
+    upcomingEvents: [] as GatheringEventView[],
+    allEvents: [] as GatheringEventView[],
     showDetail: false,
-    currentEvent: {} as ScheduleEvent
+    currentEvent: {} as GatheringEventView
   },
 
-  onLoad() {
+  onLoad(options: Record<string, string>) {
     this.loadEvents();
     this.generateCalendar();
     this.selectToday();
     this.loadUpcomingEvents();
+    // 从主页/其他入口带 eventId 进来时，自动定位到该活动并展开详情
+    if (options && options.eventId) {
+      const ev = this.data.allEvents.find((e) => e.eventId === options.eventId);
+      if (ev) {
+        this.setData({ currentEvent: ev, showDetail: true });
+        if (ev.date) {
+          this.setData({
+            currentYear: Number(ev.date.split('-')[0]),
+            currentMonth: Number(ev.date.split('-')[1]),
+          }, () => this.generateCalendar());
+        }
+      }
+    }
   },
 
   goBack() {
@@ -60,55 +51,8 @@ Page({
   },
 
   loadEvents() {
-    // 活动数据
-    const mockEvents: ScheduleEvent[] = [
-      {
-        id: 'event_001',
-        name: 'OKR0.0启动聚',
-        date: '2025-10-01',
-        dateText: '2025年10月1日',
-        monthText: '10月',
-        dayNum: 1,
-        weekday: '周三',
-        startTime: '09:00',
-        endTime: '17:00',
-        location: '沈阳乌托邦聚会别墅V4和V5',
-        host: '偶壳OKR',
-        type: 'gathering',
-        typeText: '娃聚',
-        description: '偶壳OKR首次启动聚会！100位娃友齐聚一堂，共同见证OKR社区的诞生。',
-        agenda: [
-          { time: '10:00-11:30', content: '入场签到 & 穿戴Kig准备\n签到位置：V4一层门口休息厅A（Switch区）主签到处发放胸牌\n更衣安排：V4二层更衣区，人多时V4一层卧室、V5卧室也可更衣' },
-          { time: '11:30-14:30', content: '自由交流集邮、直播互动' },
-          { time: '14:30-15:00', content: 'Bingo游戏抽奖\n发放Bingo卡片，由D100骰子投出奖品\n奖池：10个鼠鼠抱枕、10个吉吉抱枕、1个鼠鼠U类1000元优惠券、3个鼠鼠U类500元优惠券、1个秀吉姬1000元优惠券、3个秀吉姬500元优惠券' },
-          { time: '15:00-16:00', content: '大合照 & 集体互动拍照\n合影地点：室外露营地' },
-          { time: '16:00-17:00', content: '自由活动 & 散场准备' }
-        ],
-        canSignup: false
-      },
-      {
-        id: 'event_003',
-        name: 'OKR1.0聚会',
-        date: '2026-05-02',
-        dateText: '2026年5月2日-3日（暂定）',
-        monthText: '5月',
-        dayNum: 2,
-        weekday: '周六-周日',
-        startTime: '待定',
-        endTime: '待定',
-        location: '沈阳棋盘山绿地铂瑞酒店',
-        host: '偶壳OKR',
-        type: 'gathering',
-        typeText: '娃聚',
-        description: 'OKR1.0正式聚会！地点定在风景优美的沈阳棋盘山绿地铂瑞酒店，人数不限。',
-        agenda: [
-          { time: '待定', content: '活动安排敬请期待...' }
-        ],
-        canSignup: false
-      }
-    ];
-    
-    this.setData({ allEvents: mockEvents });
+    // 单一数据源：events.ts
+    this.setData({ allEvents: getEventViews() });
   },
 
   generateCalendar() {
@@ -210,11 +154,11 @@ Page({
 
   prevMonth() {
     let { currentYear, currentMonth } = this.data;
-    if (currentMonth === 1) {
-      currentMonth = 12;
-      currentYear--;
+    if (currentMonth === 12) {
+      currentMonth = 1;
+      currentYear++;
     } else {
-      currentMonth--;
+      currentMonth++;
     }
     this.setData({ currentYear, currentMonth }, () => {
       this.generateCalendar();
