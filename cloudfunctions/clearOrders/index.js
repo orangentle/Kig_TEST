@@ -6,8 +6,15 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const db = cloud.database();
 const orders = db.collection('orders');
+const users = db.collection('users');
 
 const BATCH = 100;
+
+async function assertAdmin(openid) {
+  if (!openid) return false;
+  const r = await users.where({ _openid: openid, isAdmin: true }).limit(1).get();
+  return r.data.length > 0;
+}
 
 async function removeWhere(where, label) {
   let removed = 0;
@@ -26,6 +33,12 @@ exports.main = async (event) => {
   const { mode = 'mock', confirm = '' } = event || {};
 
   try {
+    const { OPENID } = cloud.getWXContext();
+    const isAdmin = await assertAdmin(OPENID);
+    if (!isAdmin) {
+      return { success: false, error: '无管理员权限' };
+    }
+
     if (mode === 'mock') {
       // 只删除 initOrderData 生成的假数据：queueNumber 以 RatStudio-2026- 开头
       const removed = await removeWhere(

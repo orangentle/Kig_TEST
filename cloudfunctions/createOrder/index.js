@@ -7,12 +7,23 @@ cloud.init({
 
 const db = cloud.database();
 const ordersCollection = db.collection('orders');
+const usersCollection = db.collection('users');
 
 const VALID_STAGES = ['pending', 'queued', 'modeling', 'painting', 'hair', 'shipped'];
+
+async function assertAdmin(openid) {
+  if (!openid) return false;
+  const r = await usersCollection.where({ _openid: openid, isAdmin: true }).limit(1).get();
+  return r.data.length > 0;
+}
 
 exports.main = async (event, context) => {
   try {
     const wxContext = cloud.getWXContext();
+    const isAdmin = await assertAdmin(wxContext.OPENID);
+    if (!isAdmin) {
+      return { success: false, error: '无管理员权限' };
+    }
 
     // 校验淘宝订单号唯一性
     const tbOrderIdTrim = (event.tbOrderId || '').trim();

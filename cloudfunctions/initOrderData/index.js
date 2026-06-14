@@ -7,6 +7,13 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const db = cloud.database();
 const orders = db.collection('orders');
+const users = db.collection('users');
+
+async function assertAdmin(openid) {
+  if (!openid) return false;
+  const r = await users.where({ _openid: openid, isAdmin: true }).limit(1).get();
+  return r.data.length > 0;
+}
 
 const STAGES = [
   { value: 'queued',   label: '已排单', percent: 10 },
@@ -72,6 +79,12 @@ exports.main = async (event) => {
   const { count = 50, clear = false } = event || {};
 
   try {
+    const { OPENID } = cloud.getWXContext();
+    const isAdmin = await assertAdmin(OPENID);
+    if (!isAdmin) {
+      return { success: false, error: '无管理员权限' };
+    }
+
     if (clear) {
       // 分批删除（云函数单次最多 1000 条）
       let removed = 0;
